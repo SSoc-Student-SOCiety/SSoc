@@ -5,10 +5,9 @@
 핸드폰으로 편리하게 소속 동아리/학생회 공금 사용 내역을 확인하고 교류할 수 있는 커뮤니티 서비스 
 
 ### 📚 Tech Stack 
-BE
-- JAVA, Spring boot, MySQL,  Spring Data JPA, Query DSL, Spring Security
+- BE : JAVA, Spring boot, MySQL,  Spring Data JPA, Query DSL, Spring Security
 APP
-- React Native, ES6, Recoil 
+- APP : React Native, ES6, Recoil 
 Deploy (ci/cd)
 - 서버 배포 : Docker, Jenkins, AWS
 - 앱 배포    :  Code push, Fast Lane
