@@ -1,6 +1,6 @@
 package gwangju.ssafy.backend.component.shinhan;
 
-import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTansactionApi;
+import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransactionApi;
 import gwangju.ssafy.backend.component.shinhan.dto.TransactionInfo;
 import gwangju.ssafy.backend.component.shinhan.dto.BalanceDetail;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanBalanceDetailApi.Request;
@@ -39,14 +39,14 @@ public class ShinhanBankServiceImpl implements ShinhanBankService {
 	@Override
 	public TransactionInfo getAccountTransaction(String accountNumber) {
 
-		ShinhanApiDto<ShinhanApiKey, ShinhanTansactionApi.Request> request = ShinhanApiDto.<ShinhanApiKey, ShinhanTansactionApi.Request>builder()
+		ShinhanApiDto<ShinhanApiKey, ShinhanTransactionApi.Request> request = ShinhanApiDto.<ShinhanApiKey, ShinhanTransactionApi.Request>builder()
 			.dataHeader(apiKey)
-			.dataBody(ShinhanTansactionApi.Request.builder()
+			.dataBody(ShinhanTransactionApi.Request.builder()
 				.계좌번호(accountNumber)
 				.build())
 			.build();
 
-		ShinhanApiDto<ShinhanResponseHeader, ShinhanTansactionApi.Response> transactions = apiClient.getTransactions(
+		ShinhanApiDto<ShinhanResponseHeader, ShinhanTransactionApi.Response> transactions = apiClient.getTransactions(
 			request);
 
 		if (transactions.getDataHeader().getSuccessCode().equals(1)) {
