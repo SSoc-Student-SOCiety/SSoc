@@ -1,5 +1,7 @@
 package gwangju.ssafy.backend.component.shinhan;
 
+import gwangju.ssafy.backend.component.shinhan.dto.DepositHolderName;
+import gwangju.ssafy.backend.component.shinhan.dto.ShinhanSearchNameApi;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransactionApi;
 import gwangju.ssafy.backend.component.shinhan.dto.TransactionInfo;
 import gwangju.ssafy.backend.component.shinhan.dto.BalanceDetail;
@@ -54,5 +56,26 @@ public class ShinhanBankServiceImpl implements ShinhanBankService {
 		}
 
 		return transactions.getDataBody().toDto();
+	}
+
+	@Override
+	public DepositHolderName searchDepositHolderName(String depositBankCode, String depositAccountNumber) {
+
+		ShinhanApiDto<ShinhanApiKey, ShinhanSearchNameApi.Request> request = ShinhanApiDto.<ShinhanApiKey, ShinhanSearchNameApi.Request>builder()
+			.dataHeader(apiKey)
+			.dataBody(ShinhanSearchNameApi.Request.builder()
+				.입금계좌번호(depositAccountNumber)
+				.입금은행코드(depositBankCode)
+				.build())
+			.build();
+
+		ShinhanApiDto<ShinhanResponseHeader, ShinhanSearchNameApi.Response> name = apiClient.searchName(
+			request);
+
+		if (name.getDataHeader().getSuccessCode().equals(1)) {
+			throw new RuntimeException(name.getDataHeader().getResultCode());
+		}
+
+		return name.getDataBody().toDto();
 	}
 }
