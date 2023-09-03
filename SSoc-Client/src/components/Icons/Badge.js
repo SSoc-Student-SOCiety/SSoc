@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { Typography } from "./Typography";
+import { Typography } from "../Basic/Typography";
 
 export const Badge = (props) => {
   return (
