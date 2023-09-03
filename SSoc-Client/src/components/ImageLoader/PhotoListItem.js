@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
 import { useWindowDimensions, View, Animated } from "react-native";
-import { Button } from "./Button";
+import { Button } from "../Basic/Button";
 import { RemoteImage } from "./RemoteImage";
 
 export const PhotoListItem = (props) => {
