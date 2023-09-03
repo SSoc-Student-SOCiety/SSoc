@@ -5,7 +5,7 @@ export const ProfileImage = (props) => {
   return (
     <Image
       source={{
-        uri: `https://picsum.photos/600`,
+        uri: props.url,
       }}
       style={{
         width: props.size,
