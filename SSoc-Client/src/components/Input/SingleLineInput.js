@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput } from "react-native";
-
+import * as Color from "../Colors/colors";
 export const SingleLineInput = (props) => {
   const [focused, setFocused] = useState(false);
 
@@ -12,7 +12,7 @@ export const SingleLineInput = (props) => {
         paddingVertical: 8,
         borderRadius: 4,
         borderWidth: 1,
-        borderColor: focused ? "black" : "gray",
+        borderColor: focused ? Color.BLUE : Color.WHITE,
       }}
     >
       <TextInput
