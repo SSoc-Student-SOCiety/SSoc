@@ -1,10 +1,10 @@
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { RootApp } from "./src/RootApp";
 
-import { MainScreen } from "./src/screens/MainScreen";
 export default function App() {
   return (
     <SafeAreaProvider>
-      <MainScreen />
+      <RootApp />
     </SafeAreaProvider>
   );
 }
