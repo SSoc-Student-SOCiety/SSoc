@@ -51,13 +51,13 @@ public class Message<T> {
 
 		private static DataHeader success() {
 			return DataHeader.builder()
-				.successCode(1)
+				.successCode(0)
 				.build();
 		}
 
 		private static DataHeader fail(String resultCode, String resultMessage) {
 			return DataHeader.builder()
-				.successCode(0)
+				.successCode(1)
 				.resultCode(resultCode)
 				.resultMessage(resultMessage)
 				.build();
