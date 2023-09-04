@@ -18,4 +18,6 @@ public interface ShinhanBankService {
 
 	TransferResult transferMoney(TransferRequest request);
 
+	void transferAuth(String bankCode, String accountNumber, String message);
+
 }
