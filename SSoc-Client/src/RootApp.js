@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { MainScreen } from "./screens/MainScreen";
+import { MainScreen } from "./screens/MainBottomTabs/MainScreen";
 import { SplashView } from "./SplashView";
+import { RootStackNavigation } from "./navigations/MainNavigations/RootStackNavigation";
 export const RootApp = () => {
   const [initialized, setInitialized] = useState(false);
 
@@ -15,6 +16,6 @@ export const RootApp = () => {
   }
   return (
     //추후 네비게이션 컨테이너 호출
-    <MainScreen />
+    <RootStackNavigation/>
   );
 };
