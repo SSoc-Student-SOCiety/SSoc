@@ -1,9 +1,12 @@
 package gwangju.ssafy.backend.group.service.impl;
 
 import gwangju.ssafy.backend.group.dto.CreateGroupRequest;
+import gwangju.ssafy.backend.group.dto.EditGroupInfoRequest;
 import gwangju.ssafy.backend.group.entity.Group;
+import gwangju.ssafy.backend.group.entity.GroupMember;
 import gwangju.ssafy.backend.group.entity.School;
 import gwangju.ssafy.backend.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.group.repository.GroupRepository;
 import gwangju.ssafy.backend.group.repository.SchoolRepository;
 import gwangju.ssafy.backend.group.service.GroupMemberService;
@@ -20,6 +23,7 @@ public class GroupServiceImpl implements GroupService {
 
 	private final GroupRepository groupRepository;
 	private final SchoolRepository schoolRepository;
+	private final GroupMemberRepository groupMemberRepository;
 	private final GroupMemberService groupMemberService;
 
 	@Override
@@ -47,6 +51,23 @@ public class GroupServiceImpl implements GroupService {
 			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
 
 		group.inactivate();
+	}
+
+	@Override
+	public void editGroupInfo(EditGroupInfoRequest request) {
+		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
+			request.getUserId()).orElseThrow(() -> new RuntimeException("존재하지 않는 그룹원"));
+
+		if (member.getRole() != GroupMemberRole.MANAGER) {
+			throw new RuntimeException("권한이 없는 그룹원");
+		}
+
+		Group group = groupRepository.findByIdAndIsActiveIsTrue(member.getGroup().getId())
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
+
+		group.editInfo(request.getName(), request.getCategory(), request.getAboutUs(),
+			request.getIntroduce());
+
 	}
 
 }
