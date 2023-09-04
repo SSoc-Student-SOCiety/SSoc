@@ -66,9 +66,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userDto.toEntity());
         return true;
   
-    @Override
-    public boolean checkSchoolEmail(String email) {
-        return userRepository.checkSchoolEmail(email);
+//    @Override
+//    public boolean checkSchoolEmail(String email) {
+//        return userRepository.checkSchoolEmail(email);
     }
 
 

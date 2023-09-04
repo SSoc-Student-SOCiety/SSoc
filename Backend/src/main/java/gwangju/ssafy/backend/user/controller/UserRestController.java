@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.user.controller;
 
+import gwangju.ssafy.backend.email.EmailService;
 import gwangju.ssafy.backend.user.dto.MailDto;
 import gwangju.ssafy.backend.user.dto.UserDto;
 import gwangju.ssafy.backend.user.exception.BadRequestException;
@@ -7,7 +8,6 @@ import gwangju.ssafy.backend.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,11 +17,15 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
+
+    // 이메일을 통한 인증코드 보내기
     @PostMapping("/mail/send")
-    public boolean sendMail(@RequestBody MailDto mailDto) {
-        userService.sendSimpleMessage(mailDto);
+    public String sendMail(@RequestParam(value = "userEmail") String email) throws Exception {
+        String confirm = emailService.sendSimpleMessage(email);
         log.info("메일 전송 완료");
-        return true;
+        return confirm;
     }
 
     @GetMapping("/email/check")
