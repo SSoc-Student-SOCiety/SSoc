@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.user.entity;
 
+import gwangju.ssafy.backend.util.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Builder;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 import java.time.LocalDateTime;
 
@@ -18,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Table(name = "users")  // 테이블명 user일 시 생성 안됨!(오류)
-public class User {
+public class User extends BaseEntity {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,9 @@ public class User {
 
     @Column(name = "user_name")
     private String userName;    // 유저 이름
+
+    @Column(name = "user_nickname")
+    private String userNickNmae;    // 유저 닉네임
 
     @Column(name = "user_nickName")
     private String userNickNmae;    // 유저 닉네임

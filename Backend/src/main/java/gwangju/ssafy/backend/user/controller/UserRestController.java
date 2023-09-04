@@ -1,44 +1,24 @@
 package gwangju.ssafy.backend.user.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import gwangju.ssafy.backend.user.dto.MailDto;
+import gwangju.ssafy.backend.user.dto.UserDto;
 import gwangju.ssafy.backend.user.exception.BadRequestException;
 import gwangju.ssafy.backend.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @Slf4j
 @RequestMapping("user")
-public class UserController {
+public class UserRestController {
     @Autowired
     private UserService userService;
 
-
-    @GetMapping("/mailform")
-    public String mailForm() {
-        log.info("==================mailForm view controller 진입=============");
-        return "user/mailform";
-    }
-
-    // 회원 가입 폼으로 이동
-    @GetMapping("/join")
-    public String join() {
-        log.info("==================joinform view controller 진입=============");
-        return "user/joinform";
-    }
-
-
     @PostMapping("/mail/send")
-    public boolean sendMail(MailDto mailDto) {
+    public boolean sendMail(@RequestBody MailDto mailDto) {
         userService.sendSimpleMessage(mailDto);
         log.info("메일 전송 완료");
         return true;
@@ -53,5 +33,16 @@ public class UserController {
             return ResponseEntity.ok("사용 가능한 아이디 입니다.");
         }
     }
+
+    @PostMapping("/register")
+    public boolean registerSuccess(@RequestBody UserDto userDto) {
+        log.info("==================회원가입 진입=============");
+        if(userService.existsUserByUserEmail(userDto.getUserEmail())) {
+            return false;
+        }
+        userService.signUpUser(userDto);
+        return true;
+    }
+
 
 }
