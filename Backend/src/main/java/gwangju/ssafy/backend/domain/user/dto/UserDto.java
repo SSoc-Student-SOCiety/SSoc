@@ -37,7 +37,7 @@ public class UserDto {
                 .userEmail(userEmail)
                 .userName(userName)
                 .userPassword(userPassword)
-                .userNickNmae(userNickName)
+                .userNickName(userNickName)
                 .build();
         return user;
     }
