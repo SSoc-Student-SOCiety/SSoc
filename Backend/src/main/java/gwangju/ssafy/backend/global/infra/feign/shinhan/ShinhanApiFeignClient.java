@@ -10,13 +10,14 @@ import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransactionAp
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransferApi;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransferAuthApi;
 import gwangju.ssafy.backend.global.config.HeaderConfiguration;
+import gwangju.ssafy.backend.global.infra.feign.shinhan.service.impl.ShinhanApiKey;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "shinhan", url = "https://shbhack.shinhan.com", configuration = {
 	HeaderConfiguration.class})
-interface ShinhanApiFeignClient {
+public interface ShinhanApiFeignClient {
 
 	@PostMapping("/v1/account/balance/detail")
 	ShinhanApiDto<ShinhanResponseHeader, Response> getBalanceDetail(

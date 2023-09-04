@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.global.infra.feign.shinhan;
+package gwangju.ssafy.backend.global.infra.feign.shinhan.service.impl;
 
 
 import lombok.Getter;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-class ShinhanApiKey {
+public class ShinhanApiKey {
 
 	@Value("${shinhan.apiKey}")
 	private String apikey;

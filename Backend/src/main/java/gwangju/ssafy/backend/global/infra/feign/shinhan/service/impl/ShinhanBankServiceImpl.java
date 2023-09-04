@@ -1,5 +1,6 @@
-package gwangju.ssafy.backend.global.infra.feign.shinhan;
+package gwangju.ssafy.backend.global.infra.feign.shinhan.service.impl;
 
+import gwangju.ssafy.backend.global.infra.feign.shinhan.ShinhanApiFeignClient;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanApiDto;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanBalanceDetailApi.Request;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanBalanceDetailApi.Response;
@@ -13,12 +14,14 @@ import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.TransferRequest;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.TransferResult;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.DepositHolderName;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.BalanceDetail;
+import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankService;
+import gwangju.ssafy.backend.global.infra.feign.shinhan.service.impl.ShinhanApiKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ShinhanBankServiceImpl implements ShinhanBankService {
+class ShinhanBankServiceImpl implements ShinhanBankService {
 
 	private final ShinhanApiKey apiKey;
 	private final ShinhanApiFeignClient apiClient;

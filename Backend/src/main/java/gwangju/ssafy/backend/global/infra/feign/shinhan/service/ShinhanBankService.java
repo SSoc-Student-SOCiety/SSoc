@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.global.infra.feign.shinhan;
+package gwangju.ssafy.backend.global.infra.feign.shinhan.service;
 
 
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.TransactionInfo;

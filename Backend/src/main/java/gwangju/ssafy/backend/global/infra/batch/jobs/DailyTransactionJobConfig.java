@@ -1,6 +1,6 @@
 package gwangju.ssafy.backend.global.infra.batch.jobs;
 
-import gwangju.ssafy.backend.global.infra.feign.shinhan.ShinhanBankService;
+import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankService;
 import gwangju.ssafy.backend.domain.transaction.entity.Transaction;
 import gwangju.ssafy.backend.domain.transaction.repository.GroupAccountRepository;
 import gwangju.ssafy.backend.domain.transaction.repository.TransactionRepository;

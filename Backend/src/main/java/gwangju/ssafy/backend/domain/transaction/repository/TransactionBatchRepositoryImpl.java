@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Repository
 @Transactional
-public class TransactionBatchRepositoryImpl implements TransactionBatchRepository {
+class TransactionBatchRepositoryImpl implements TransactionBatchRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 

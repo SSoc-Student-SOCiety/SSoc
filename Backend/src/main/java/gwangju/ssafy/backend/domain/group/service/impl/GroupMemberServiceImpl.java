@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class GroupMemberServiceImpl implements GroupMemberService {
+class GroupMemberServiceImpl implements GroupMemberService {
 
 	private final GroupMemberRepository groupMemberRepository;
 	private final UserRepository userRepository;
