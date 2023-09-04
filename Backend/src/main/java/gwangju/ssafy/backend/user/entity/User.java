@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,6 +38,17 @@ public class User extends BaseEntity {
 
     @Column(name = "user_nickname")
     private String userNickNmae;    // 유저 닉네임
+
+    @Column(name = "user_nickName")
+    private String userNickNmae;    // 유저 닉네임
+
+    @CreatedDate
+    @Column(name = "user_create_date", updatable = false)
+    private LocalDateTime userCreateDate;
+
+    @LastModifiedBy
+    @Column(name = "user_modify_date")
+    private LocalDateTime userModifyDate;
 
 
 }

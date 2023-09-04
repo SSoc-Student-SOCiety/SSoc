@@ -20,4 +20,6 @@ public interface UserService {
 
     // 회원가입 처리
     public boolean signUpUser(UserDto userDto);
+    // 학교 이메일인지 여부 판단해주기 (테스트)
+    public boolean checkSchoolEmail(String email);
 }

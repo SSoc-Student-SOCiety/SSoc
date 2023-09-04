@@ -24,4 +24,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    public boolean checkSchoolEmail(String userEmail);
 
 
+    @Query(value = "SELECT EXISTS " +
+                            "(SELECT * " +
+                            "FROM users as u" +
+                            "WHERE u.user_email = ?1" +
+                            "limit 1) as exist")
+    public boolean checkSchoolEmail(String userEmail);
 }
