@@ -48,4 +48,7 @@ public class Group {
 	@Column
 	private boolean isActive;
 
+	public void inactivate() {
+		this.isActive = false;
+	}
 }

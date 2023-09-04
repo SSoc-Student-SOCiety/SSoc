@@ -1,7 +1,6 @@
 package gwangju.ssafy.backend.group.dto;
 
 
-import gwangju.ssafy.backend.group.entity.Group;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

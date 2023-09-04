@@ -41,4 +41,12 @@ public class GroupServiceImpl implements GroupService {
 
 	}
 
+	@Override
+	public void inactiveGroup(Long groupId) {
+		Group group = groupRepository.findById(groupId)
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
+
+		group.inactivate();
+	}
+
 }
