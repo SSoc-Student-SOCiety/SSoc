@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
-	Optional<Group> findByIdAndActiveIsTrue(Long id);
+	Optional<Group> findByIdAndIsActiveIsTrue(Long id);
+
 
 }

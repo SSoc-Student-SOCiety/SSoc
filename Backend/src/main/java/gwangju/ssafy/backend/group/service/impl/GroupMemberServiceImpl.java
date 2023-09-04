@@ -27,7 +27,7 @@ public class GroupMemberServiceImpl implements GroupMemberService {
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new RuntimeException("존재하지 않는 회원"));
-		Group group = groupRepository.findByIdAndActiveIsTrue(groupId)
+		Group group = groupRepository.findByIdAndIsActiveIsTrue(groupId)
 			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
 
 		groupMemberRepository.save(GroupMember.builder()
