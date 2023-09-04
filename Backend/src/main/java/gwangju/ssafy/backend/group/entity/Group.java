@@ -45,4 +45,7 @@ public class Group {
 	@Lob
 	private String introduce;
 
+	@Column
+	private boolean isActive;
+
 }

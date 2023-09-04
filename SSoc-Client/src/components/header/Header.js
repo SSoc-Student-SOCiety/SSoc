@@ -1,11 +1,12 @@
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View, useWindowDimensions } from "react-native";
-import { Spacer } from "../Spacer";
+import { Spacer } from "../Basic/Spacer";
 import { HeaderTitle } from "./HeaderTitle";
 import { HeaderIcon } from "./HeaderButton";
 import { HeaderGroup } from "./HeaderGroup";
-
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GRAY } from "../Colors/colors";
 export const Header = (props) => {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -17,7 +18,7 @@ export const Header = (props) => {
           width: width,
           flexDirection: "row",
           height: 56,
-          borderBottomColor: "gray",
+          borderBottomColor: GRAY,
           borderBottomWidth: 1,
           alignItems: "center",
         }}
