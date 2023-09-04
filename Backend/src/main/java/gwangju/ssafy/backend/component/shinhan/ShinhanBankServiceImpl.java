@@ -4,6 +4,7 @@ import gwangju.ssafy.backend.component.shinhan.dto.DepositHolderName;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanSearchNameApi;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransactionApi;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransferApi;
+import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransferAuthApi;
 import gwangju.ssafy.backend.component.shinhan.dto.TransactionInfo;
 import gwangju.ssafy.backend.component.shinhan.dto.BalanceDetail;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanBalanceDetailApi.Request;
@@ -96,5 +97,26 @@ public class ShinhanBankServiceImpl implements ShinhanBankService {
 		}
 
 		return transfer.getDataBody().toDto();
+	}
+
+	@Override
+	public void transferAuth(String bankCode, String accountNumber, String message) {
+
+		ShinhanApiDto<ShinhanApiKey, ShinhanTransferAuthApi.Request> request =
+			ShinhanApiDto.<ShinhanApiKey, ShinhanTransferAuthApi.Request>builder()
+				.dataHeader(apiKey)
+				.dataBody(ShinhanTransferAuthApi.Request.builder()
+					.입금은행코드(bankCode)
+					.입금계좌번호(accountNumber)
+					.입금통장메모(message)
+					.build())
+				.build();
+
+		ShinhanApiDto<ShinhanResponseHeader, ShinhanTransferAuthApi.Response> response =
+			apiClient.transferAuth(request);
+
+		if (response.getDataHeader().getSuccessCode().equals("1")) {
+			throw new RuntimeException("1원 이체 실패");
+		}
 	}
 }
