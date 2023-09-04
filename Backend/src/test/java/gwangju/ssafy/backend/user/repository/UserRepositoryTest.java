@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.user.repository;
 
-import gwangju.ssafy.backend.user.entity.User;
+import gwangju.ssafy.backend.domain.user.entity.User;
+import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
