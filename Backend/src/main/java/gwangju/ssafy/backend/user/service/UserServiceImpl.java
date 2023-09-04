@@ -1,11 +1,14 @@
 package gwangju.ssafy.backend.user.service;
 
 import gwangju.ssafy.backend.user.dto.MailDto;
+import gwangju.ssafy.backend.user.dto.UserDto;
+import gwangju.ssafy.backend.user.entity.User;
 import gwangju.ssafy.backend.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -48,9 +51,20 @@ public class UserServiceImpl implements UserService {
         schoolEmailHashMap.put(schoolName, schoolEmail);
     }
 
+//    @Override
+//    public boolean checkSchoolEmail(String email) {
+//        return userRepository.checkSchoolEmail(email);
+//    }
+
+    // 회원가입 처리
     @Override
-    public boolean checkSchoolEmail(String email) {
-        return userRepository.checkSchoolEmail(email);
+    public boolean signUpUser(UserDto userDto) {
+        if(userRepository.existsUserByUserEmail(userDto.getUserEmail())) {
+            return false;
+        }
+
+        userRepository.save(userDto.toEntity());
+        return true;
     }
 
 

@@ -27,7 +27,6 @@ public class UserRepositoryTest {
                 .userPassword("1234")
                 .userName("테스트1")
                 .userNickNmae("테스트 닉네임")
-                .userCreateDate(LocalDateTime.now())
                 .build();
         // when
         User saveUser = userRepository.save(user);
@@ -48,7 +47,6 @@ public class UserRepositoryTest {
                 .userPassword("1234")
                 .userName("테스트1")
                 .userNickNmae("테스트 닉네임")
-                .userCreateDate(LocalDateTime.now())
                 .build();
         // when
         User saveUser = userRepository.save(user);
