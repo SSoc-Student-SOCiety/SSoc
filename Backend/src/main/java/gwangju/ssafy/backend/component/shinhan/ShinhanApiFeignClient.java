@@ -1,12 +1,13 @@
 package gwangju.ssafy.backend.component.shinhan;
 
 
-import gwangju.ssafy.backend.component.shinhan.dto.ShinhanBalanceDetailApi;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanApiDto;
+import gwangju.ssafy.backend.component.shinhan.dto.ShinhanBalanceDetailApi;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanResponseHeader;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanSearchNameApi;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransactionApi;
 import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransferApi;
+import gwangju.ssafy.backend.component.shinhan.dto.ShinhanTransferAuthApi;
 import gwangju.ssafy.backend.config.HeaderConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,4 +32,10 @@ interface ShinhanApiFeignClient {
 	@PostMapping("/v1/transfer/krw")
 	ShinhanApiDto<ShinhanResponseHeader, ShinhanTransferApi.Response> transferMoney(
 		@RequestBody ShinhanApiDto<ShinhanApiKey, ShinhanTransferApi.Request> request);
+
+	@PostMapping("/v1/auth/1transfer")
+	ShinhanApiDto<ShinhanResponseHeader, ShinhanTransferAuthApi.Response> transferAuth(
+		@RequestBody ShinhanApiDto<ShinhanApiKey, ShinhanTransferAuthApi.Request> request);
+
+
 }
