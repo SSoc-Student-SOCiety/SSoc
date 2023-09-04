@@ -1,28 +1,28 @@
 package gwangju.ssafy.backend.group.entity;
 
 
-import jakarta.persistence.Column;
+import gwangju.ssafy.backend.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.user.entity.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Group {
+public class GroupMember {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,21 +30,13 @@ public class Group {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(nullable = false)
-	private School school;
+	private User user;
 
-	@Column
-	private String name;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(nullable = false)
+	private Group group;
 
-	@Column
-	private String category;
-
-	@Column
-	private String aboutUs;
-
-	@Lob
-	private String introduce;
-
-	@Column
-	private boolean isActive;
+	@Enumerated(EnumType.STRING)
+	private GroupMemberRole role;
 
 }
