@@ -1,15 +1,14 @@
 package gwangju.ssafy.backend.user.service;
 
-import gwangju.ssafy.backend.user.entity.User;
-import gwangju.ssafy.backend.user.repository.UserRepository;
+import gwangju.ssafy.backend.domain.user.entity.User;
+import gwangju.ssafy.backend.domain.user.repository.UserRepository;
+import gwangju.ssafy.backend.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
@@ -21,7 +20,7 @@ public class UserServiceTest {
     UserRepository userRepository;
 
     @InjectMocks
-    UserService userService;
+	UserService userService;
 
     @DisplayName("유저 이메일 중복검사 - 성공")
     @Test
