@@ -1,8 +1,10 @@
 package gwangju.ssafy.backend.domain.user.service;
 
+import gwangju.ssafy.backend.domain.user.dto.LoginUserDto;
 import gwangju.ssafy.backend.domain.user.dto.MailDto;
 import gwangju.ssafy.backend.domain.user.dto.UserDto;
 import gwangju.ssafy.backend.domain.user.entity.User;
+import gwangju.ssafy.backend.domain.user.entity.enums.UserRole;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,6 @@ class UserServiceImpl implements UserService {
     }
 
     // 이에일 중복 체크를 위해 이메일이 존재하는지 여부 조회
-    @Transactional
     @Override
     public boolean existsUserByUserEmail(String userEmail) {
         return userRepository.existsUserByUserEmail(userEmail);
@@ -51,19 +52,20 @@ class UserServiceImpl implements UserService {
             return false;
         }
 
-        userDto.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
+        userDto.setUserPassword(passwordEncoder.encode(userDto.getUserPassword())); // 패스워드 암호화 작업
+        userDto.setUserAuthority(UserRole.USER.toString()); // 회원가입한 유저의 권한은 USER (일반)
         userRepository.save(userDto.toEntity());
         return true;
 
     }
 
     @Override
-    public boolean loginCheckUser(String userEmail, String checkPassword) {
-        User user = userRepository.findByUserEmail(userEmail).orElseThrow(() ->
+    public boolean loginCheckUser(LoginUserDto loginUserDto) {
+        User user = userRepository.findByUserEmail(loginUserDto.getUserEmail()).orElseThrow(() ->
                 new IllegalArgumentException("해당 이메일을 가진 회원이 존재하지 않습니다. 이메일을 다시한번 확인해주세요."));
         String realPassword = user.getUserPassword();
 
-        return passwordEncoder.matches(checkPassword, realPassword);
+        return passwordEncoder.matches(loginUserDto.getUserPassword(), realPassword);
     }
 
 
