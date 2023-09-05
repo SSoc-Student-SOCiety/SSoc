@@ -37,7 +37,7 @@ public class UserRestController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public boolean registerSuccess(@RequestBody UserDto userDto) {
         log.info("==================회원가입 진입=============");
         if(userService.existsUserByUserEmail(userDto.getUserEmail())) {
@@ -45,6 +45,12 @@ public class UserRestController {
         }
         userService.signUpUser(userDto);
         return true;
+    }
+
+    @PostMapping("/login")
+    public boolean login(@RequestParam(value = "userEmail") String userEmail, @RequestParam(value = "userPassword") String userPassword) {
+        log.info("==================로그인 진입=============");
+        return userService.loginCheckUser(userEmail, userPassword);
     }
 
 

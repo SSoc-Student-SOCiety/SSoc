@@ -2,11 +2,13 @@ package gwangju.ssafy.backend.domain.user.service;
 
 import gwangju.ssafy.backend.domain.user.dto.MailDto;
 import gwangju.ssafy.backend.domain.user.dto.UserDto;
+import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,10 +16,13 @@ import java.util.HashMap;
 @Service
 @Transactional  // DB 관련 모든 작업은 트랜잭션 안에서 수행되어야 한다
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     private final JavaMailSender emailSender;
+
+    private final PasswordEncoder passwordEncoder;
+
 
     // 이메일 보내기
     @Override
@@ -39,19 +44,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    // 학교이름 - 이메일 해시맵 이용해서 테스트
-    @Override
-    public void schoolEmailTest(String schoolName, String schoolEmail) {
-        HashMap<String, String> schoolEmailHashMap = new HashMap<>();
-
-        schoolEmailHashMap.put(schoolName, schoolEmail);
-    }
-
-//    @Override
-//    public boolean checkSchoolEmail(String email) {
-//        return userRepository.checkSchoolEmail(email);
-//    }
-
     // 회원가입 처리
     @Override
     public boolean signUpUser(UserDto userDto) {
@@ -59,13 +51,21 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
+        userDto.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
         userRepository.save(userDto.toEntity());
         return true;
-  
-//    @Override
-//    public boolean checkSchoolEmail(String email) {
-//        return userRepository.checkSchoolEmail(email);
+
     }
+
+    @Override
+    public boolean loginCheckUser(String userEmail, String checkPassword) {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(() ->
+                new IllegalArgumentException("해당 이메일을 가진 회원이 존재하지 않습니다. 이메일을 다시한번 확인해주세요."));
+        String realPassword = user.getUserPassword();
+
+        return passwordEncoder.matches(checkPassword, realPassword);
+    }
+
 
 
 }
