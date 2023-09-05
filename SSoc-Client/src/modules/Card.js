@@ -1,10 +1,17 @@
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Typography } from "../components/Basic/Typography";
 import * as Color from "../components/Colors/colors";
 import { ProfileImage } from "./ProfileImage";
 import { Spacer } from "../components/Basic/Spacer";
+import { useNavigation } from "@react-navigation/native";
 export const Card = (props) => {
+  const navigation = useNavigation();
+  const onPressDetail =()=>{
+    console.log("test");
+    navigation.navigate("StackDetailScreen");
+  }
   return (
+    <TouchableOpacity onPress={onPressDetail}>
     <View
       style={{
         height: 210,
@@ -41,5 +48,6 @@ export const Card = (props) => {
         </Typography>
       </View>
     </View>
+    </TouchableOpacity>
   );
 };
