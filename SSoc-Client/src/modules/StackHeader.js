@@ -16,7 +16,7 @@ export const StackHeader = (props) => {
   //to-do setting 화면가기 구현하기
   const onPressSetting = useCallback(() => {
     console.log("setting butotn test");
-    navigation.navigate("StackDetailScreen");
+    navigation.navigate("SettingScreen");
   }, []);
 
   return (

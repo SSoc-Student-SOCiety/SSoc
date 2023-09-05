@@ -1,7 +1,6 @@
 import { Image } from "react-native/";
 import * as Color from "../components/Colors/colors";
 export const ProfileImage = (props) => {
-  console.log(props.size);
   return (
     <Image
       source={{

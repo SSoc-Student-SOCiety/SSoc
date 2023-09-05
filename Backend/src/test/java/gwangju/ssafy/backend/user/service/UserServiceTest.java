@@ -30,7 +30,7 @@ public class UserServiceTest {
                 .id(1L)
                 .userPassword("1234")
                 .userEmail("test1234@yonsei.ac.kr")
-                .userNickNmae("테스트닉네임")
+                .userNickName("테스트닉네임")
                 .build();
 
         // 내 예상한 값을 넣는다 (무슨 값이 들어오던 무조건 true 반환하겠다)

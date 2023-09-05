@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.time.LocalDateTime;
@@ -18,7 +19,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Table(name = "users")  // 테이블명 user일 시 생성 안됨!(오류)
 public class User extends BaseEntity {
     @Id
@@ -38,13 +38,8 @@ public class User extends BaseEntity {
     @Column(name = "user_nickname")
     private String userNickName;    // 유저 닉네임
 
-    @CreatedDate
-    @Column(name = "user_create_date", updatable = false)
-    private LocalDateTime userCreateDate;
-
-    @LastModifiedBy
-    @Column(name = "user_modify_date")
-    private LocalDateTime userModifyDate;
-
-
+    // 유저 패스워드 암호화
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.userPassword = passwordEncoder.encode(userPassword);
+    }
 }
