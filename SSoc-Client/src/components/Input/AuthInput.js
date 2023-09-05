@@ -22,6 +22,7 @@ const AuthInput = (props) => {
           fontSize={20}
           editable={props.editable}
           secureTextEntry={props.secureTextEntry}
+          onChangeText={props.onChangeText}
         />
       </View>
     </View>

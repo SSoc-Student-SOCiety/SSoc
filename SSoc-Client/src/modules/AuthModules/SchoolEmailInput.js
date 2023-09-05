@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { Button } from '../../components/Basic/Button';
 import { Spacer } from '../../components/Basic/Spacer';
 import { Typography } from '../../components/Basic/Typography';
@@ -8,13 +8,14 @@ const SchoolEmailInput = (props) => {
   const email = props.email;
   const onPressCheckEmail = () => {
     // TO-DO
+    // 8줄 email Server로 쏴서 response 받기
     // API로 메일 인증 버튼 클릭 시 인증번호가 오면 onPressCheck() 아니면 에러
-    let res = true;
-    if (res) {
+    let res = 'testAuthCode';
+    if (res != '-1') {
       props.onPressCheck();
-      props.setEmailCode('1234');
+      props.setEmailCode(res);
     } else {
-      //   props.onPressCheck();
+      Alert.alert('잘못된 이메일입니다.');
     }
   };
   return (

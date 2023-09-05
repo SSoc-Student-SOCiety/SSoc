@@ -10,12 +10,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const RegisterSuccessScreen = (props) => {
   const navigation = useNavigation();
-
   // TO-DO
   // API 받아서 중복체크 -> 분기 처리 필요
   const onPressLogin = () => {
     navigation.reset({
-      routes: [{ name: 'Login', onFinishLoad: props.route.params.onFinishLoad }],
+      routes: [{ name: 'Login', onFinishLoad: props.route.onFinishLoad }],
     });
   };
 

@@ -1,19 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthStackNavigation from './navigations/AuthNavigations/AuthStackNavigation';
 import { useNavigation } from '@react-navigation/native';
+import { setAsync, getAsync } from './util/AsyncModule';
 
 export const SplashView = (props) => {
-  //유저 식별 로직
-  // const signUserIdentify = useCallback(() => {});
   const navigation = useNavigation();
   const [accessToken, setAccessToken] = useState(null);
   const [refleshToken, setRefleshToken] = useState(null);
-  const tmpRefleshToken = {
-    '': '',
-  };
 
-  //recoil 혹은 async storage에 저장되어있는 jwt로 로그인 시도
+  // TO-DO
+  // async storage에 저장되어있는 jwt로 로그인 시도
   const userSilentLogin = useCallback(() => {
     setTimeout(() => {
       //토큰에 저장된 값이 없을 경우
@@ -23,25 +19,39 @@ export const SplashView = (props) => {
           routes: [{ name: 'SchoolEmail', onFinishLoad: props.onFinishLoad }],
         });
       } else {
-        // 1. 토큰 존재
-        // 1-1.리프레시 토큰 만료시
-        //토큰 재발급
-        // 1-2. 액세스 토큰 만료시
-        //로그인 창
-        // props.onFinishLoad();
+        if (accessToken.date > 0) {
+          // 1. accessToken 살아있음
+          // 바로 메인화면으로 가기
+          props.onFinishLoad();
+        } else if (refleshToken.date > 0) {
+          // 2. refleshToken 살아있음
+          // API에 새로운 토큰들 달라고 요청 후 메인화면
+          props.onFinishLoad();
+        } else if (refleshToken.date < 0) {
+          // 3. accessToken, refleshToken 모두 죽음
+          // 로그인 화면으로 가기
+          navigation.reset({
+            routes: [{ name: 'Login', onFinishLoad: props.onFinishLoad }],
+          });
+        }
       }
+      // navigation.reset({
+      //   routes: [{ name: 'Login', onFinishLoad: props.onFinishLoad }],
+      // });
     }, 2000);
   }, []);
 
   //처음 앱 실행시 recoil 혹은 async storage에 저장되어있는 jwt로 로그인 시도
   useEffect(() => {
-    const getTokens = async () => {
-      const accessTokenData = JSON.parse(await AsyncStorage.getItem('accessToken'));
-      const refleshTokenData = JSON.parse(await AsyncStorage.getItem('refleshToken'));
-      if (accessTokenData !== null) setAccessToken(accessTokenData);
-      if (refleshTokenData !== null) setRefleshToken(refleshTokenData);
-    };
-    getTokens();
+    // TO-DO
+    // API 나오면 주석 해제 후 작업
+    // const getTokens = async () => {
+    //   const accessTokenData = getAsync('accessToken');
+    //   const refleshTokenData = getAsync('refleshToken');
+    //   if (accessTokenData !== null) setAccessToken(accessTokenData);
+    //   if (refleshTokenData !== null) setRefleshToken(refleshTokenData);
+    // };
+    // getTokens();
     userSilentLogin();
   }, []);
 
