@@ -6,7 +6,7 @@ import { Spacer } from '../../components/Basic/Spacer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SchoolEmailInput from '../../modules/AuthModules/SchoolEmailInput';
 import UserInfoInput from '../../modules/AuthModules/UserInfoInput';
-const RegisterScreen = ({ route }) => {
+const RegisterScreen = (props) => {
   const [initialized, setInitialized] = useState(false);
   const [emailCode, setEmailCode] = useState('');
   return (
@@ -18,13 +18,18 @@ const RegisterScreen = ({ route }) => {
       <Logo />
       <View style={{ margin: 20 }}>
         <SchoolEmailInput
-          email={route.params.email}
+          email={props.route.params.email}
           onPressCheck={() => {
             setInitialized(true);
           }}
           setEmailCode={setEmailCode}
         />
-        {initialized ? <UserInfoInput emailCode={emailCode} /> : null}
+        {initialized ? (
+          <UserInfoInput
+            emailCode={emailCode}
+            onFinishLoad={props.route.params.onFinishLoad}
+          />
+        ) : null}
       </View>
     </KeyboardAwareScrollView>
   );

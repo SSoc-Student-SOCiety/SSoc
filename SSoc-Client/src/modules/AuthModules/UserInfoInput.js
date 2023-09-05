@@ -13,7 +13,7 @@ const UserInfoInput = (props) => {
     // 인증번호 입력값과 emailCode(API에서 보내준 값)이
     // 일치하는지 확인 후 에러/로그인페이지 분기처리
     if (props.emailCode === '1234') {
-      navigation.navigate('Login');
+      navigation.navigate('RegisterSuccess', { onFinishLoad: props.onFinishLoad });
     } else {
     }
   };

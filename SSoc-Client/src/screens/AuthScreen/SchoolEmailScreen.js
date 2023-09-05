@@ -9,13 +9,12 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AuthInput from '../../components/Input/AuthInput';
 
-const SchoolEmailScreen = () => {
+const SchoolEmailScreen = (props) => {
   const navigation = useNavigation();
-
   // TO-DO
   // API 받아서 중복체크 -> 분기 처리 필요
   const onPressRegister = () => {
-    navigation.navigate('Register', { email: 'test1234@shinhan.ac.kr' });
+    navigation.navigate('Register', { email: 'test1234@shinhan.ac.kr', onFinishLoad: props.route.onFinishLoad });
   };
 
   return (
@@ -44,7 +43,7 @@ const SchoolEmailScreen = () => {
           fontSize={14}
           color={Color.LIGHT_BLUE}
         >
-          학교 이메일이 필요해요!{' '}
+          학교 이메일이 필요해요!
         </Typography>
         <Spacer space={16} />
         <Button onPress={onPressRegister}>

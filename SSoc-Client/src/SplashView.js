@@ -9,7 +9,6 @@ export const SplashView = (props) => {
   const navigation = useNavigation();
   const [accessToken, setAccessToken] = useState(null);
   const [refleshToken, setRefleshToken] = useState(null);
-
   const tmpRefleshToken = {
     '': '',
   };
@@ -21,7 +20,7 @@ export const SplashView = (props) => {
       //회원가입
       if (refleshToken === null || accessToken === null) {
         navigation.reset({
-          routes: [{ name: 'SchoolEmail' }],
+          routes: [{ name: 'SchoolEmail', onFinishLoad: props.onFinishLoad }],
         });
       } else {
         // 1. 토큰 존재
