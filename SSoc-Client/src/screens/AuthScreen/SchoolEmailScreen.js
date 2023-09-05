@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Alert } from 'react-native';
 import { Typography } from '../../components/Basic/Typography';
 import { Logo } from '../../modules/Logo';
 import * as Color from '../../components/Colors/colors';
@@ -8,13 +8,29 @@ import { Button } from '../../components/Basic/Button';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AuthInput from '../../components/Input/AuthInput';
+import { SingleLineInput } from '../../components/Input/SingleLineInput';
 
 const SchoolEmailScreen = (props) => {
   const navigation = useNavigation();
+  // const [school, setSchool] = useState('');
+  const [userId, setUserId] = useState('');
+  const [email, setEmail] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const schoolList = {
+    신한대학교: 'shinhan.ac.kr',
+    싸피대학교: 'ssafy.ac.kr',
+  };
+
   // TO-DO
-  // API 받아서 중복체크 -> 분기 처리 필요
+  // userEmail Server로 보내기 -> 정상: return값 메일 인증번호 = Register페이지로 prop 보내기
+  // userEmail Server로 보내기 -> 에러: return값 에러코드 = 에러코드 발생 시 Alert 띄우기
   const onPressRegister = () => {
-    navigation.navigate('Register', { email: 'test1234@shinhan.ac.kr', onFinishLoad: props.route.onFinishLoad });
+    if (email.length < 2 || userId.length < 2) {
+      Alert.alert('학교와 이메일을 정확히 기입해주세요.');
+    } else {
+      setUserEmail(userId + '@' + email);
+      navigation.navigate('Register', { email: userEmail, onFinishLoad: props.route.onFinishLoad });
+    }
   };
 
   return (
@@ -30,43 +46,81 @@ const SchoolEmailScreen = (props) => {
           fontSize={16}
           title="학교"
           placeholder="ex) OO대학교"
-          inputColor={Color.BLUE}
-        />
-        <Spacer space={12} />
-        <AuthInput
-          fontSize={16}
-          title="학교 이메일"
-          placeholder="ex) test@shinhan.ac.kr"
-          inputColor={Color.BLUE}
+          onChangeText={(text) => {
+            if (schoolList[text]) {
+              setEmail(schoolList[text]);
+            } else {
+              setEmail('');
+            }
+            setUserEmail(userId + '@' + schoolList[text]);
+          }}
         />
         <Typography
           fontSize={14}
-          color={Color.LIGHT_BLUE}
+          color={Color.GRAY}
         >
-          학교 이메일이 필요해요!
+          <Text>* 학교명을 정확히 기입해주세요!{'\n  '}정확히 기입시 이메일이 나타납니다 :)</Text>
         </Typography>
         <Spacer space={16} />
-        <Button onPress={onPressRegister}>
-          <View
-            backgroundColor={Color.DARK_BLUE}
-            borderRadius={10}
-            style={{
-              alignSelf: 'stretch',
-              height: 50,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-            }}
+        <View>
+          <Typography
+            fontSize={16}
+            color={Color.DARK_BLUE}
           >
-            <Typography
-              fontSize={16}
-              color={Color.WHITE}
-            >
-              중복체크
-            </Typography>
-            <Spacer space={10} />
+            <Text style={{ fontWeight: 'bold' }}>학교 이메일</Text>
+          </Typography>
+          <Spacer space={4} />
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+            <View style={{ flex: 5, backgroundColor: Color.LIGHT_GRAY, borderRadius: 10 }}>
+              <SingleLineInput
+                fontSize={20}
+                onChangeText={(text) => {
+                  setUserId(text);
+                  setUserEmail(text + '@' + email);
+                }}
+              />
+            </View>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Text>@</Text>
+            </View>
+            <View style={{ flex: 5, backgroundColor: Color.GRAY, borderRadius: 10 }}>
+              <SingleLineInput
+                fontSize={18}
+                editable={false}
+                value={email}
+              />
+            </View>
           </View>
-        </Button>
+
+          <Typography
+            fontSize={14}
+            color={Color.LIGHT_BLUE}
+          >
+            학교 이메일이 필요해요!
+          </Typography>
+          <Spacer space={16} />
+          <Button onPress={onPressRegister}>
+            <View
+              backgroundColor={Color.DARK_BLUE}
+              borderRadius={10}
+              style={{
+                alignSelf: 'stretch',
+                height: 50,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <Typography
+                fontSize={16}
+                color={Color.WHITE}
+              >
+                중복체크
+              </Typography>
+              <Spacer space={10} />
+            </View>
+          </Button>
+        </View>
       </View>
     </KeyboardAwareScrollView>
   );
