@@ -26,20 +26,23 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    // 유저 아이디 (기본키)
 
-    @Column(name = "user_email")
+    @Column(name = "email")
     private String userEmail;   // 유저 이메일
 
-    @Column(name = "user_password")
+    @Column(name = "password")
     private String userPassword;    // 유저 비밀번호
 
-    @Column(name = "user_name")
+    @Column(name = "name")
     private String userName;    // 유저 이름
 
-    @Column(name = "user_nickname")
+    @Column(name = "nickname")
     private String userNickName;    // 유저 닉네임
 
+    @Column(name = "authority")
+    private String userAuthority;   // 유저 권한
+
     // 유저 패스워드 암호화
-    public void encodePassword(PasswordEncoder passwordEncoder) {
+    private void encodePassword(PasswordEncoder passwordEncoder) {
         this.userPassword = passwordEncoder.encode(userPassword);
     }
 }
