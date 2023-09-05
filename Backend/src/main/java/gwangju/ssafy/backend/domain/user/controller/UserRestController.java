@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.domain.user.controller;
 
+import gwangju.ssafy.backend.domain.user.dto.LoginUserDto;
 import gwangju.ssafy.backend.domain.user.dto.UserDto;
 import gwangju.ssafy.backend.domain.user.service.UserService;
 import gwangju.ssafy.backend.global.infra.email.EmailService;
@@ -48,10 +49,9 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public boolean login(@RequestParam(value = "userEmail") String userEmail, @RequestParam(value = "userPassword") String userPassword) {
+    public boolean login(@RequestBody LoginUserDto loginUserDto) {
         log.info("==================로그인 진입=============");
-        return userService.loginCheckUser(userEmail, userPassword);
+        return userService.loginCheckUser(loginUserDto);
     }
-
 
 }
