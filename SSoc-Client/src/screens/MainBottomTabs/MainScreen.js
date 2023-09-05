@@ -11,7 +11,7 @@ export const MainScreen = () => {
 
   const onPressDetail = () => {
     console.log("test");
-    navigation.navigate("StackDetailScreen");
+    navigation.navigate("GroupDetailScreen");
   };
 
   return (
@@ -24,55 +24,52 @@ export const MainScreen = () => {
         showsHorizontalScrollIndicator={false}
         style={styles.cardContainer}
       >
-        {
-          cardsData.map((card, index) => (
-            <Card key={index} {...card} onPress={onPressDetail} />
-          ))
-        }
+        {cardsData.map((card, index) => (
+          <Card key={index} {...card} onPress={onPressDetail} />
+        ))}
       </ScrollView>
     </View>
   );
 };
 
-
-  const cardsData = [
-    {
-      url: "https://picsum.photos/600",
-      schoolName: "한국대학교",
-      groupName: "정오",
-      groupType: "총학생회",
-      group: "제36대 총학생회",
-      val: "1",
-      unit: "days",
-    },
-    {
-      url: "https://picsum.photos/700",
-      schoolName: "한국대학교",
-      groupName: "정일",
-      groupType: "동아리",
-      group: "중앙 밴드동아리",
-      val: "1",
-      unit: "days",
-    },
-    {
-      url: "https://picsum.photos/500",
-      schoolName: "한국대학교",
-      groupName: "정일",
-      groupType: "동아리",
-      group: "중앙 밴드동아리",
-      val: "1",
-      unit: "days",
-    },
-    {
-      url: "https://picsum.photos/300",
-      schoolName: "한국대학교",
-      groupName: "정일",
-      groupType: "동아리",
-      group: "중앙 밴드동아리",
-      val: "1",
-      unit: "days",
-    },
-  ]
+const cardsData = [
+  {
+    url: "https://picsum.photos/600",
+    schoolName: "한국대학교",
+    groupName: "정오",
+    groupType: "총학생회",
+    group: "제36대 총학생회",
+    val: "1",
+    unit: "days",
+  },
+  {
+    url: "https://picsum.photos/700",
+    schoolName: "한국대학교",
+    groupName: "정일",
+    groupType: "동아리",
+    group: "중앙 밴드동아리",
+    val: "1",
+    unit: "days",
+  },
+  {
+    url: "https://picsum.photos/500",
+    schoolName: "한국대학교",
+    groupName: "정일",
+    groupType: "동아리",
+    group: "중앙 밴드동아리",
+    val: "1",
+    unit: "days",
+  },
+  {
+    url: "https://picsum.photos/300",
+    schoolName: "한국대학교",
+    groupName: "정일",
+    groupType: "동아리",
+    group: "중앙 밴드동아리",
+    val: "1",
+    unit: "days",
+  },
+];
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "white" },
