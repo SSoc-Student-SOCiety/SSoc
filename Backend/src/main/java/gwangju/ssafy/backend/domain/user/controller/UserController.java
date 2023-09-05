@@ -29,4 +29,11 @@ public class UserController {
         return "user/joinform";
     }
 
+    // 로그인 폼으로 이동
+    @GetMapping("/loginform")
+    public String login() {
+        log.info("==================loginform view controller 진입=============");
+        return "user/loginform";
+    }
+
 }
