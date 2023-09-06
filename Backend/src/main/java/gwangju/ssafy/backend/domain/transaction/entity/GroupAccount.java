@@ -41,5 +41,7 @@ public class GroupAccount {
 	})
 	private Bank bank;
 
+	@Column
+	private boolean isActive;
 
 }

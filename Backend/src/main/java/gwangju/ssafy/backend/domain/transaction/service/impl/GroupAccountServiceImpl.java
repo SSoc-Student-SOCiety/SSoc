@@ -75,6 +75,7 @@ class GroupAccountServiceImpl implements GroupAccountService {
 			.group(group)
 			.number(request.getAccountNumber())
 			.bank(new Bank(request.getBankName(), request.getBankCode()))
+			.isActive(true)
 			.build();
 
 		//
