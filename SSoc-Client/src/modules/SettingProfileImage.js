@@ -12,7 +12,7 @@ export const SettingProfileImage = (props) => {
       }}
       imageStyle={{
         borderRadius: 100,
-        borderColor: Color.BLACK,
+        borderColor: Color.GRAY,
         borderWidth: 0.5,
       }}
     >
