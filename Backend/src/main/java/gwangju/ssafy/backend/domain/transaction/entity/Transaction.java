@@ -1,6 +1,5 @@
 package gwangju.ssafy.backend.domain.transaction.entity;
 
-import gwangju.ssafy.backend.domain.group.entity.Group;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +29,7 @@ public class Transaction {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn
-	private Group group;
+	private GroupAccount groupAccount;
 
 	@Column
 	private LocalDateTime date;

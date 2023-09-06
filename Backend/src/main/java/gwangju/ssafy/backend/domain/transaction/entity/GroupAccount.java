@@ -1,7 +1,11 @@
 package gwangju.ssafy.backend.domain.transaction.entity;
 
 import gwangju.ssafy.backend.domain.group.entity.Group;
+import gwangju.ssafy.backend.global.common.entity.vo.Bank;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,5 +33,13 @@ public class GroupAccount {
 
 	@Column
 	private String number;
+
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name = "name", column = @Column(name = "bank_name")),
+		@AttributeOverride(name = "code", column = @Column(name = "bank_code"))
+	})
+	private Bank bank;
+
 
 }

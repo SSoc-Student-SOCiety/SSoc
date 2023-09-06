@@ -42,7 +42,7 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 
 			List<TransactionInfo.Transaction> transactions = info.getTransactions();
 
-			int cnt = transactionRepository.countByGroup_Id(groupAccount.getGroup().getId());
+			int cnt = transactionRepository.countByGroupAccount_Id(groupAccount.getId());
 			log.info("===== 기존 거래내역 개수 : {} =====", cnt);
 
 			long diff = info.getTransactionCnt() - cnt;
@@ -60,7 +60,7 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 					.branch(transaction.getBranch())
 					.date(transaction.getDate())
 					.category(transaction.getCategory())
-					.group(groupAccount.getGroup())
+					.groupAccount(groupAccount)
 					.build();
 
 				list.add(result);
