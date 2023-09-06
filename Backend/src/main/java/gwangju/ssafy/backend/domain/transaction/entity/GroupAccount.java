@@ -12,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +23,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(
+	uniqueConstraints = {
+		@UniqueConstraint(name = "unique_group_account",
+			columnNames = {"number" , "group_id"})
+	}
+)
 @Entity
 public class GroupAccount {
 
@@ -41,5 +49,14 @@ public class GroupAccount {
 	})
 	private Bank bank;
 
+	@Column
+	private boolean isActive;
 
+	public void activate() {
+		this.isActive = true;
+	}
+
+	public void deactivate() {
+		this.isActive = false;
+	}
 }

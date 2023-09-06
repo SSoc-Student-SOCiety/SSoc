@@ -28,8 +28,8 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 	public List<Transaction> read()
 		throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 
-		log.info("====== 모든 그룹 계좌번호 가져오기 =====");
-		List<GroupAccount> all = groupAccountRepository.findAll();
+		log.info("====== 활성화된 모든 그룹 계좌번호 가져오기 =====");
+		List<GroupAccount> all = groupAccountRepository.findAllByIsActiveIsTrue();
 
 		log.info("모든 그룹 계좌 수 : {}", all.size());
 		ArrayList<Transaction> list = new ArrayList<>();

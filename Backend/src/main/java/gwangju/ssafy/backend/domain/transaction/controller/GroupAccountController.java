@@ -3,10 +3,12 @@ package gwangju.ssafy.backend.domain.transaction.controller;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
 import gwangju.ssafy.backend.domain.transaction.dto.RegisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.transaction.dto.SendAuthCodeRequest;
+import gwangju.ssafy.backend.domain.transaction.dto.UnregisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.transaction.service.GroupAccountService;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +28,14 @@ public class GroupAccountController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<Message> sendAuthCode(@RequestBody RegisterGroupAccountRequest request) {
+	public ResponseEntity<Message> registerGroupAccount(@RequestBody RegisterGroupAccountRequest request) {
 		groupAccountService.registerGroupAccount(request);
 		return ResponseEntity.ok().body(Message.success());
 	}
 
-
-
+	@GetMapping("/unregister")
+	public ResponseEntity<Message> unregisterGroupAccount(@RequestBody UnregisterGroupAccountRequest request) {
+		groupAccountService.unregisterGroupAccount(request);
+		return ResponseEntity.ok().body(Message.success());
+	}
 }

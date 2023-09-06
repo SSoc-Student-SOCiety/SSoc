@@ -7,6 +7,7 @@ import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
 import gwangju.ssafy.backend.domain.transaction.dto.RegisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.transaction.dto.SendAuthCodeRequest;
+import gwangju.ssafy.backend.domain.transaction.dto.UnregisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.transaction.entity.GroupAccount;
 import gwangju.ssafy.backend.domain.transaction.repository.GroupAccountRepository;
 import gwangju.ssafy.backend.domain.transaction.service.GroupAccountService;
@@ -34,7 +35,21 @@ class GroupAccountServiceImpl implements GroupAccountService {
 
 	@Override
 	public void sendAuthCode(SendAuthCodeRequest request) {
+		// 권한 확인
 		validateAuthority(request.getGroupId(), request.getUserId());
+
+		// 그룹 계좌로 등록된 계좌인지 확인
+		Optional<GroupAccount> optionalGroupAccount = groupAccountRepository.findByGroupIdAndNumber(
+			request.getGroupId(),
+			request.getAccountNumber());
+
+		// 요청 계좌가 이미 등록된 계좌라면
+		if(optionalGroupAccount.isPresent()){
+			GroupAccount groupAccount = optionalGroupAccount.get();
+			if (groupAccount.isActive()) {
+				throw new RuntimeException("이미 등록된 계좌");
+			}
+		}
 
 		// 인증 코드 생성
 		String authCode = AuthCodeGenerator.generate();
@@ -57,6 +72,20 @@ class GroupAccountServiceImpl implements GroupAccountService {
 	public void registerGroupAccount(RegisterGroupAccountRequest request) {
 		validateAuthority(request.getGroupId(), request.getUserId());
 
+		Optional<GroupAccount> optionalGroupAccount = groupAccountRepository.findByGroupIdAndNumber(
+			request.getGroupId(),
+			request.getAccountNumber());
+
+		if(optionalGroupAccount.isPresent()){
+			GroupAccount groupAccount = optionalGroupAccount.get();
+			if (groupAccount.isActive()) {
+				throw new RuntimeException("이미 등록된 계좌");
+			}else {
+				groupAccount.activate();
+				return;
+			}
+		}
+
 		String key = KEY_PREFIX + request.getGroupId();
 
 		// 인증 코드 검증
@@ -75,6 +104,7 @@ class GroupAccountServiceImpl implements GroupAccountService {
 			.group(group)
 			.number(request.getAccountNumber())
 			.bank(new Bank(request.getBankName(), request.getBankCode()))
+			.isActive(true)
 			.build();
 
 		//
@@ -96,6 +126,18 @@ class GroupAccountServiceImpl implements GroupAccountService {
 
 	private Optional<String> getAuthCodeInRedis(String key) {
 		return Optional.ofNullable(redisTemplate.opsForValue().get(key));
+	}
+
+	@Override
+	public void unregisterGroupAccount(UnregisterGroupAccountRequest request) {
+		validateAuthority(request.getGroupId(), request.getUserId());
+
+		GroupAccount groupAccount = groupAccountRepository.findByGroupIdAndNumber(
+				request.getGroupId(),
+				request.getAccountNumber())
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 계좌"));
+
+		groupAccount.deactivate();
 	}
 
 }
