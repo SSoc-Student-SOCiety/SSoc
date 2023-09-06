@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "expo-image-picker": "^14.3.2"
+    "expo-image-picker": "^14.3.2",
+    "expo-module-scripts": "^3.0.11"
   }
 }
