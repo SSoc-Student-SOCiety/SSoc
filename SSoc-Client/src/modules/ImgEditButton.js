@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { Button } from '../components/Basic/Button'
 import * as Color from '../components/Colors/colors'
 import { Icon } from '../components/Icons/Icons'
-import * as ImagePicker from 'expo-image-picker'
+// import * as ImagePicker from 'expo-image-picker'
 
 const SettingImgEditButton = (props) => {
   const imageUrl = props.userData.imageUrl
