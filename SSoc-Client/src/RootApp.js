@@ -3,7 +3,7 @@ import { SplashView } from './SplashView';
 import { RootStackNavigation } from './navigations/MainNavigations/RootStackNavigation';
 
 export const RootApp = () => {
-  const [initialized, setInitialized] = useState(false);
+  const [initialized, setInitialized] = useState(true);
 
   if (!initialized) {
     return (
