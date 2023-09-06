@@ -30,4 +30,10 @@ public class GroupAccount {
 	@Column
 	private String number;
 
+	@Column
+	private String bankCode;
+
+	@Column
+	private String bankName;
+
 }
