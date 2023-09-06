@@ -34,7 +34,21 @@ class GroupAccountServiceImpl implements GroupAccountService {
 
 	@Override
 	public void sendAuthCode(SendAuthCodeRequest request) {
+		// 권한 확인
 		validateAuthority(request.getGroupId(), request.getUserId());
+
+		// 그룹 계좌로 등록된 계좌인지 확인
+		Optional<GroupAccount> optionalGroupAccount = groupAccountRepository.findByGroupIdAndNumber(
+			request.getGroupId(),
+			request.getAccountNumber());
+
+		// 요청 계좌가 이미 등록된 계좌라면
+		if(optionalGroupAccount.isPresent()){
+			GroupAccount groupAccount = optionalGroupAccount.get();
+			if (groupAccount.isActive()) {
+				throw new RuntimeException("이미 등록된 계좌");
+			}
+		}
 
 		// 인증 코드 생성
 		String authCode = AuthCodeGenerator.generate();
@@ -56,6 +70,20 @@ class GroupAccountServiceImpl implements GroupAccountService {
 	@Override
 	public void registerGroupAccount(RegisterGroupAccountRequest request) {
 		validateAuthority(request.getGroupId(), request.getUserId());
+
+		Optional<GroupAccount> optionalGroupAccount = groupAccountRepository.findByGroupIdAndNumber(
+			request.getGroupId(),
+			request.getAccountNumber());
+
+		if(optionalGroupAccount.isPresent()){
+			GroupAccount groupAccount = optionalGroupAccount.get();
+			if (groupAccount.isActive()) {
+				throw new RuntimeException("이미 등록된 계좌");
+			}else {
+				groupAccount.activate();
+				return;
+			}
+		}
 
 		String key = KEY_PREFIX + request.getGroupId();
 
