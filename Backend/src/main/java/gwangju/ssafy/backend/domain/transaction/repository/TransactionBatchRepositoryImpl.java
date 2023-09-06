@@ -29,7 +29,7 @@ class TransactionBatchRepositoryImpl implements TransactionBatchRepository {
 
 		log.info("===== 거래 내역 배치 JdbcTemplate 실행 =====");
 		String sql =
-			"INSERT INTO TRANSACTIONS (group_id, date, briefs, withdrawal, deposit, detail, balance, category, branch)"
+			"INSERT INTO TRANSACTIONS (group_account_id, date, briefs, withdrawal, deposit, detail, balance, category, branch)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			log.info("===== 저장될 거래 내역 개수 : {} =====", transactions.size());
@@ -37,7 +37,7 @@ class TransactionBatchRepositoryImpl implements TransactionBatchRepository {
 				jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 					@Override
 					public void setValues(PreparedStatement ps, int i) throws SQLException {
-						ps.setLong(1, transaction.getGroup().getId());
+						ps.setLong(1, transaction.getGroupAccount().getId());
 						ps.setTimestamp(2, Timestamp.valueOf(transaction.getDate()));
 						ps.setString(3, transaction.getBriefs());
 						ps.setLong(4, transaction.getWithdrawal());
