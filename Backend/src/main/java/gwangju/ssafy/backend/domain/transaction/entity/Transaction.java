@@ -58,4 +58,9 @@ public class Transaction {
 	@Column
 	private String note;
 
+
+	public void changeNote(String note) {
+		this.note = note;
+	}
+
 }
