@@ -7,6 +7,7 @@ import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
 import gwangju.ssafy.backend.domain.transaction.dto.RegisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.transaction.dto.SendAuthCodeRequest;
+import gwangju.ssafy.backend.domain.transaction.dto.UnregisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.transaction.entity.GroupAccount;
 import gwangju.ssafy.backend.domain.transaction.repository.GroupAccountRepository;
 import gwangju.ssafy.backend.domain.transaction.service.GroupAccountService;
@@ -125,6 +126,18 @@ class GroupAccountServiceImpl implements GroupAccountService {
 
 	private Optional<String> getAuthCodeInRedis(String key) {
 		return Optional.ofNullable(redisTemplate.opsForValue().get(key));
+	}
+
+	@Override
+	public void unregisterGroupAccount(UnregisterGroupAccountRequest request) {
+		validateAuthority(request.getGroupId(), request.getUserId());
+
+		GroupAccount groupAccount = groupAccountRepository.findByGroupIdAndNumber(
+				request.getGroupId(),
+				request.getAccountNumber())
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 계좌"));
+
+		groupAccount.deactivate();
 	}
 
 }
