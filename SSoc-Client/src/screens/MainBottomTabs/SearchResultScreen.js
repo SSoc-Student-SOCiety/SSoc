@@ -29,7 +29,7 @@ export const SearchResultScreen=()=>{
                         />
                     </View>          
                     <TouchableOpacity>
-                    <SearchButton color={Color.BLUE} title={"학생회 / 동아리 공금 현황 보러가기"} iconName={"airplane-outline" } isIcon={true}/>
+                        <SearchButton color={Color.BLUE} title={"학생회 / 동아리 공금 현황 보러가기"} iconName={"airplane-outline" } isIcon={true}/>
 
                     </TouchableOpacity>
                 </View>
@@ -71,15 +71,15 @@ var styles = StyleSheet.create({
 
 
 const IMAGE_LIST = [
-    {title : "Enactus", school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on", url: "https://images.pexels.com/photos/11860376/pexels-photo-11860376.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"},
-    {title : "K.U.D.T", school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/14268955/pexels-photo-14268955.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 1, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 2, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/13240319/pexels-photo-13240319.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 4, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/12290139/pexels-photo-12290139.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 5, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/10550714/pexels-photo-10550714.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 6, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/13350289/pexels-photo-13350289.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 7, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/14270535/pexels-photo-14270535.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 8, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/9420617/pexels-photo-9420617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
-    {title : 9, school: "신한대학교", subtitle:"신한대학교 사회혁신 경영학회", updatedAt:"9h ago on",url:"https://images.pexels.com/photos/12938821/pexels-photo-12938821.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"}
+    {name : "Enactus", school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days", url: "https://images.pexels.com/photos/11860376/pexels-photo-11860376.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"},
+    {name : "K.U.D.T", school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/14268955/pexels-photo-14268955.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 1, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 2, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/13240319/pexels-photo-13240319.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 4, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/12290139/pexels-photo-12290139.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 5, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/10550714/pexels-photo-10550714.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 6, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/13350289/pexels-photo-13350289.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 7, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/14270535/pexels-photo-14270535.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 8, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/9420617/pexels-photo-9420617.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"},
+    {name : 9, school: "신한대학교", subName:"신한대학교 사회혁신 경영학회", val:"3",unit:"days",url:"https://images.pexels.com/photos/12938821/pexels-photo-12938821.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"}
   ];
   

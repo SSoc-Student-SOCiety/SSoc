@@ -26,11 +26,11 @@ export const Card = (props) => {
           <ProfileImage size={50} url={props.url} />
           <Spacer space={10} />
           <Typography fontSize={20} color={Color.WHITE}>
-            {props.schoolName}
+            {props.school}
           </Typography>
           <Spacer space={5} />
           <Typography fontSize={17} color={Color.WHITE}>
-            {props.groupName}
+            {props.name}
           </Typography>
           <Spacer space={5} />
           <Typography fontSize={15} color={Color.LIGHT_GRAY}>
@@ -38,7 +38,7 @@ export const Card = (props) => {
           </Typography>
           <Spacer space={5} />
           <Typography fontSize={12} color={Color.LIGHT_GRAY}>
-            {props.group}
+            {props.subName}
           </Typography>
           <Spacer space={20} />
           <Typography fontSize={13} color={Color.WHITE}>
