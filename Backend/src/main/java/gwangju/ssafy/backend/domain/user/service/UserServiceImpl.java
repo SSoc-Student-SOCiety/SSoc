@@ -1,10 +1,7 @@
 package gwangju.ssafy.backend.domain.user.service;
 
-import gwangju.ssafy.backend.domain.user.dto.LoginUserDto;
-import gwangju.ssafy.backend.domain.user.dto.MailDto;
-import gwangju.ssafy.backend.domain.user.dto.UserRequestDto;
+import gwangju.ssafy.backend.domain.user.dto.*;
 import gwangju.ssafy.backend.domain.user.entity.User;
-import gwangju.ssafy.backend.domain.user.entity.enums.UserRole;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import gwangju.ssafy.backend.global.common.dto.TokenDto;
 import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
@@ -12,27 +9,17 @@ import gwangju.ssafy.backend.global.component.jwt.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 @Slf4j
 @Service
@@ -75,7 +62,7 @@ class UserServiceImpl implements UserService {
 
     // 회원가입 처리
     @Override
-    public UserRequestDto signUpUser(UserRequestDto userRequestDto) {
+    public void signUpUser(UserSignUpRequestDto userRequestDto) {
         if(userRepository.existsUserByUserEmail(userRequestDto.getUserEmail())) {
             throw new RuntimeException("이미 가입되어 있는 이메일입니다.");
         }
@@ -83,29 +70,42 @@ class UserServiceImpl implements UserService {
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword())); // 패스워드 암호화 작업
         User user = userRepository.save(userRequestDto.toEntity());
         log.info(user.getId().toString());
-        return userRequestDto;
-
     }
 
     // 로그인 처리 부분
     @Override
-    public TokenDto loginCheckUser(LoginUserDto loginUserDto) {
-        User user = userRepository.findByUserEmail(loginUserDto.getUserEmail()).orElseThrow(() ->
+    public UserLoginResponseDto loginCheckUser(UserLoginRequestDto userLoginRequestDto) {
+        User user = userRepository.findByUserEmail(userLoginRequestDto.getUserEmail()).orElseThrow(() ->
                 new IllegalArgumentException("해당 이메일을 가진 회원이 존재하지 않습니다. 이메일을 다시한번 확인해주세요."));
         String realPassword = user.getUserPassword();
 
-        if(!passwordEncoder.matches(loginUserDto.getUserPassword(), realPassword)) {
+        if(!passwordEncoder.matches(userLoginRequestDto.getUserPassword(), realPassword)) {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다. 다시한번 확인해주세요.");
         }
 
         // Dto의 email, 비밀번호을 받고 UssrnamePasswordAuthenticationToken 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserDto.getUserEmail(), realPassword);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUserEmail(), realPassword);
         log.info(String.valueOf(authenticationToken));
         log.info(authenticationToken.getCredentials().toString());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
-        log.info(String.valueOf(tokenDto));
-        return tokenDto;
+
+        log.info(user.getUserEmail());
+        log.info(user.getUsername());
+        log.info(user.getUserNickName());
+        log.info(user.getUserPassword());
+
+        UserDto userDto = UserDto.builder()
+                .userEmail(user.getUserEmail())
+                .userNickName(user.getUserNickName())
+                .userName(user.getUsername())
+                .build();
+
+        return UserLoginResponseDto.builder()
+                .userInfo(userDto)
+                .token(tokenDto)
+                .build();
     }
 
     @Override
@@ -131,6 +131,30 @@ class UserServiceImpl implements UserService {
         return tokenProvider.generateTokenDto(authentication);
     }
 
+    // 회원정보에서 닉네임만 수정
+    @Override
+    public void updateNickName(UserUpdateDto userUpdateDto) {
+        User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).get();
+        user.updateUserNickName(userUpdateDto.getUserNickName());
+    }
 
+    // 회원정보에서 프로필 이미지만 수정
+    @Override
+    public void updateImage(UserUpdateDto userUpdateDto) {
+        User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).get();
+        user.updateUserImage(userUpdateDto.getUserImage());
+    }
+
+    // 회원정보에서 비밀번호만 수정
+    @Override
+    public boolean updatePassword(UserUpdateDto userUpdateDto) {
+        User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).get();
+        String realPassword = user.getUserPassword();
+        if(passwordEncoder.matches(userUpdateDto.getUserPassword(), realPassword)) {
+            return false;
+        }
+        user.updatePassword(passwordEncoder.encode(userUpdateDto.getUserPassword()));
+        return true;
+    }
 
 }

@@ -1,12 +1,9 @@
 package gwangju.ssafy.backend.domain.user.service;
 
-import gwangju.ssafy.backend.domain.user.dto.LoginUserDto;
-import gwangju.ssafy.backend.domain.user.dto.MailDto;
-import gwangju.ssafy.backend.domain.user.dto.UserRequestDto;
+import gwangju.ssafy.backend.domain.user.dto.*;
 import gwangju.ssafy.backend.global.common.dto.TokenDto;
 import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.redis.core.ValueOperations;
 
 public interface UserService {
 
@@ -17,12 +14,22 @@ public interface UserService {
     boolean existsUserByUserEmail(String userEmail);
 
     // 회원가입 처리
-    UserRequestDto signUpUser(UserRequestDto userRequestDto);
+    void signUpUser(UserSignUpRequestDto userSignUpRequestDto);
 
     // 로그인 처리
-    TokenDto loginCheckUser(LoginUserDto loginUserDto);
+    UserLoginResponseDto loginCheckUser(UserLoginRequestDto loginUserDto);
 
     void logoutUser(HttpServletRequest request);
 
     TokenDto reissue(TokenRequestDto tokenRequestDto);
+
+    // 유저정보에서 닉네임만 수정
+    void updateNickName(UserUpdateDto userUpdateDto);
+
+    // 유저정보에서 프로필 이미지만 수정
+    void updateImage(UserUpdateDto userUpdateDto);
+
+    // 유저정보에서 패스워드만 수정
+    boolean updatePassword(UserUpdateDto userUpdateDto);
+
 }

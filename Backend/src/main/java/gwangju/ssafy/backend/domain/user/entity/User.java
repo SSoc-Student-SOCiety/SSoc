@@ -41,14 +41,27 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "nickname")
     private String userNickName;    // 유저 닉네임
 
+    @Column(name = "image")
+    private String userImage;
+
 //    @Column(name = "authority")
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> role = new ArrayList<>();   // 유저 권한
 
-    // 유저 패스워드 암호화
-    private void encodePassword(PasswordEncoder passwordEncoder) {
-        this.userPassword = passwordEncoder.encode(userPassword);
+    // 유저 패스워드 세팅 (암호화해서 넘겨줌) (회원정보 수정 - 패스워드)
+    public void updatePassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    // 유저 닉네임만 세팅 (회원정보 수정 - 닉네임)
+    public void updateUserNickName(String userNickName) {
+        this.userNickName = userNickName;
+    }
+
+    // 유저 프로필 이미지만 세팅 (회원정보 수정 - 닉네임)
+    public void updateUserImage(String userImage) {
+        this.userImage = userImage;
     }
 
     @Override
