@@ -17,7 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 로그인시 해당 유저 이메일 검색
     Optional<User> findByUserEmail(String userEmail);
 
-
     // 네이티브 쿼리 이용
     // 해당 이메일이 학교 이메일인지 여부 확인
 //    @Query(value = "SELECT EXISTS " +

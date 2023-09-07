@@ -1,5 +1,4 @@
-package gwangju.ssafy.backend.domain.group.dto;
-
+package gwangju.ssafy.backend.domain.transaction.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,14 +11,12 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class EditGroupInfoRequest {
+public class SendAuthCodeRequest {
 
 	private Long userId;
 	private Long groupId;
-	private String name;
-	private String category;
-	private String aboutUs;
-	private String introduce;
-	private String thumbnail;
+	private String accountNumber;
+	private String bankCode;
+	private String bankName;
 
 }

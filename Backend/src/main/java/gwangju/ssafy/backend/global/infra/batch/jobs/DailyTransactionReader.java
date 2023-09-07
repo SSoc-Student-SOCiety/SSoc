@@ -28,8 +28,8 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 	public List<Transaction> read()
 		throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
 
-		log.info("====== 모든 그룹 계좌번호 가져오기 =====");
-		List<GroupAccount> all = groupAccountRepository.findAll();
+		log.info("====== 활성화된 모든 그룹 계좌번호 가져오기 =====");
+		List<GroupAccount> all = groupAccountRepository.findAllByIsActiveIsTrue();
 
 		log.info("모든 그룹 계좌 수 : {}", all.size());
 		ArrayList<Transaction> list = new ArrayList<>();
@@ -42,7 +42,7 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 
 			List<TransactionInfo.Transaction> transactions = info.getTransactions();
 
-			int cnt = transactionRepository.countByGroup_Id(groupAccount.getGroup().getId());
+			int cnt = transactionRepository.countByGroupAccount_Id(groupAccount.getId());
 			log.info("===== 기존 거래내역 개수 : {} =====", cnt);
 
 			long diff = info.getTransactionCnt() - cnt;
@@ -60,7 +60,7 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 					.branch(transaction.getBranch())
 					.date(transaction.getDate())
 					.category(transaction.getCategory())
-					.group(groupAccount.getGroup())
+					.groupAccount(groupAccount)
 					.build();
 
 				list.add(result);
