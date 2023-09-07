@@ -2,7 +2,11 @@ package gwangju.ssafy.backend.domain.user.service;
 
 import gwangju.ssafy.backend.domain.user.dto.LoginUserDto;
 import gwangju.ssafy.backend.domain.user.dto.MailDto;
-import gwangju.ssafy.backend.domain.user.dto.UserDto;
+import gwangju.ssafy.backend.domain.user.dto.UserRequestDto;
+import gwangju.ssafy.backend.global.common.dto.TokenDto;
+import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.redis.core.ValueOperations;
 
 public interface UserService {
 
@@ -13,9 +17,12 @@ public interface UserService {
     boolean existsUserByUserEmail(String userEmail);
 
     // 회원가입 처리
-    boolean signUpUser(UserDto userDto);
+    UserRequestDto signUpUser(UserRequestDto userRequestDto);
 
     // 로그인 처리
-    boolean loginCheckUser(LoginUserDto loginUserDto);
+    TokenDto loginCheckUser(LoginUserDto loginUserDto);
 
+    void logoutUser(HttpServletRequest request);
+
+    TokenDto reissue(TokenRequestDto tokenRequestDto);
 }
