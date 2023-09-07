@@ -66,7 +66,7 @@ class GroupServiceImpl implements GroupService {
 			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
 
 		group.editInfo(request.getName(), request.getCategory(), request.getAboutUs(),
-			request.getIntroduce());
+			request.getIntroduce(),request.getThumbnail());
 
 	}
 
