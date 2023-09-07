@@ -1,18 +1,19 @@
 package gwangju.ssafy.backend.domain.user.dto;
 
 import gwangju.ssafy.backend.domain.user.entity.User;
+import gwangju.ssafy.backend.domain.user.entity.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
-// 유저 서비스 요청 RequestDTO 클래스
+import java.util.Collections;
+
+// 유저 서비스 요청 RequestDto 클래스 (회원가입 요청에 사용될 dto)
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Builder
-@Setter
-public class UserDto {
+public class UserRequestDto {
     private Long id;
 
     @NotBlank(message = "이메일은 필수 입력값입니다.")
@@ -30,8 +31,6 @@ public class UserDto {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$" , message = "닉네임은 특수문자를 포함하지 않은 2~10자리여야 합니다.")
     private String userNickName;
 
-    private String userAuthority;
-
     // DTO -> Entity
     public User toEntity() {
         User user = User.builder()
@@ -40,7 +39,7 @@ public class UserDto {
                 .userName(userName)
                 .userPassword(userPassword)
                 .userNickName(userNickName)
-                .userAuthority(userAuthority)
+                .role(Collections.singletonList(UserRole.USER.name()))
                 .build();
         return user;
     }
