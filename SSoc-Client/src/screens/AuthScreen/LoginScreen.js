@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
-import { Typography } from '../../components/Basic/Typography';
-import { Logo } from '../../modules/Logo';
-import * as Color from '../../components/Colors/colors';
-import { Spacer } from '../../components/Basic/Spacer';
-import { Button } from '../../components/Basic/Button';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import AuthInput from '../../components/Input/AuthInput';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react'
+import { View, Text, Alert, TouchableOpacity } from 'react-native'
+import { Typography } from '../../components/Basic/Typography'
+import { Logo } from '../../modules/Logo'
+import * as Color from '../../components/Colors/colors'
+import { Spacer } from '../../components/Basic/Spacer'
+import { Button } from '../../components/Basic/Button'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import AuthInput from '../../components/Input/AuthInput'
+import { useNavigation } from '@react-navigation/native'
 
 const LoginScreen = (props) => {
-  const navigation = useNavigation();
-  const [userId, setUserId] = useState('');
-  const [userPw, setUserPw] = useState('');
+  const navigation = useNavigation()
+  const [userId, setUserId] = useState('')
+  const [userPw, setUserPw] = useState('')
+  const onFinishLoad = props.route.params.onFinishLoad
   const userData = {
     accessToken: {
       id: 'test123@shinhan.ac.kr',
@@ -30,28 +31,37 @@ const LoginScreen = (props) => {
       code: 0,
       error: '',
     },
-  };
+  }
 
   const onPressRegister = () => {
-    navigation.navigate('SchoolEmail');
-  };
+    navigation.reset({
+      routes: [
+        {
+          name: 'SchoolEmail',
+          params: {
+            onFinishLoad: onFinishLoad,
+          },
+        },
+      ],
+    })
+  }
 
   const onPressLogin = () => {
     if (userId.length == 0) {
-      Alert.alert('아이디를 입력해주세요.');
+      Alert.alert('아이디를 입력해주세요.')
     } else if (userPw.length < 8) {
-      Alert.alert('비밀번호는 8자 이하일 수 잆습니다.');
+      Alert.alert('비밀번호는 8자 이하일 수 잆습니다.')
     } else {
       // TO-DO
       // Server로 userId, userPw 보내고 Token/에러 받기
-      const res = userData;
+      const res = userData
       if (res != null && res.result.code != '-1') {
-        props.route.onFinishLoad();
+        onFinishLoad()
       } else {
-        Alert.alert('아이디 또는 비밀번호를 확인해주세요.');
+        Alert.alert('아이디 또는 비밀번호를 확인해주세요.')
       }
     }
-  };
+  }
 
   return (
     <KeyboardAwareScrollView
@@ -68,7 +78,7 @@ const LoginScreen = (props) => {
           placeholder="ex) test@shinhan.ac.kr"
           inputColor={Color.BLUE}
           onChangeText={(text) => {
-            setUserId(text);
+            setUserId(text)
           }}
         />
         <Spacer space={12} />
@@ -78,30 +88,32 @@ const LoginScreen = (props) => {
           inputColor={Color.BLUE}
           secureTextEntry={true}
           onChangeText={(text) => {
-            setUserPw(text);
+            setUserPw(text)
           }}
         />
         <Spacer space={16} />
-        <Button onPress={onPressLogin}>
-          <View
-            backgroundColor={Color.DARK_BLUE}
-            borderRadius={10}
-            style={{
-              alignSelf: 'stretch',
-              height: 50,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <Typography
-              fontSize={16}
-              color={Color.WHITE}
+        <Button>
+          <TouchableOpacity onPress={onPressLogin}>
+            <View
+              backgroundColor={Color.DARK_BLUE}
+              borderRadius={10}
+              style={{
+                alignSelf: 'stretch',
+                height: 50,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}
             >
-              로그인
-            </Typography>
-            <Spacer space={10} />
-          </View>
+              <Typography
+                fontSize={16}
+                color={Color.WHITE}
+              >
+                로그인
+              </Typography>
+              <Spacer space={10} />
+            </View>
+          </TouchableOpacity>
         </Button>
         <Spacer space={14} />
         <View style={{ flex: 1, alignItems: 'flex-end' }}>
@@ -112,19 +124,21 @@ const LoginScreen = (props) => {
             <Text>아직 회원이 아니신가요?</Text>
           </Typography>
           <Spacer space={5} />
-          <Button onPress={onPressRegister}>
-            <View>
-              <Typography
-                fontSize={15}
-                color={Color.DARK_BLUE}
-              >
-                <Text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>회원가입 하러가기</Text>
-              </Typography>
-            </View>
+          <Button>
+            <TouchableOpacity onPress={onPressRegister}>
+              <View>
+                <Typography
+                  fontSize={15}
+                  color={Color.DARK_BLUE}
+                >
+                  <Text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>회원가입 하러가기</Text>
+                </Typography>
+              </View>
+            </TouchableOpacity>
           </Button>
         </View>
       </View>
     </KeyboardAwareScrollView>
-  );
-};
-export default LoginScreen;
+  )
+}
+export default LoginScreen
