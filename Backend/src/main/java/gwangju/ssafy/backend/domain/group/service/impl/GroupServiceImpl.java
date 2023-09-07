@@ -4,6 +4,7 @@ import gwangju.ssafy.backend.domain.group.dto.CreateGroupRequest;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
 import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
 import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
+import gwangju.ssafy.backend.domain.group.dto.MyGroupSearchCond;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.School;
@@ -77,6 +78,11 @@ class GroupServiceImpl implements GroupService {
 	@Override
 	public List<GroupSimpleInfo> searchGroup(GroupSearchCond cond) {
 		return groupRepository.findAllBySearchCond(cond);
+	}
+
+	@Override
+	public List<GroupSimpleInfo> searchMyGroup(MyGroupSearchCond cond) {
+		return groupRepository.findMyGroups(cond);
 	}
 
 }

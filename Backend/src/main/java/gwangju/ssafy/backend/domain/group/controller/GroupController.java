@@ -2,6 +2,7 @@ package gwangju.ssafy.backend.domain.group.controller;
 
 import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
 import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
+import gwangju.ssafy.backend.domain.group.dto.MyGroupSearchCond;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
 import gwangju.ssafy.backend.domain.group.service.GroupService;
@@ -27,8 +28,13 @@ public class GroupController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Message> searchGroup(@RequestBody GroupSearchCond cond) {
+	public ResponseEntity<Message<List<GroupSimpleInfo>>> searchGroup(@RequestBody GroupSearchCond cond) {
 		return ResponseEntity.ok().body(Message.success(groupService.searchGroup(cond)));
+	}
+
+	@PostMapping("/my")
+	public ResponseEntity<Message> searchMyGroup(@RequestBody MyGroupSearchCond cond) {
+		return ResponseEntity.ok().body(Message.success(groupService.searchMyGroup(cond)));
 	}
 	
 }

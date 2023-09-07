@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.domain.group.repository.impl;
 
 import static gwangju.ssafy.backend.domain.group.entity.QGroup.group;
+import static gwangju.ssafy.backend.domain.group.entity.QGroupMember.groupMember;
 import static gwangju.ssafy.backend.domain.group.entity.QSchool.school;
 
 import com.querydsl.core.BooleanBuilder;
@@ -9,6 +10,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
 import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
+import gwangju.ssafy.backend.domain.group.dto.MyGroupSearchCond;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupCategory;
 import gwangju.ssafy.backend.domain.group.repository.QueryDslGroupRepository;
 import java.util.List;
@@ -32,7 +34,25 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 				))
 			.from(group)
 			.innerJoin(group.school, school)
-			.where(searchCond(cond))
+			.where(searchGroupCond(cond))
+			.limit(cond.getLimit())
+			.offset(cond.getPageNumber() * cond.getLimit())
+			.fetch();
+	}
+
+	@Override
+	public List<GroupSimpleInfo> findMyGroups(MyGroupSearchCond cond) {
+		return jpaQueryFactory
+			.select(Projections.fields(GroupSimpleInfo.class,
+				group.id.as("groupId"),
+				group.name.as("name"),
+				group.aboutUs.as("aboutUs"),
+				school.name.as("school")
+			))
+			.from(groupMember)
+			.innerJoin(groupMember.group, group)
+			.innerJoin(group.school, school)
+			.where(searchMyGroupCond(cond))
 			.limit(cond.getLimit())
 			.offset(cond.getPageNumber() * cond.getLimit())
 			.fetch();
@@ -58,8 +78,17 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 			: school.name.contains(schoolName);
 	}
 
-	private BooleanBuilder searchCond(GroupSearchCond cond) {
+
+	private BooleanBuilder searchGroupCond(GroupSearchCond cond) {
 		return new BooleanBuilder()
+			.and(group.isActive.eq(true))
+			.and(filterGroupCategory(cond.getCategory()))
+			.and(searchName(cond.getWord()).or(searchAboutUs(cond.getWord())).or(searchSchool(cond.getWord())));
+	}
+
+	private BooleanBuilder searchMyGroupCond(MyGroupSearchCond cond) {
+		return new BooleanBuilder()
+			.and(groupMember.user.id.eq(cond.getUserId()))
 			.and(group.isActive.eq(true))
 			.and(filterGroupCategory(cond.getCategory()))
 			.and(searchName(cond.getWord()).or(searchAboutUs(cond.getWord())).or(searchSchool(cond.getWord())));
