@@ -29,7 +29,8 @@ export const SearchResultScreen=()=>{
                         />
                     </View>          
                     <TouchableOpacity>
-                        <SearchButton color={Color.BLUE}/>
+                    <SearchButton color={Color.BLUE} title={"학생회 / 동아리 공금 현황 보러가기"} iconName={"airplane-outline" } isIcon={true}/>
+
                     </TouchableOpacity>
                 </View>
             </View>

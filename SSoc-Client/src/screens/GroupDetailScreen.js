@@ -14,6 +14,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 export const GroupDetailScreen = () => {
+  //to-do 
+    // 그룹아이디 같이 보냄 
+    // 해당 유저가 동아리 소속원인지, 동아리 소속원이 아닌지 
+    // 해당 유저가 동아리 매니저인지 동아리 매니저인지 받아옴 
+    //  버튼 동적 표현 구현   
+
   const { onScrollEndDrag, onScrollBeginDrag, onScroll, headerAnim } =
     useScrollEvent();
   const insets = useSafeAreaInsets();
@@ -22,6 +28,46 @@ export const GroupDetailScreen = () => {
   const onPressGoBack = useCallback(()=>{
     navigation.goBack(); 
   })
+
+
+
+  const onPressGoSettlement = useCallback(()=>{
+    console.log("결산안");
+    //to-do :  결산안 이동 
+  });
+
+  const onPressGoCommunity = useCallback(()=>{
+    console.log("커뮤니티 이동");
+  })
+
+  const onPressGoSchedule = useCallback(()=>{
+    console.log("일정 이동");
+  })
+
+  const onPressGoBooking = useCallback(()=>{
+    console.log("예약하기 ")
+  })
+
+    
+const ButtonData = [
+  {
+    title: "공금 사용현황",
+    onPress: onPressGoSettlement,
+  },
+  {
+    title: "커뮤니티 바로가기",
+    onPress: onPressGoCommunity,
+  },
+  {
+    title: "동아리 / 학생회 일정",
+    onPress: onPressGoSchedule,
+  },
+  {
+    title: "물품 예약",
+    onPress: onPressGoBooking,
+  },
+];
+
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity onPress={onPressGoBack}  style={{ zIndex: 1 }}>
@@ -93,18 +139,24 @@ export const GroupDetailScreen = () => {
             <Spacer space={40}/>
             <Typography fontSize={17} color={Color.GRAY}>Update 9h ago</Typography>
             <Spacer space={40}/>
-            <View style={{backgroundColor:Color.BLUE, borderRadius:10, marginVertical:5}}>
-              <SearchButton/>
-            </View>
-            <View style={{backgroundColor:Color.BLUE, borderRadius:10, marginVertical:5}}>
-              <SearchButton/>
-            </View>
-            <View style={{backgroundColor:Color.BLUE, borderRadius:10, marginVertical:5}}>
-              <SearchButton/>
-            </View>
-            <View style={{backgroundColor:Color.BLUE, borderRadius:10, marginVertical:5}}>
-              <SearchButton/>
-            </View>
+            {ButtonData.map((button, index) => (
+              <TouchableOpacity key={index} onPress={button.onPress}>
+                <View
+                  style={{
+                    backgroundColor: Color.BLUE,
+                    borderRadius: 10,
+                    marginVertical: 5,
+                  }}
+                >
+                  <SearchButton
+                    color={Color.BLUE}
+                    title={button.title}
+                    iconName="airplane-outline"
+                    isIcon={false}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))}
             <Spacer space={40}/>
             <Typography fontSize={22}>About us</Typography>
             <Spacer space={40}/>
@@ -134,3 +186,4 @@ export const GroupDetailScreen = () => {
     </View>
   );
 };
+
