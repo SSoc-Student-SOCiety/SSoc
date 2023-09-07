@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput } from 'react-native';
-import { Logo } from '../../modules/Logo';
-import * as Color from '../../components/Colors/colors';
-import { Spacer } from '../../components/Basic/Spacer';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import SchoolEmailInput from '../../modules/AuthModules/SchoolEmailInput';
-import UserInfoInput from '../../modules/AuthModules/UserInfoInput';
+import React, { useState } from 'react'
+import { View, Text, TextInput } from 'react-native'
+import { Logo } from '../../modules/Logo'
+import * as Color from '../../components/Colors/colors'
+import { Spacer } from '../../components/Basic/Spacer'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import SchoolEmailInput from '../../modules/AuthModules/SchoolEmailInput'
+import UserInfoInput from '../../modules/AuthModules/UserInfoInput'
 const RegisterScreen = (props) => {
-  const [initialized, setInitialized] = useState(false);
-  const [emailCode, setEmailCode] = useState('');
+  const [initialized, setInitialized] = useState(false)
+  const [emailCode, setEmailCode] = useState('')
+  const onFinishLoad = props.route.params.onFinishLoad
   return (
     <KeyboardAwareScrollView
       backgroundColor={Color.WHITE}
@@ -20,18 +21,18 @@ const RegisterScreen = (props) => {
         <SchoolEmailInput
           email={props.route.params.email}
           onPressCheck={() => {
-            setInitialized(true);
+            setInitialized(true)
           }}
           setEmailCode={setEmailCode}
         />
         {initialized ? (
           <UserInfoInput
             emailCode={emailCode}
-            onFinishLoad={props.route.params.onFinishLoad}
+            onFinishLoad={onFinishLoad}
           />
         ) : null}
       </View>
     </KeyboardAwareScrollView>
-  );
-};
-export default RegisterScreen;
+  )
+}
+export default RegisterScreen

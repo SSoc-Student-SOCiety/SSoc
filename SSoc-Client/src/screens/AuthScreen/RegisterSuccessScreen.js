@@ -1,22 +1,29 @@
-import React from 'react';
-import { View, Text, Image } from 'react-native';
-import { Typography } from '../../components/Basic/Typography';
-import { Logo } from '../../modules/Logo';
-import * as Color from '../../components/Colors/colors';
-import { Spacer } from '../../components/Basic/Spacer';
-import { Button } from '../../components/Basic/Button';
-import { useNavigation } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React from 'react'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { Typography } from '../../components/Basic/Typography'
+import { Logo } from '../../modules/Logo'
+import * as Color from '../../components/Colors/colors'
+import { Spacer } from '../../components/Basic/Spacer'
+import { Button } from '../../components/Basic/Button'
+import { useNavigation } from '@react-navigation/native'
 
 const RegisterSuccessScreen = (props) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
+  const onFinishLoad = props.route.params.onFinishLoad
   // TO-DO
   // API 받아서 중복체크 -> 분기 처리 필요
   const onPressLogin = () => {
     navigation.reset({
-      routes: [{ name: 'Login', onFinishLoad: props.route.onFinishLoad }],
-    });
-  };
+      routes: [
+        {
+          name: 'Login',
+          params: {
+            onFinishLoad: onFinishLoad,
+          },
+        },
+      ],
+    })
+  }
 
   return (
     <View
@@ -43,28 +50,30 @@ const RegisterSuccessScreen = (props) => {
       </View>
       <View style={{ flex: 0.2, margin: 20 }}>
         <Spacer space={16} />
-        <Button onPress={onPressLogin}>
-          <View
-            backgroundColor={Color.DARK_BLUE}
-            borderRadius={10}
-            style={{
-              alignSelf: 'stretch',
-              height: 50,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <Typography
-              fontSize={16}
-              color={Color.WHITE}
+        <Button>
+          <TouchableOpacity onPress={onPressLogin}>
+            <View
+              backgroundColor={Color.DARK_BLUE}
+              borderRadius={10}
+              style={{
+                alignSelf: 'stretch',
+                height: 50,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}
             >
-              로그인 하러가기
-            </Typography>
-          </View>
+              <Typography
+                fontSize={16}
+                color={Color.WHITE}
+              >
+                로그인 하러가기
+              </Typography>
+            </View>
+          </TouchableOpacity>
         </Button>
       </View>
     </View>
-  );
-};
-export default RegisterSuccessScreen;
+  )
+}
+export default RegisterSuccessScreen
