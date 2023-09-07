@@ -6,13 +6,14 @@ import * as Color from '../components/Colors/colors'
 import { useState } from 'react'
 
 const EditInputShow = (props) => {
-  const userNick = props.userData.nick
-  const userPw = props.userData.password
+  const userNick = props.userInfo.userNickName
   const [inputUserNick, setInputUserNick] = useState('')
   const [inputUserPw, setInputUserPw] = useState('')
 
   const pressSaveNick = () => {
     if (inputUserNick.length != 0 && userNick != inputUserNick) {
+      // TO-DO
+      // Fetch 쏴서 result 분기
       Alert.alert('변경사항이 저장되었습니다.')
     } else {
       Alert.alert('변경사항이 존재하지 않습니다.')
@@ -22,16 +23,15 @@ const EditInputShow = (props) => {
   const pressSavePw = () => {
     if (inputUserPw.length < 8) {
       Alert.alert('비밀번호는 8자 이상이어야 합니다.')
-    } else if (userPw == inputUserPw) {
-      Alert.alert('변경사항이 존재하지 않습니다.')
     } else {
+      // TO-DO
+      // Fetch 쏴서 result 분기
       Alert.alert('변경사항이 저장되었습니다.')
-      props.editCanclePress()
     }
   }
 
   const pressSaveAll = () => {
-    if (inputUserPw.length != 0 && userPw != inputUserPw && inputUserNick.length != 0 && userNick != inputUserNick) {
+    if (inputUserNick.length != 0 && userNick != inputUserNick && inputUserPw.length >= 8) {
       Alert.alert('변경사항이 모두 저장되었습니다.')
       props.editCanclePress()
     } else {
@@ -45,7 +45,7 @@ const EditInputShow = (props) => {
       <View>
         <SettingInfoInput
           editContent="닉네임"
-          placeholder={props.userData.nick}
+          placeholder={props.userInfo.userNickName}
           onPress={pressSaveNick}
           onChangeText={(text) => {
             setInputUserNick(text)
