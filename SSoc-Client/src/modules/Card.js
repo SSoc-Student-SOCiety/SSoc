@@ -7,8 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 export const Card = (props) => {
   const navigation = useNavigation();
   const onPressDetail = () => {
-    console.log("test");
-    navigation.navigate("GroupDetailScreen");
+    const { onPress,  ...otherProps } = props;
+    console.log(otherProps); 
+    navigation.navigate("GroupDetailScreen", otherProps);
   };
   return (
     <TouchableOpacity onPress={onPressDetail}>

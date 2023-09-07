@@ -9,11 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 export const MainScreen = () => {
   const navigation = useNavigation();
 
-  const onPressDetail = () => {
-    console.log("test");
-    navigation.navigate("GroupDetailScreen");
-  };
-
+ 
   return (
     <View style={styles.container}>
       <MainHeader name={"김싸피"} url={"https://picsum.photos/600"} />
@@ -25,7 +21,8 @@ export const MainScreen = () => {
         style={styles.cardContainer}
       >
         {cardsData.map((card, index) => (
-          <Card key={index} {...card} onPress={onPressDetail} />
+          
+          <Card key={index} {...card} />
         ))}
       </ScrollView>
     </View>
@@ -39,12 +36,12 @@ const cardsData = [
     groupName: "정오",
     groupType: "총학생회",
     group: "제36대 총학생회",
-    val: "1",
+    val: "3",
     unit: "days",
   },
   {
     url: "https://picsum.photos/700",
-    schoolName: "한국대학교",
+    schoolName: "연세대학교",
     groupName: "정일",
     groupType: "동아리",
     group: "중앙 밴드동아리",
@@ -53,21 +50,21 @@ const cardsData = [
   },
   {
     url: "https://picsum.photos/500",
-    schoolName: "한국대학교",
-    groupName: "정일",
+    schoolName: "서울대학교",
+    groupName: "싸피",
     groupType: "동아리",
-    group: "중앙 밴드동아리",
+    group: "알고리즘 동아리",
     val: "1",
-    unit: "days",
+    unit: "hours",
   },
   {
     url: "https://picsum.photos/300",
-    schoolName: "한국대학교",
-    groupName: "정일",
+    schoolName: "고려대학교",
+    groupName: "mdn",
     groupType: "동아리",
-    group: "중앙 밴드동아리",
+    group: "사회혁신 학회",
     val: "1",
-    unit: "days",
+    unit: "miniutes",
   },
 ];
 

@@ -13,7 +13,7 @@ import { Icon } from "../components/Icons/Icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
-export const GroupDetailScreen = () => {
+export const GroupDetailScreen = ({route}) => {
   //to-do 
     // 그룹아이디 같이 보냄 
     // 해당 유저가 동아리 소속원인지, 동아리 소속원이 아닌지 
@@ -25,7 +25,10 @@ export const GroupDetailScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
+  const {group, groupName, groupType, schoolName, url, val, unit}= route.params; 
+
   const onPressGoBack = useCallback(()=>{
+    
     navigation.goBack(); 
   })
 
@@ -33,6 +36,7 @@ export const GroupDetailScreen = () => {
 
   const onPressGoSettlement = useCallback(()=>{
     console.log("결산안");
+    console.log(val, unit);
     //to-do :  결산안 이동 
   });
 
@@ -111,14 +115,14 @@ const ButtonData = [
             }}
           >
             <View style={{ alignItems: "center", flexDirection: "row" }}>
-              <ProfileImage size={70} url={"https://picsum.photos/500"} />
+              <ProfileImage size={70} url={url} />
               <View style={{ marginHorizontal: 5, marginBottom: 3 }}>
                 <Typography fontSize={30} color="white">
-                  달리샤
+                  {groupName}
                 </Typography>
                 <Spacer space={4} />
                 <Typography fontSize={20} color="white">
-                  싸피대학교
+                  {schoolName}
                 </Typography>
               </View>
             </View>
@@ -135,9 +139,9 @@ const ButtonData = [
       >
         <View style={{marginHorizontal:20}}>
             <Spacer space={20}/>
-            <Typography fontSize={22}>교내 달리기 동아리</Typography>
+            <Typography fontSize={22}>{schoolName +" "+ group}</Typography>
             <Spacer space={40}/>
-            <Typography fontSize={17} color={Color.GRAY}>Update 9h ago</Typography>
+            <Typography fontSize={17} color={Color.GRAY}>Update {val}{unit} ago</Typography>
             <Spacer space={40}/>
             {ButtonData.map((button, index) => (
               <TouchableOpacity key={index} onPress={button.onPress}>
@@ -161,6 +165,7 @@ const ButtonData = [
             <Typography fontSize={22}>About us</Typography>
             <Spacer space={40}/>
             <Typography fontSize={15}>
+              {/* to-do :  group id 값으로 받아오기 */}
             교내 중앙동아리 중 유일한 달리기 동아리이다. 
             2011년 나이키 트레이닝 런에 참여하던 모임에서 출발해 함께 마라톤대회에 나가고 러닝 프로그램에 참여하는 교내 소모임의 성격이었다가, 2012년 하반기 가동아리 신청과 함께 본격적인 교내 동아리로 발전하였다.
 
