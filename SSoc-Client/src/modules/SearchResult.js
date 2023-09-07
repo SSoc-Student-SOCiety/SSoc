@@ -9,8 +9,8 @@ import * as Color from "../components/Colors/colors"
 export const SearchResult = (props)=>{
     const navigation = useNavigation();
     const onPressDetail =()=>{
-      console.log("test");
-      navigation.navigate("StackDetailScreen");
+        console.log(props.item); 
+        navigation.navigate("GroupDetailScreen", props.item);
     }
     return (
         <TouchableOpacity onPress={onPressDetail}>
@@ -23,11 +23,11 @@ export const SearchResult = (props)=>{
                         <ProfileImage size={60} url={props.item.url} />
                     </View>
                     <View>  
-                        <Typography fontSize={15}>{props.item.title}</Typography>
+                        <Typography fontSize={15}>{props.item.name}</Typography>
                         <Typography fontSize={12}>{props.item.school}</Typography>
-                        <Typography fontSize={10} color={Color.GRAY}>{props.item.subtitle}</Typography>
+                        <Typography fontSize={10} color={Color.GRAY}>{props.item.subName}</Typography>
                         <Spacer space={14}/>
-                        <Typography fontSize={9} color={Color.GRAY}>{props.item.updatedAt}</Typography>
+                        <Typography fontSize={9} color={Color.GRAY}>{props.item.val}{props.item.unit} ago</Typography>
                         <Spacer space={14}/>
                     </View> 
                     </View>
