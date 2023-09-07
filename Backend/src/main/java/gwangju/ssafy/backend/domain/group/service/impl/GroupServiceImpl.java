@@ -2,6 +2,8 @@ package gwangju.ssafy.backend.domain.group.service.impl;
 
 import gwangju.ssafy.backend.domain.group.dto.CreateGroupRequest;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
+import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
+import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.School;
@@ -12,6 +14,7 @@ import gwangju.ssafy.backend.domain.group.repository.SchoolRepository;
 import gwangju.ssafy.backend.domain.group.service.GroupMemberService;
 import gwangju.ssafy.backend.domain.group.service.GroupService;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +72,11 @@ class GroupServiceImpl implements GroupService {
 		group.editInfo(request.getName(),  request.getAboutUs(),
 			request.getIntroduce(),request.getThumbnail());
 
+	}
+
+	@Override
+	public List<GroupSimpleInfo> searchGroup(GroupSearchCond cond) {
+		return groupRepository.findAllBySearchCond(cond);
 	}
 
 }
