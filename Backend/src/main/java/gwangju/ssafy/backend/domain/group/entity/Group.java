@@ -48,6 +48,9 @@ public class Group {
 	@Column
 	private boolean isActive;
 
+	@Column
+	private String thumbnail;
+
 	public void inactivate() {
 		this.isActive = false;
 	}
