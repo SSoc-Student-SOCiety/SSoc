@@ -1,8 +1,11 @@
 package gwangju.ssafy.backend.domain.group.entity;
 
 
+import gwangju.ssafy.backend.domain.group.entity.enums.GroupCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,8 +39,8 @@ public class Group {
 	@Column
 	private String name;
 
-	@Column
-	private String category;
+	@Enumerated(EnumType.STRING)
+	private GroupCategory category;
 
 	@Column
 	private String aboutUs;
@@ -48,14 +51,17 @@ public class Group {
 	@Column
 	private boolean isActive;
 
+	@Column
+	private String thumbnail;
+
 	public void inactivate() {
 		this.isActive = false;
 	}
 
-	public void editInfo(String name, String category, String aboutUs, String introduce) {
+	public void editInfo(String name, String aboutUs, String introduce,String thumbnail) {
 		this.name = name;
-		this.category = category;
 		this.aboutUs = aboutUs;
 		this.introduce = introduce;
+		this.thumbnail = thumbnail;
 	}
 }

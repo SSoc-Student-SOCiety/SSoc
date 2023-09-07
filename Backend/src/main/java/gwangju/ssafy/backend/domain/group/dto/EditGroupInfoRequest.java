@@ -20,5 +20,6 @@ public class EditGroupInfoRequest {
 	private String category;
 	private String aboutUs;
 	private String introduce;
+	private String thumbnail;
 
 }

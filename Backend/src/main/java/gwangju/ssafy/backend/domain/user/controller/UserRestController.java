@@ -1,8 +1,10 @@
 package gwangju.ssafy.backend.domain.user.controller;
 
 import gwangju.ssafy.backend.domain.user.dto.LoginUserDto;
-import gwangju.ssafy.backend.domain.user.dto.UserDto;
+import gwangju.ssafy.backend.domain.user.dto.UserRequestDto;
 import gwangju.ssafy.backend.domain.user.service.UserService;
+import gwangju.ssafy.backend.global.common.dto.TokenDto;
+import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
 import gwangju.ssafy.backend.global.infra.email.EmailService;
 import gwangju.ssafy.backend.domain.user.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class UserRestController {
         return confirm;
     }
 
+    // 이메일 중복 체크
     @GetMapping("/email/check")
     public ResponseEntity<?> checkEmailDuplication(@RequestParam(value = "userEmail") String userEmail) throws BadRequestException {
         if(userService.existsUserByUserEmail(userEmail)) {
@@ -39,19 +42,22 @@ public class UserRestController {
     }
 
     @PostMapping("/signup")
-    public boolean registerSuccess(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserRequestDto> registerSuccess(@RequestBody UserRequestDto userRequestDto) {
         log.info("==================회원가입 진입=============");
-        if(userService.existsUserByUserEmail(userDto.getUserEmail())) {
-            return false;
-        }
-        userService.signUpUser(userDto);
-        return true;
+        return ResponseEntity.ok(userService.signUpUser(userRequestDto));
     }
 
+    // 로그인
     @PostMapping("/login")
-    public boolean login(@RequestBody LoginUserDto loginUserDto) {
+    public ResponseEntity<TokenDto> login(@RequestBody LoginUserDto loginUserDto) {
         log.info("==================로그인 진입=============");
-        return userService.loginCheckUser(loginUserDto);
+        return ResponseEntity.ok(userService.loginCheckUser(loginUserDto));
+    }
+
+    // JWT 토큰 재발급
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return ResponseEntity.ok(userService.reissue(tokenRequestDto));
     }
 
 }
