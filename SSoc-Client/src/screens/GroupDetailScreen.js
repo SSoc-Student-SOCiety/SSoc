@@ -25,7 +25,7 @@ export const GroupDetailScreen = ({route}) => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
-  const {group, groupName, groupType, schoolName, url, val, unit}= route.params; 
+  const {name, groupType, school, url, val, unit, subName}= route.params; 
 
   const onPressGoBack = useCallback(()=>{
     
@@ -118,11 +118,11 @@ const ButtonData = [
               <ProfileImage size={70} url={url} />
               <View style={{ marginHorizontal: 5, marginBottom: 3 }}>
                 <Typography fontSize={30} color="white">
-                  {groupName}
+                  {name}
                 </Typography>
                 <Spacer space={4} />
                 <Typography fontSize={20} color="white">
-                  {schoolName}
+                  {school}
                 </Typography>
               </View>
             </View>
@@ -138,11 +138,13 @@ const ButtonData = [
         onScrollEndDrag={onScrollEndDrag}
       >
         <View style={{marginHorizontal:20}}>
-            <Spacer space={20}/>
-            <Typography fontSize={22}>{schoolName +" "+ group}</Typography>
-            <Spacer space={40}/>
+            <Typography fontSize={30}>{school}</Typography>
+            <Typography fontSize={22}>
+               {subName}
+            </Typography>
+            <Spacer space={5}/>
             <Typography fontSize={17} color={Color.GRAY}>Update {val}{unit} ago</Typography>
-            <Spacer space={40}/>
+            <Spacer space={30}/>
             {ButtonData.map((button, index) => (
               <TouchableOpacity key={index} onPress={button.onPress}>
                 <View
