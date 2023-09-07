@@ -55,10 +55,11 @@ public class Group {
 		this.isActive = false;
 	}
 
-	public void editInfo(String name, String category, String aboutUs, String introduce) {
+	public void editInfo(String name, String category, String aboutUs, String introduce,String thumbnail) {
 		this.name = name;
 		this.category = category;
 		this.aboutUs = aboutUs;
 		this.introduce = introduce;
+		this.thumbnail = thumbnail;
 	}
 }
