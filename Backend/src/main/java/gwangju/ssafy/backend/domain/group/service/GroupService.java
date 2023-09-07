@@ -2,6 +2,9 @@ package gwangju.ssafy.backend.domain.group.service;
 
 import gwangju.ssafy.backend.domain.group.dto.CreateGroupRequest;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
+import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
+import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
+import java.util.List;
 
 public interface GroupService {
 
@@ -10,4 +13,6 @@ public interface GroupService {
 	void inactiveGroup(Long groupId);
 
 	void editGroupInfo(EditGroupInfoRequest request);
+
+	List<GroupSimpleInfo> searchGroup(GroupSearchCond cond);
 }

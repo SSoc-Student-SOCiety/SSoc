@@ -1,8 +1,11 @@
 package gwangju.ssafy.backend.domain.group.controller;
 
+import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
+import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
 import gwangju.ssafy.backend.domain.group.service.GroupService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,4 +25,10 @@ public class GroupController {
 		groupService.editGroupInfo(request);
 		return ResponseEntity.ok().body(Message.success());
 	}
+
+	@PostMapping
+	public ResponseEntity<Message> searchGroup(@RequestBody GroupSearchCond cond) {
+		return ResponseEntity.ok().body(Message.success(groupService.searchGroup(cond)));
+	}
+	
 }
