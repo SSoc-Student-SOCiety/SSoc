@@ -32,7 +32,7 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 				))
 			.from(group)
 			.innerJoin(group.school, school)
-			.where(searchNameOrAboutUs(cond))
+			.where(searchNameOrAboutUs(cond).and(group.isActive.eq(true)))
 			.limit(cond.getLimit())
 			.offset(cond.getPageNumber() * cond.getLimit())
 			.fetch();
