@@ -1,4 +1,4 @@
-import { View, Image, ScrollView, Animated } from "react-native";
+import { View, Image, ScrollView, Animated, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StackHeader } from "../modules/StackHeader";
 import defaultBg from "../../assets/basic_group_bgf.jpeg";
@@ -11,13 +11,24 @@ import { SearchButton } from "../modules/SearchButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "../components/Icons/Icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useCallback } from "react";
+import { useNavigation } from "@react-navigation/native";
 export const GroupDetailScreen = () => {
   const { onScrollEndDrag, onScrollBeginDrag, onScroll, headerAnim } =
     useScrollEvent();
-    const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
+
+  const onPressGoBack = useCallback(()=>{
+    navigation.goBack(); 
+  })
   return (
     <View style={{ flex: 1 }}>
-      
+      <TouchableOpacity onPress={onPressGoBack}  style={{ zIndex: 1 }}>
+            <View style={{ position: "absolute", paddingTop: insets.top, paddingHorizontal: 20 }}>
+              <Icon name="arrow-back" color="black" size={30} />
+            </View>
+          </TouchableOpacity>
       <Animated.View
         style={{
           marginTop: headerAnim.interpolate({
@@ -32,33 +43,30 @@ export const GroupDetailScreen = () => {
           }),
         }}
       >
-       
         <View
           style={{
             position: "absolute",
             height: 250,
             width: "100%",
-            backgroundColor: "#11111111",
+            backgroundColor: Color.BLACK,
           }}
         >
+         
           <View style={{ flex: 1 }}>
-            
-            <Image source={defaultBg} style={{ width: "100%", height: 250 }} />
+            <Image source={require('../../assets/basic_group_bgf.jpeg')} style={{ width: "100%", height: 250 }} />
           </View>
-          <View position="absolute" paddingTop={insets.top} paddingHorizontal={20}>
-            <Icon name="arrow-back" color ="black" size={30}/>
-          </View>
+          
           <View
             style={{
               backgroundColor: "rgba(0, 0, 0, 0.5)",
               height: 90,
-              justifyContent:"center",
-              paddingHorizontal:15
+              justifyContent: "center",
+              paddingHorizontal: 15,
             }}
           >
             <View style={{ alignItems: "center", flexDirection: "row" }}>
               <ProfileImage size={70} url={"https://picsum.photos/500"} />
-              <View style={{ marginHorizontal: 5, marginBottom:3}}>
+              <View style={{ marginHorizontal: 5, marginBottom: 3 }}>
                 <Typography fontSize={30} color="white">
                   달리샤
                 </Typography>
