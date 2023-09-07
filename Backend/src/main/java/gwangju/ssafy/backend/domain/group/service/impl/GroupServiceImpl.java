@@ -35,6 +35,7 @@ class GroupServiceImpl implements GroupService {
 		Group group = Group.builder()
 			.school(school)
 			.name(request.getName())
+			.category(request.getCategory())
 			.isActive(true)
 			.build();
 
@@ -65,7 +66,7 @@ class GroupServiceImpl implements GroupService {
 		Group group = groupRepository.findByIdAndIsActiveIsTrue(member.getGroup().getId())
 			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
 
-		group.editInfo(request.getName(), request.getCategory(), request.getAboutUs(),
+		group.editInfo(request.getName(),  request.getAboutUs(),
 			request.getIntroduce(),request.getThumbnail());
 
 	}
