@@ -17,11 +17,10 @@ export const useScrollEvent = () => {
 
   const onScroll = (e) => {
     const y = e.nativeEvent.contentOffset.y;
-    const dy = y - scrollStartRef.current;
+
     scrollStartRef.current = y; // Update scrollStartRef
 
     headerAnim.setValue(y);
-    console.log(headerAnim);
   };
 
   return { onScrollEndDrag, onScrollBeginDrag, onScroll, headerAnim };
