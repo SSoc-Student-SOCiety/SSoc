@@ -1,5 +1,7 @@
 package gwangju.ssafy.backend.domain.group.service.impl;
 
+import gwangju.ssafy.backend.domain.group.dto.GetMemberRoleRequest;
+import gwangju.ssafy.backend.domain.group.dto.GetMemberRoleResponse;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
@@ -35,6 +37,16 @@ class GroupMemberServiceImpl implements GroupMemberService {
 			.user(user)
 			.role(role)
 			.build());
+	}
+
+	@Override
+	public GetMemberRoleResponse getMemberRole(GetMemberRoleRequest request) {
+
+		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
+				request.getUserId())
+			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+
+		return GetMemberRoleResponse.of(member);
 	}
 
 
