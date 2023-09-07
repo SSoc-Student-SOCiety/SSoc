@@ -31,7 +31,7 @@ export const MainSearchBar = () => {
       <Button
        onPress ={onPressSearch}>
         <TouchableOpacity>
-          <SearchButton color={Color.DARK_BLUE}/>
+          <SearchButton color={Color.DARK_BLUE} title={"학생회 / 동아리 공금 현황 보러가기"} iconName={"airplane-outline" } isIcon={true}/>
         </TouchableOpacity>
       </Button>
     </View>
