@@ -33,7 +33,7 @@ public class GroupAccountController {
 		return ResponseEntity.ok().body(Message.success());
 	}
 
-	@GetMapping("/unregister")
+	@PostMapping("/unregister")
 	public ResponseEntity<Message> unregisterGroupAccount(@RequestBody UnregisterGroupAccountRequest request) {
 		groupAccountService.unregisterGroupAccount(request);
 		return ResponseEntity.ok().body(Message.success());
