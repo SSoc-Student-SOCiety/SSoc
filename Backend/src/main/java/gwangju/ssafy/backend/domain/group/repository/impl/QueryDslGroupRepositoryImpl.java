@@ -32,7 +32,7 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 				))
 			.from(group)
 			.innerJoin(group.school, school)
-			.where(searchNameOrAboutUs(cond).and(group.isActive.eq(true)))
+			.where(searchCond(cond))
 			.limit(cond.getLimit())
 			.offset(cond.getPageNumber() * cond.getLimit())
 			.fetch();
@@ -58,8 +58,9 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 			: school.name.contains(schoolName);
 	}
 
-	private BooleanBuilder searchNameOrAboutUs(GroupSearchCond cond) {
+	private BooleanBuilder searchCond(GroupSearchCond cond) {
 		return new BooleanBuilder()
+			.and(group.isActive.eq(true))
 			.and(filterGroupCategory(cond.getCategory()))
 			.and(searchName(cond.getWord()).or(searchAboutUs(cond.getWord())).or(searchSchool(cond.getWord())));
 	}
