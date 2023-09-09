@@ -3,6 +3,7 @@ package gwangju.ssafy.backend.domain.user.service;
 import gwangju.ssafy.backend.domain.user.dto.*;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
+import gwangju.ssafy.backend.global.common.dto.MailCodeDto;
 import gwangju.ssafy.backend.global.common.dto.MailSendDto;
 import gwangju.ssafy.backend.global.common.dto.TokenDto;
 import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
@@ -84,12 +85,12 @@ class UserServiceImpl implements UserService {
         }
 
         // Dto의 email, 비밀번호을 받고 UssrnamePasswordAuthenticationToken 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUserEmail(), realPassword);
-        log.info(String.valueOf(authenticationToken));
-        log.info(authenticationToken.getCredentials().toString());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUserEmail(), realPassword);
+//        log.info(String.valueOf(authenticationToken));
+//        log.info(authenticationToken.getCredentials().toString());
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+        TokenDto tokenDto = tokenProvider.generateTokenDto(user);
 
         log.info(user.getUserEmail());
         log.info(user.getUsername());
@@ -117,19 +118,19 @@ class UserServiceImpl implements UserService {
     }
 
     // 재발급
-    @Transactional
-    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
-        // refresh Token 검증
-        if(!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
-        }
-
-        // access Token에서 Authentication 객체 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
-
-        // 새로운 토큰 재발급해서 반환
-        return tokenProvider.generateTokenDto(authentication);
-    }
+//    @Transactional
+//    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
+//        // refresh Token 검증
+//        if(!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+//            throw new RuntimeException("Refresh Token이 유효하지 않습니다.");
+//        }
+//
+//        // access Token에서 Authentication 객체 가져오기
+//        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+//
+//        // 새로운 토큰 재발급해서 반환
+//        return tokenProvider.generateTokenDto(authentication);
+//    }
 
     // 회원정보에서 닉네임만 수정
     @Override
@@ -147,15 +148,28 @@ class UserServiceImpl implements UserService {
 
     // 회원정보에서 비밀번호만 수정
     @Override
-    public boolean updatePassword(UserUpdateDto userUpdateDto) {
+    public int updatePassword(UserUpdateDto userUpdateDto) {
         User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).get();
-        String realPassword = user.getUserPassword();   // 해당 유저 db에서 검색해서 패스워드 받아옴
-        // 변경할 패스워드와 이전 패스워드가 같은 경우
-        if(passwordEncoder.matches(userUpdateDto.getUserPassword(), realPassword)) {
-            return false;
+        String realPassword = user.getUserPassword();   // 해당 유저 db에서 검색해서 현재 저장된 패스워드 받아옴
+        // 입력받은 현재 패스워드와 DB내에 저장된 패스워드가 같지 않은 경우 (현재 비밀번호를 잘못 입력하였습니다)
+        if(!passwordEncoder.matches(userUpdateDto.getUserNowPassword(), realPassword)) {
+            return 1;   // 에러 발생
         }
-        user.updatePassword(passwordEncoder.encode(userUpdateDto.getUserPassword()));
-        return true;
+
+        // 입력받은 유저의 변경할 비밀번호가 DB내에 저장된 패스워드와 같은 경우 (현재 비밀번호가 변경하려는 비밀번호와 같습니다)
+        if(passwordEncoder.matches(userUpdateDto.getUserChangePassword(), realPassword)) {
+            return 2; // 에러 발생
+        }
+
+        user.updatePassword(passwordEncoder.encode(userUpdateDto.getUserChangePassword()));
+        return 0;   // 정상 성공 코드
+    }
+
+    // 임시 비밀번호 발급 및 db에 임시 비밀번호 저장
+    @Override
+    public void tempPassword(UserDto userDto, MailCodeDto mailCodeDto) {
+        User user = userRepository.findByUserEmail(userDto.getUserEmail()).get();
+        user.updatePassword(passwordEncoder.encode(mailCodeDto.getEmailCode()));
     }
 
 }

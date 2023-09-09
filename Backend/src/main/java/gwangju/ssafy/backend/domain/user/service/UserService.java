@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.domain.user.service;
 
 import gwangju.ssafy.backend.domain.user.dto.*;
+import gwangju.ssafy.backend.global.common.dto.MailCodeDto;
 import gwangju.ssafy.backend.global.common.dto.MailSendDto;
 import gwangju.ssafy.backend.global.common.dto.TokenDto;
 import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
@@ -22,7 +23,7 @@ public interface UserService {
 
     void logoutUser(HttpServletRequest request);
 
-    TokenDto reissue(TokenRequestDto tokenRequestDto);
+//    TokenDto reissue(TokenRequestDto tokenRequestDto);
 
     // 유저정보에서 닉네임만 수정
     void updateNickName(UserUpdateDto userUpdateDto);
@@ -31,6 +32,9 @@ public interface UserService {
     void updateImage(UserUpdateDto userUpdateDto);
 
     // 유저정보에서 패스워드만 수정
-    boolean updatePassword(UserUpdateDto userUpdateDto);
+    int updatePassword(UserUpdateDto userUpdateDto);
+
+    // 임시 비밀번호 발급 및 db에 임시 비밀번호 저장
+    void tempPassword(UserDto userDto, MailCodeDto mailCodeDto);
 
 }

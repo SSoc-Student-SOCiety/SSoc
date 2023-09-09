@@ -19,10 +19,10 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
     private final StringRedisTemplate redisTemplate;
 
     // TokenProvider를 주입받아서 JwtFilter를 통해 Security 로직에 필터를 적용
-    @Bean
-    public void configure(HttpSecurity httpSecurity) {
-        JwtFilter customFilter = new JwtFilter(tokenProvider, redisTemplate);
-        httpSecurity.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+//    @Bean
+//    public void configure(HttpSecurity httpSecurity) {
+//        JwtFilter customFilter = new JwtFilter(tokenProvider, redisTemplate);
+//        httpSecurity.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+//    }
 
 }

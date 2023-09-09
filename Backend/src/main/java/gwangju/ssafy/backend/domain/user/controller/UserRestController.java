@@ -25,7 +25,7 @@ public class UserRestController {
     public ResponseEntity<Message<MailCodeDto>> sendMail(@RequestBody UserDto userDto) {
         MailCodeDto mailCodeDto = null;
         try {
-            mailCodeDto = emailService.sendSimpleMessage(userDto.getUserEmail());
+            mailCodeDto = emailService.sendSimpleMessage(userDto.getUserEmail(), true);
         } catch (Exception e) {
             return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
         }
@@ -70,11 +70,11 @@ public class UserRestController {
     }
 
     // JWT 토큰 재발급
-    @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        log.info("==================JWT 토큰 재발급 진입=============");
-        return ResponseEntity.ok().body(userService.reissue(tokenRequestDto));
-    }
+//    @PostMapping("/reissue")
+//    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+//        log.info("==================JWT 토큰 재발급 진입=============");
+//        return ResponseEntity.ok().body(userService.reissue(tokenRequestDto));
+//    }
 
     @PostMapping("/update/nickname")
     public ResponseEntity<Message> updateNickName(@RequestBody UserUpdateDto userUpdateDto) {
@@ -86,10 +86,16 @@ public class UserRestController {
     @PostMapping("/update/password")
     public ResponseEntity<Message> updatePassword(@RequestBody UserUpdateDto userUpdateDto) {
         log.info("==================회원정보 비밀번호 수정 Controller 진입=============");
-        if(userService.updatePassword(userUpdateDto)) {
+        int code = userService.updatePassword(userUpdateDto);
+        if(code == 0) {
             return ResponseEntity.ok().body(Message.success());
         }
-        return ResponseEntity.ok().body(Message.fail(null, "비밀번호가 이전과 같습니다."));
+        else if(code == 1) {
+            return ResponseEntity.ok().body(Message.fail("1", "현재 비밀번호를 잘못 입력하였습니다."));
+        }
+        else {
+            return ResponseEntity.ok().body(Message.fail("2", "현재 비밀번호가 변경하려는 비밀번호와 같습니다."));
+        }
     }
 
     @PostMapping("/update/image")
@@ -102,11 +108,42 @@ public class UserRestController {
     @PostMapping("/update/nickname/password")
     public ResponseEntity<Message> updateNickNameAndPassword(@RequestBody UserUpdateDto userUpdateDto) {
         log.info("==================회원정보 닉네임, 비밀번호 수정 Controller 진입=============");
-        if(userService.updatePassword(userUpdateDto)) {
+        int code = userService.updatePassword(userUpdateDto);
+        if(code == 0) {
             userService.updateNickName(userUpdateDto);
             return ResponseEntity.ok().body(Message.success());
         }
-        return ResponseEntity.ok().body(Message.fail(null, "비밀번호가 이전과 같습니다."));
+        else if(code == 1) {
+            return ResponseEntity.ok().body(Message.fail("1", "현재 비밀번호를 잘못 입력하였습니다."));
+        }
+        else {
+            return ResponseEntity.ok().body(Message.fail("2", "현재 비밀번호가 변경하려는 비밀번호와 같습니다."));
+        }
+
+
     }
+
+    // 토큰값들(accessToken, refreshToken 받아오기)
+    @PostMapping("/token/check")
+    public ResponseEntity<Message> tokenCheck(@RequestBody TokenDto tokenDto) {
+        log.info("==================토큰값 받아오기 Controller 진입=============");
+        return ResponseEntity.ok().body(Message.success());
+    }
+
+    // 임시 비밀번호 재발급
+    @PostMapping("/email/password")
+    public ResponseEntity<Message> sendTempPassword(@RequestBody UserDto userDto) {
+        MailCodeDto mailCodeDto = null;
+        try {
+            mailCodeDto = emailService.sendSimpleMessage(userDto.getUserEmail(), false);
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
+        }
+        log.info("메일 전송 완료");
+        userService.tempPassword(userDto, mailCodeDto);
+        log.info("임시 비밀번호 발급 완료");
+        return ResponseEntity.ok().body(Message.success());
+    }
+
 
 }
