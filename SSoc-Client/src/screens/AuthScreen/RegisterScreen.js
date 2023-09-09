@@ -6,35 +6,36 @@ import { Spacer } from '../../components/Basic/Spacer'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import SchoolEmailInput from '../../modules/AuthModules/SchoolEmailInput'
 import UserInfoInput from '../../modules/AuthModules/UserInfoInput'
-import { useRecoilState } from 'recoil'
-import { goMainPageState } from '../../util/RecoilUtil/Atoms'
+import { AuthStackHeader } from '../../modules/AuthModules/AuthStackHeader'
 const RegisterScreen = (props) => {
   const [initialized, setInitialized] = useState(false)
   const [emailCode, setEmailCode] = useState('')
 
   return (
-    <KeyboardAwareScrollView
+    <View
       backgroundColor={Color.WHITE}
       style={{ flex: 1, alignContent: 'center' }}
     >
-      <Spacer space={16} />
-      <Logo />
-      <View style={{ margin: 20 }}>
-        <SchoolEmailInput
-          email={props.route.params.email}
-          onPressCheck={() => {
-            setInitialized(true)
-          }}
-          setEmailCode={setEmailCode}
-        />
-        {initialized ? (
-          <UserInfoInput
-            userEmail={props.route.params.email}
-            emailCode={emailCode}
+      <AuthStackHeader title="회원가입" />
+      <KeyboardAwareScrollView>
+        <Logo />
+        <View style={{ margin: 20 }}>
+          <SchoolEmailInput
+            userEmail={props.route.params.userEmail}
+            onPressCheck={() => {
+              setInitialized(true)
+            }}
+            setEmailCode={setEmailCode}
           />
-        ) : null}
-      </View>
-    </KeyboardAwareScrollView>
+          {initialized ? (
+            <UserInfoInput
+              userEmail={props.route.params.userEmail}
+              emailCode={emailCode}
+            />
+          ) : null}
+        </View>
+      </KeyboardAwareScrollView>
+    </View>
   )
 }
 export default RegisterScreen
