@@ -1,11 +1,12 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from '../../screens/AuthScreen/LoginScreen';
-import RegisterScreen from '../../screens/AuthScreen/RegisterScreen';
-import RegisterSuccessScreen from '../../screens/AuthScreen/RegisterSuccessScreen';
-import SchoolEmailScreen from '../../screens/AuthScreen/SchoolEmailScreen';
-import SplashScreen from '../../screens/AuthScreen/SplashScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import FindPassWordScreen from '../../screens/AuthScreen/FindPassWordScreen'
+import LoginScreen from '../../screens/AuthScreen/LoginScreen'
+import RegisterScreen from '../../screens/AuthScreen/RegisterScreen'
+import RegisterSuccessScreen from '../../screens/AuthScreen/RegisterSuccessScreen'
+import SchoolEmailScreen from '../../screens/AuthScreen/SchoolEmailScreen'
+import SplashScreen from '../../screens/AuthScreen/SplashScreen'
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 const AuthStackNavigation = () => {
   return (
     <Stack.Navigator initialRouteName="SplashScreen">
@@ -34,7 +35,12 @@ const AuthStackNavigation = () => {
         component={RegisterSuccessScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="FindPassWord"
+        component={FindPassWordScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
-  );
-};
-export default AuthStackNavigation;
+  )
+}
+export default AuthStackNavigation
