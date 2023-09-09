@@ -7,7 +7,7 @@ import { Button } from '../../components/Basic/Button'
 import { Typography } from '../../components/Basic/Typography'
 import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
-import { getRegisterResultCodeFetch } from '../../util/FetchUtil'
+import { getRegisterResultFetch } from '../../util/FetchUtil'
 
 const UserInfoInput = (props) => {
   const navigation = useNavigation()
@@ -15,13 +15,22 @@ const UserInfoInput = (props) => {
   const [userPw, setUserPw] = useState('')
   const [userName, setUserName] = useState('')
   const [userNick, setUserNick] = useState('')
-  const [registerResult, setRegisterCode] = useState(null)
+  const [registerResultData, setRegisterResultData] = useState(null)
+
+  const tempData = {
+    dataHeader: {
+      successCode: 0,
+      resultCode: null,
+      resultMessage: null,
+    },
+    dataBody: null,
+  }
 
   const getRegisterResultData = async () => {
     try {
-      const response = await getRegisterResultCodeFetch()
+      const response = await getRegisterResultFetch(props.userEmail, userPw, userName, userNick)
       const data = await response.json()
-      setRegisterCode(data)
+      setRegisterResultData(tempData)
     } catch (e) {
       console.log(e)
     }
@@ -35,20 +44,20 @@ const UserInfoInput = (props) => {
     } else if (props.emailCode != emailCode) {
       Alert.alert('이메일 인증번호를 다시 확인해주세요.')
     } else {
-      getRegisterResultData(props.userEmail, userPw, userName, userNick)
+      getRegisterResultData()
     }
   }
 
   useEffect(() => {
-    if (registerResult != null) {
-      // if (registerResult.dataHeader.successCode == 0) {
-      if (true) {
+    if (registerResultData != null) {
+      if (registerResultData.dataHeader.successCode == 0) {
         navigation.reset({ routes: [{ name: 'RegisterSuccess' }] })
       } else {
-        Alert.alert('데이터 등록에 실패했습니다.')
+        Alert.alert('회원가입에 실패했습니다.', '다시 시도해주세요.')
       }
     }
-  }, [registerResult])
+    setRegisterResultData(null)
+  }, [registerResultData])
 
   return (
     <View>
