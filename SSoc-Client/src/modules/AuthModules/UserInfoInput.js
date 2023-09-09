@@ -1,4 +1,5 @@
-import { View, Text, Alert, TouchableOpacity } from 'react-native'
+import { View, Alert, TouchableOpacity } from 'react-native'
+import { useEffect } from 'react'
 import { Spacer } from '../../components/Basic/Spacer'
 import AuthInput from '../../components/Input/AuthInput'
 import * as Color from '../../components/Colors/colors'
@@ -6,6 +7,7 @@ import { Button } from '../../components/Basic/Button'
 import { Typography } from '../../components/Basic/Typography'
 import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
+import { getRegisterResultCodeFetch } from '../../util/FetchUtil'
 
 const UserInfoInput = (props) => {
   const navigation = useNavigation()
@@ -13,6 +15,18 @@ const UserInfoInput = (props) => {
   const [userPw, setUserPw] = useState('')
   const [userName, setUserName] = useState('')
   const [userNick, setUserNick] = useState('')
+  const [registerResult, setRegisterCode] = useState(null)
+
+  const getRegisterResultData = async () => {
+    try {
+      const response = await getRegisterResultCodeFetch()
+      const data = await response.json()
+      setRegisterCode(data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const onPressRegister = () => {
     if (emailCode.length == 0 || userName.length < 1 || userNick == 0) {
       Alert.alert('정보를 모두 입력해주세요.')
@@ -21,18 +35,21 @@ const UserInfoInput = (props) => {
     } else if (props.emailCode != emailCode) {
       Alert.alert('이메일 인증번호를 다시 확인해주세요.')
     } else {
-      navigation.reset({
-        routes: [
-          {
-            name: 'RegisterSuccess',
-            params: {
-              onFinishLoad: props.onFinishLoad,
-            },
-          },
-        ],
-      })
+      getRegisterResultData(props.userEmail, userPw, userName, userNick)
     }
   }
+
+  useEffect(() => {
+    if (registerResult != null) {
+      // if (registerResult.dataHeader.successCode == 0) {
+      if (true) {
+        navigation.reset({ routes: [{ name: 'RegisterSuccess' }] })
+      } else {
+        Alert.alert('데이터 등록에 실패했습니다.')
+      }
+    }
+  }, [registerResult])
+
   return (
     <View>
       <Spacer space={10} />

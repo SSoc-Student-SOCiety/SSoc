@@ -6,10 +6,12 @@ import { Spacer } from '../../components/Basic/Spacer'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import SchoolEmailInput from '../../modules/AuthModules/SchoolEmailInput'
 import UserInfoInput from '../../modules/AuthModules/UserInfoInput'
+import { useRecoilState } from 'recoil'
+import { goMainPageState } from '../../util/RecoilUtil/Atoms'
 const RegisterScreen = (props) => {
   const [initialized, setInitialized] = useState(false)
   const [emailCode, setEmailCode] = useState('')
-  const onFinishLoad = props.route.params.onFinishLoad
+
   return (
     <KeyboardAwareScrollView
       backgroundColor={Color.WHITE}
@@ -27,8 +29,8 @@ const RegisterScreen = (props) => {
         />
         {initialized ? (
           <UserInfoInput
+            userEmail={props.route.params.email}
             emailCode={emailCode}
-            onFinishLoad={onFinishLoad}
           />
         ) : null}
       </View>

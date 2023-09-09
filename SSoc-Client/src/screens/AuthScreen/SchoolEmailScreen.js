@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AuthInput from '../../components/Input/AuthInput'
 import { SingleLineInput } from '../../components/Input/SingleLineInput'
+import { goMainPageState } from '../../util/RecoilUtil/Atoms'
+import { useRecoilState } from 'recoil'
 
 const SchoolEmailScreen = (props) => {
   const navigation = useNavigation()
@@ -20,7 +22,6 @@ const SchoolEmailScreen = (props) => {
     신한대학교: 'shinhan.ac.kr',
     싸피대학교: 'ssafy.ac.kr',
   }
-  const onFinishLoad = props.route.params.onFinishLoad
 
   // TO-DO
   // userEmail Server로 보내기 -> 정상: return값 메일 인증번호 = Register페이지로 prop 보내기
@@ -30,21 +31,12 @@ const SchoolEmailScreen = (props) => {
       Alert.alert('학교와 이메일을 정확히 기입해주세요.')
     } else {
       setUserEmail(userId + '@' + email)
-      navigation.navigate('Register', { email: userEmail, onFinishLoad: onFinishLoad })
+      navigation.navigate('Register', { email: userEmail })
     }
   }
 
   const onPressLogin = () => {
-    navigation.reset({
-      routes: [
-        {
-          name: 'Login',
-          params: {
-            onFinishLoad: onFinishLoad,
-          },
-        },
-      ],
-    })
+    navigation.reset({ routes: [{ name: 'Login' }] })
   }
 
   return (
