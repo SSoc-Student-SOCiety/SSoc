@@ -4,6 +4,7 @@ export async function setAsync(key, value) {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value))
   } catch (e) {
+    console.log(e)
     console.log(key + ' 세팅 실패')
   }
 }
