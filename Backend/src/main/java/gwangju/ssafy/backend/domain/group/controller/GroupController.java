@@ -24,7 +24,7 @@ public class GroupController {
 	private final GroupService groupService;
 
 	@PostMapping("/edit")
-	public ResponseEntity<Message> createGroup(@RequestBody EditGroupInfoRequest request) {
+	public ResponseEntity<Message> editGroupInfo(@RequestBody EditGroupInfoRequest request) {
 		groupService.editGroupInfo(request);
 		return ResponseEntity.ok().body(Message.success());
 	}
