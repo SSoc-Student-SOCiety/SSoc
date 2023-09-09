@@ -1,4 +1,4 @@
-import { setAsync, getAsync } from './AsyncUtil'
+import { setAsync, getAsync, removeAsync } from './AsyncUtil'
 
 export const getTokens = async (setAccessToken, setRefleshToken, setIsTokenGet) => {
   getAsync('accessToken').then((res) => {
@@ -13,4 +13,9 @@ export const getTokens = async (setAccessToken, setRefleshToken, setIsTokenGet) 
 export const setTokens = async (accessToken, refleshToken) => {
   setAsync('accessToken', accessToken)
   setAsync('refleshToken', refleshToken)
+}
+
+export const removeTokens = async () => {
+  removeAsync('accessToken')
+  removeAsync('refleshToken')
 }

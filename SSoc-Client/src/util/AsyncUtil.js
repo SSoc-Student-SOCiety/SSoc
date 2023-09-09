@@ -7,10 +7,19 @@ export async function setAsync(key, value) {
     console.log(key + ' 세팅 실패')
   }
 }
+
 export async function getAsync(key) {
   try {
     return await AsyncStorage.getItem(key)
   } catch (e) {
     console.log(key + ' 가져오기 실패')
+  }
+}
+
+export async function removeAsync(key) {
+  try {
+    return await AsyncStorage.removeItem(key)
+  } catch (e) {
+    console.log(key + ' 삭제 실패')
   }
 }
