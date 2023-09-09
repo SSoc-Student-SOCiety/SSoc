@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-public class TransactionInfo {
+public class ShinhanTransactionInfo {
 	private String accountNumber;
 	private String productName;
 	private String balance;

@@ -31,8 +31,8 @@ public class ShinhanTransactionApi {
 		private Long 거래내역반복횟수;
 		private List<Transaction> 거래내역;
 
-		public TransactionInfo toDto() {
-			return TransactionInfo.builder()
+		public ShinhanTransactionInfo toDto() {
+			return ShinhanTransactionInfo.builder()
 				.accountNumber(this.계좌번호)
 				.productName(this.상품명)
 				.balance(this.계좌잔액)
@@ -42,8 +42,8 @@ public class ShinhanTransactionApi {
 				.build();
 		}
 
-		private List<TransactionInfo.Transaction> toList() {
-			ArrayList<TransactionInfo.Transaction> list = new ArrayList<>();
+		private List<ShinhanTransactionInfo.Transaction> toList() {
+			ArrayList<ShinhanTransactionInfo.Transaction> list = new ArrayList<>();
 			for (Transaction transaction : 거래내역) {
 				list.add(transaction.toDto());
 			}
@@ -68,8 +68,8 @@ public class ShinhanTransactionApi {
 		private String 입지구분;
 		private String 거래점명;
 
-		public TransactionInfo.Transaction toDto() {
-			return TransactionInfo.Transaction.builder()
+		public ShinhanTransactionInfo.Transaction toDto() {
+			return ShinhanTransactionInfo.Transaction.builder()
 				.date(LocalDateTime.parse(this.거래일자 + this.거래시간,formatter))
 				.briefs(this.적요)
 				.withdrawal(this.출금금액)

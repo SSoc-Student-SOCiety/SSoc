@@ -9,13 +9,12 @@ import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanSearchNameApi
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransactionApi;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransferApi;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransferAuthApi;
-import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.TransactionInfo;
+import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransactionInfo;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.TransferRequest;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.TransferResult;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.DepositHolderName;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.BalanceDetail;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankService;
-import gwangju.ssafy.backend.global.infra.feign.shinhan.service.impl.ShinhanApiKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +42,7 @@ class ShinhanBankServiceImpl implements ShinhanBankService {
 	}
 
 	@Override
-	public TransactionInfo getAccountTransaction(String accountNumber) {
+	public ShinhanTransactionInfo getAccountTransaction(String accountNumber) {
 
 		ShinhanApiDto<ShinhanApiKey, ShinhanTransactionApi.Request> request = ShinhanApiDto.<ShinhanApiKey, ShinhanTransactionApi.Request>builder()
 			.dataHeader(apiKey)
