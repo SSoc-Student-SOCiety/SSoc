@@ -4,11 +4,14 @@ import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.transaction.dto.EditTransactionNoteRequest;
+import gwangju.ssafy.backend.domain.transaction.dto.GetTransactionsRequest;
+import gwangju.ssafy.backend.domain.transaction.dto.TransactionInfo;
 import gwangju.ssafy.backend.domain.transaction.entity.GroupAccount;
 import gwangju.ssafy.backend.domain.transaction.entity.Transaction;
 import gwangju.ssafy.backend.domain.transaction.repository.GroupAccountRepository;
 import gwangju.ssafy.backend.domain.transaction.repository.TransactionRepository;
 import gwangju.ssafy.backend.domain.transaction.service.TransactionService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,5 +45,23 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 
 		transaction.changeNote(request.getNote());
+	}
+
+	@Override
+	public List<TransactionInfo> getTransactions(GetTransactionsRequest request) {
+
+		GroupAccount account = groupAccountRepository.findByGroupIdAndNumber(request.getGroupId(),
+				request.getAccountNumber())
+			.orElseThrow(() -> new RuntimeException("없는 계좌"));
+
+		if (!account.isActive()) {
+			throw new RuntimeException("비활성화된 계좌");
+		}
+
+		groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(), request.getUserId())
+			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+
+		return transactionRepository.findAllByGroupAccountId(account.getId(), request.getLimit(),
+			request.getPageNumber());
 	}
 }
