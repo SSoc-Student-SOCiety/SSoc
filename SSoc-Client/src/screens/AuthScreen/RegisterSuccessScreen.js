@@ -9,20 +9,11 @@ import { useNavigation } from '@react-navigation/native'
 
 const RegisterSuccessScreen = (props) => {
   const navigation = useNavigation()
-  const onFinishLoad = props.route.params.onFinishLoad
+
   // TO-DO
   // API 받아서 중복체크 -> 분기 처리 필요
   const onPressLogin = () => {
-    navigation.reset({
-      routes: [
-        {
-          name: 'Login',
-          params: {
-            onFinishLoad: onFinishLoad,
-          },
-        },
-      ],
-    })
+    navigation.reset({ routes: [{ name: 'Login' }] })
   }
 
   return (

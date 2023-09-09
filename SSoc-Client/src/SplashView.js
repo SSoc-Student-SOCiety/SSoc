@@ -4,11 +4,10 @@ import { useNavigation } from '@react-navigation/native'
 import { getAuthDataFetch } from './util/FetchUtil'
 import { getTokens, setTokens } from './util/TokenUtil'
 import { useRecoilState } from 'recoil'
-import { UserInfoState } from './util/RecoilUtil/Atoms'
+import { goMainPageState, UserInfoState } from './util/RecoilUtil/Atoms'
 
-export const SplashView = (props) => {
+export const SplashView = () => {
   const navigation = useNavigation()
-  const onFinishLoad = props.onFinishLoad
 
   const [refleshToken, setRefleshToken] = useState(null)
   const [accessToken, setAccessToken] = useState(null)
@@ -17,10 +16,11 @@ export const SplashView = (props) => {
   const [isTokenGet, setIsTokenGet] = useState(false)
 
   const [user, setUser] = useRecoilState(UserInfoState)
+  const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
 
   const tempData = {
     dataHeader: {
-      successCode: 0,
+      successCode: 1,
       resultCode: 0,
       resultMessage: null,
     },
@@ -33,8 +33,8 @@ export const SplashView = (props) => {
       },
       token: {
         grantType: 'bearer',
-        accessToken: 'asdgjklasjglsdjlajflajsglasdg',
-        refreshToken: 'asdglajgdljalfjdlsaf',
+        accessToken: 'testSplashScreen_REFLASH_AccessToken',
+        refreshToken: 'testSplashScreen_REFLASH_RefleshToken',
         accessTokenExpiresIn: 12345153351,
       },
     },
@@ -57,16 +57,7 @@ export const SplashView = (props) => {
       if (authInfo == null) {
         if (accessToken == null || refleshToken == null) {
           setTimeout(() => {
-            navigation.reset({
-              routes: [
-                {
-                  name: 'SchoolEmail',
-                  params: {
-                    onFinishLoad: onFinishLoad,
-                  },
-                },
-              ],
-            })
+            navigation.reset({ routes: [{ name: 'SchoolEmail' }] })
           }, 1500)
           return
         }
@@ -78,20 +69,11 @@ export const SplashView = (props) => {
             setTokens(authInfo.dataBody.accessToken, authInfo.dataBody.refleshToken)
           }
           setTimeout(() => {
-            onFinishLoad()
+            setGoMainPage(true)
           }, 1500)
         } else {
           setTimeout(() => {
-            navigation.reset({
-              routes: [
-                {
-                  name: 'Login',
-                  params: {
-                    onFinishLoad: onFinishLoad,
-                  },
-                },
-              ],
-            })
+            navigation.reset({ routes: [{ name: 'Login' }] })
           }, 1500)
         }
       } else {
