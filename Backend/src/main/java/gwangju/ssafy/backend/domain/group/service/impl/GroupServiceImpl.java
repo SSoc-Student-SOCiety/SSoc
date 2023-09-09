@@ -2,6 +2,8 @@ package gwangju.ssafy.backend.domain.group.service.impl;
 
 import gwangju.ssafy.backend.domain.group.dto.CreateGroupRequest;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
+import gwangju.ssafy.backend.domain.group.dto.GetGroupInfoDetailRequest;
+import gwangju.ssafy.backend.domain.group.dto.GroupDetailInfo;
 import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
 import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
 import gwangju.ssafy.backend.domain.group.dto.MyGroupSearchCond;
@@ -70,8 +72,8 @@ class GroupServiceImpl implements GroupService {
 		Group group = groupRepository.findByIdAndIsActiveIsTrue(member.getGroup().getId())
 			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
 
-		group.editInfo(request.getName(),  request.getAboutUs(),
-			request.getIntroduce(),request.getThumbnail());
+		group.editInfo(request.getName(), request.getAboutUs(),
+			request.getIntroduce(), request.getThumbnail());
 
 	}
 
@@ -83,6 +85,27 @@ class GroupServiceImpl implements GroupService {
 	@Override
 	public List<GroupSimpleInfo> searchMyGroup(MyGroupSearchCond cond) {
 		return groupRepository.findMyGroups(cond);
+	}
+
+	@Override
+	public GroupDetailInfo getGroupDetail(GetGroupInfoDetailRequest request) {
+		// 그룹 존재 여부 확인
+		Group group = groupRepository.findByIdAndIsActiveIsTrue(request.getGroupId())
+			.orElseThrow(() -> new RuntimeException("해당 그룹이 없음"));
+
+		// 그룹원 수 카운트
+		Long cnt = groupMemberRepository.countByGroup_Id(request.getGroupId());
+
+		return GroupDetailInfo.builder()
+			.groupId(request.getGroupId())
+			.name(group.getName())
+			.school(group.getSchool().getName())
+			.category(group.getCategory().getValue())
+			.aboutUs(group.getAboutUs())
+			.thumb(group.getThumbnail())
+			.introduce(group.getIntroduce())
+			.memberCnt(cnt)
+			.build();
 	}
 
 }

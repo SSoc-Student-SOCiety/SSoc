@@ -12,13 +12,15 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class GroupSimpleInfo {
+public class GroupDetailInfo {
 
 	private Long groupId;
-	private String name;
-	private String aboutUs;
 	private String school;
-	private String thumbnail;
-
+	private String name;
+	private String thumb;
+	private String category;
+	private String aboutUs;
+	private String introduce;
+	private Long memberCnt;
 
 }

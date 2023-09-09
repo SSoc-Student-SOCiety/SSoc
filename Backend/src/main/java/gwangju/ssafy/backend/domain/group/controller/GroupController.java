@@ -1,5 +1,7 @@
 package gwangju.ssafy.backend.domain.group.controller;
 
+import gwangju.ssafy.backend.domain.group.dto.GetGroupInfoDetailRequest;
+import gwangju.ssafy.backend.domain.group.dto.GroupDetailInfo;
 import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
 import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
 import gwangju.ssafy.backend.domain.group.dto.MyGroupSearchCond;
@@ -22,13 +24,14 @@ public class GroupController {
 	private final GroupService groupService;
 
 	@PostMapping("/edit")
-	public ResponseEntity<Message> createGroup(@RequestBody EditGroupInfoRequest request) {
+	public ResponseEntity<Message> editGroupInfo(@RequestBody EditGroupInfoRequest request) {
 		groupService.editGroupInfo(request);
 		return ResponseEntity.ok().body(Message.success());
 	}
 
 	@PostMapping
-	public ResponseEntity<Message<List<GroupSimpleInfo>>> searchGroup(@RequestBody GroupSearchCond cond) {
+	public ResponseEntity<Message<List<GroupSimpleInfo>>> searchGroup(
+		@RequestBody GroupSearchCond cond) {
 		return ResponseEntity.ok().body(Message.success(groupService.searchGroup(cond)));
 	}
 
@@ -36,5 +39,9 @@ public class GroupController {
 	public ResponseEntity<Message> searchMyGroup(@RequestBody MyGroupSearchCond cond) {
 		return ResponseEntity.ok().body(Message.success(groupService.searchMyGroup(cond)));
 	}
-	
+
+	@PostMapping("/detail")
+	public ResponseEntity<Message<GroupDetailInfo>> getGroupInfoDetail(@RequestBody GetGroupInfoDetailRequest request) {
+		return ResponseEntity.ok().body(Message.success(groupService.getGroupDetail(request)));
+	}
 }

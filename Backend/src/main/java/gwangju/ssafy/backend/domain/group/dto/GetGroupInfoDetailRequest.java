@@ -12,13 +12,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class GroupSimpleInfo {
+public class GetGroupInfoDetailRequest {
 
 	private Long groupId;
-	private String name;
-	private String aboutUs;
-	private String school;
-	private String thumbnail;
-
 
 }

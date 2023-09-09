@@ -30,7 +30,8 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 					group.id.as("groupId"),
 				group.name.as("name"),
 				group.aboutUs.as("aboutUs"),
-				school.name.as("school")
+				school.name.as("school"),
+				group.thumbnail.as("thumbnail")
 				))
 			.from(group)
 			.innerJoin(group.school, school)
@@ -47,7 +48,8 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 				group.id.as("groupId"),
 				group.name.as("name"),
 				group.aboutUs.as("aboutUs"),
-				school.name.as("school")
+				school.name.as("school"),
+				group.thumbnail.as("thumbnail")
 			))
 			.from(groupMember)
 			.innerJoin(groupMember.group, group)

@@ -2,6 +2,8 @@ package gwangju.ssafy.backend.domain.group.service;
 
 import gwangju.ssafy.backend.domain.group.dto.CreateGroupRequest;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
+import gwangju.ssafy.backend.domain.group.dto.GetGroupInfoDetailRequest;
+import gwangju.ssafy.backend.domain.group.dto.GroupDetailInfo;
 import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
 import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
 import gwangju.ssafy.backend.domain.group.dto.MyGroupSearchCond;
@@ -17,4 +19,7 @@ public interface GroupService {
 
 	List<GroupSimpleInfo> searchGroup(GroupSearchCond cond);
 	List<GroupSimpleInfo> searchMyGroup(MyGroupSearchCond cond);
+
+	GroupDetailInfo getGroupDetail(GetGroupInfoDetailRequest request);
+
 }
