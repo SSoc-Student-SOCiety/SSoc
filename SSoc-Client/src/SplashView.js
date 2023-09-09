@@ -40,9 +40,9 @@ export const SplashView = () => {
     },
   }
 
-  const getAuthData = async () => {
+  const getAuthData = async (refleshToken, accessToken) => {
     try {
-      const response = await getAuthDataFetch()
+      const response = await getAuthDataFetch(refleshToken, accessToken)
       const data = await response.json()
       await setAuthInfo(tempData)
     } catch (e) {
@@ -51,22 +51,31 @@ export const SplashView = () => {
   }
 
   const authFlow = () => {
+    // 토큰 얻어오기(async에서)
     if (!isTokenGet) {
       getTokens(setAccessToken, setRefleshToken, setIsTokenGet)
     } else {
+      // 토큰 가져왔음
+      // Fetch 보내기 전. 즉, authInfo 요청 아직 안 함
       if (authInfo == null) {
+        // 가져온 토큰 확인 -> 토큰 없으면 회원가입 하러 감
         if (accessToken == null || refleshToken == null) {
           setTimeout(() => {
             navigation.reset({ routes: [{ name: 'SchoolEmail' }] })
           }, 1500)
-          return
+        } else {
+          getAuthData() // 토큰 없어서 데이터 요청함
         }
       }
+
+      // 요청 받아서 가져옴
       if (authInfo != null) {
-        setUser(authInfo.dataBody.userInfo)
         if (authInfo.dataHeader.successCode == 0) {
+          // recoil에 유저 정보 담기
+          setUser(authInfo.dataBody.userInfo)
           if (authInfo.dataHeader.resultCode == 1) {
-            setTokens(authInfo.dataBody.accessToken, authInfo.dataBody.refleshToken)
+            // 토큰 재발급인 경우에 async 업데이트
+            setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refleshToken)
           }
           setTimeout(() => {
             setGoMainPage(true)
@@ -76,13 +85,10 @@ export const SplashView = () => {
             navigation.reset({ routes: [{ name: 'Login' }] })
           }, 1500)
         }
-      } else {
-        getAuthData()
       }
     }
   }
 
-  //처음 앱 실행시 async storage에 저장되어있는 jwt로 로그인 시도
   useEffect(() => {
     authFlow()
   }, [isTokenGet, authInfo])
