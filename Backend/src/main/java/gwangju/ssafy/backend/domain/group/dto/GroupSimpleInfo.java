@@ -18,6 +18,7 @@ public class GroupSimpleInfo {
 	private String name;
 	private String aboutUs;
 	private String school;
+	private String thumbnail;
 
 
 }
