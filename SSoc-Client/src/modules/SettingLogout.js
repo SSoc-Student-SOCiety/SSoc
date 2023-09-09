@@ -1,23 +1,43 @@
+import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import * as Color from '../components/Colors/colors'
 import { Typography } from '../components/Basic/Typography'
 import SettingBtn from './SettingButton'
 import { Spacer } from '../components/Basic/Spacer'
+import { useRecoilState } from 'recoil'
+import { goMainPageState } from '../util/RecoilUtil/Atoms'
+import { removeTokens } from '../util/TokenUtil'
 
 const SettingLogout = () => {
-  const onPressLogout = () => {
+  const [isTokenRemove, setIsTokenRemove] = useState(false)
+  const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
+
+  const onPressLogout = async () => {
     Alert.alert(
       '로그아웃',
       '정말 로그아웃 하시겠습니까?',
       [
         { text: '취소', onPress: () => {}, style: 'cancle' },
-        { text: '로그아웃', onPress: () => {}, style: 'destructive' },
+        {
+          text: '로그아웃',
+          onPress: () => {
+            removeTokens()
+            setIsTokenRemove(true)
+          },
+          style: 'destructive',
+        },
       ],
       {
         cancelable: true,
       }
     )
   }
+
+  useEffect(() => {
+    if (isTokenRemove == true) {
+      setGoMainPage(false)
+    }
+  }, [isTokenRemove])
 
   return (
     <View>
