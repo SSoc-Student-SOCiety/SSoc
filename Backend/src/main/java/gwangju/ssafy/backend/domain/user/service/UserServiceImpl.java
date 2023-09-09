@@ -3,6 +3,7 @@ package gwangju.ssafy.backend.domain.user.service;
 import gwangju.ssafy.backend.domain.user.dto.*;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
+import gwangju.ssafy.backend.global.common.dto.MailSendDto;
 import gwangju.ssafy.backend.global.common.dto.TokenDto;
 import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
 import gwangju.ssafy.backend.global.component.jwt.TokenProvider;
@@ -43,13 +44,13 @@ class UserServiceImpl implements UserService {
 
     // 이메일 보내기
     @Override
-    public void sendSimpleMessage(MailDto mailDto) {
+    public void sendSimpleMessage(MailSendDto mailSendDto) {
         SimpleMailMessage message = new SimpleMailMessage();
 //        message.setFrom("tlsehdrms124@yonsei.ac.kr"); // 구글 정책 때문에 발신자(보내는사람) 세팅 안됨
 
-        message.setTo(mailDto.getAddress());    // 수신자(받는사람) 이메일 주소 세팅
-        message.setSubject(mailDto.getTitle()); // 이메일 제목 세팅
-        message.setText(mailDto.getContent());  // 이메일 내용 세팅
+        message.setTo(mailSendDto.getAddress());    // 수신자(받는사람) 이메일 주소 세팅
+        message.setSubject(mailSendDto.getTitle()); // 이메일 제목 세팅
+        message.setText(mailSendDto.getContent());  // 이메일 내용 세팅
         emailSender.send(message);  // 이메일 보내기
     }
 
@@ -66,7 +67,6 @@ class UserServiceImpl implements UserService {
         if(userRepository.existsUserByUserEmail(userRequestDto.getUserEmail())) {
             throw new RuntimeException("이미 가입되어 있는 이메일입니다.");
         }
-
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword())); // 패스워드 암호화 작업
         User user = userRepository.save(userRequestDto.toEntity());
         log.info(user.getId().toString());
@@ -149,7 +149,8 @@ class UserServiceImpl implements UserService {
     @Override
     public boolean updatePassword(UserUpdateDto userUpdateDto) {
         User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).get();
-        String realPassword = user.getUserPassword();
+        String realPassword = user.getUserPassword();   // 해당 유저 db에서 검색해서 패스워드 받아옴
+        // 변경할 패스워드와 이전 패스워드가 같은 경우
         if(passwordEncoder.matches(userUpdateDto.getUserPassword(), realPassword)) {
             return false;
         }

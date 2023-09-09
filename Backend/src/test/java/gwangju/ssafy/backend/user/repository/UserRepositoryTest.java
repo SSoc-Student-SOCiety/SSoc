@@ -35,7 +35,7 @@ public class UserRepositoryTest {
 
         // then
         Assertions.assertEquals("test1234@yonsei.ac.kr", saveUser.getUserEmail());
-        Assertions.assertEquals("테스트1", saveUser.getUserName());
+        Assertions.assertEquals("테스트1", saveUser.getUsername());
 
         System.out.println(saveUser.getUserEmail());
     }
