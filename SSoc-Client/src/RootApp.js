@@ -1,18 +1,14 @@
 import { useState } from 'react'
 import { SplashView } from './SplashView'
 import { RootStackNavigation } from './navigations/MainNavigations/RootStackNavigation'
+import { useRecoilState } from 'recoil'
+import { goMainPageState } from './util/RecoilUtil/Atoms'
 
 export const RootApp = () => {
-  const [initialized, setInitialized] = useState(false)
+  const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
 
-  if (!initialized) {
-    return (
-      <SplashView
-        onFinishLoad={() => {
-          setInitialized(true)
-        }}
-      ></SplashView>
-    )
+  if (!goMainPage) {
+    return <SplashView />
   }
   return (
     //추후 네비게이션 컨테이너 호출
