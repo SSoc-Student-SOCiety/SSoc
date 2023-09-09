@@ -4,8 +4,8 @@ import React from "react";
 import { BoardListScreen } from "../../screens/GroupDetailBottomTabs/Board/BoardListScreen";
 import { BookingScreen } from "../../screens/GroupDetailBottomTabs/Booking/BookingScreen";
 import { ScheduleScreen } from "../../screens/GroupDetailBottomTabs/Schedule/ScheduleScreen";
-import { SettlementScreen } from "../../screens/GroupDetailBottomTabs/Settlement/SettlementScreen";
-
+import { WeeklySettlementScreen } from "../../screens/GroupDetailBottomTabs/Settlement/WeeklySettlementScreen";
+import { SettlementsTopTabs } from "../../screens/GroupDetailBottomTabs/Settlement/SettlementsTopTabs";
 import { TabIcon } from "../../components/Icons/TabIcon";
 const Tabs = createBottomTabNavigator();
 
@@ -37,7 +37,7 @@ export const GroupDetailBottomTabNavigation = () => {
       })}
     >
       <Tabs.Screen name="게시판" component={BoardListScreen}></Tabs.Screen>
-      <Tabs.Screen name="결산안" component={SettlementScreen}></Tabs.Screen>
+      <Tabs.Screen name="결산안" component={SettlementsTopTabs}></Tabs.Screen>
       <Tabs.Screen name="일정" component={ScheduleScreen}></Tabs.Screen>
       <Tabs.Screen name="물품 예약" component={BookingScreen}></Tabs.Screen>
     </Tabs.Navigator>

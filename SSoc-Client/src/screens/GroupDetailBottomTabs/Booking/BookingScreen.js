@@ -4,7 +4,7 @@ import { StackHeader } from "../../../modules/StackHeader";
 export const BookingScreen = () => {
   return (
     <View style={{ flex: 1 }}>
-      <StackHeader title={"게시판"}></StackHeader>
+      <StackHeader title={"예약"}></StackHeader>
     </View>
   );
 };
