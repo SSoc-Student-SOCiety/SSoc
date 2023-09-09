@@ -19,7 +19,7 @@ public class GroupMemberController {
 	private final GroupMemberService groupMemberService;
 
 	@PostMapping("/role")
-	public ResponseEntity<Message<GetMemberRoleResponse>> createGroup(@RequestBody GetMemberRoleRequest request) {
+	public ResponseEntity<Message<GetMemberRoleResponse>> getMemberRole(@RequestBody GetMemberRoleRequest request) {
 		GetMemberRoleResponse memberRole = groupMemberService.getMemberRole(request);
 		return ResponseEntity.ok().body(Message.success(memberRole));
 	}
