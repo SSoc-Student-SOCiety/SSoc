@@ -40,9 +40,9 @@ public class UserSignUpRequestDto {
                 .userEmail(userEmail)
                 .userName(userName)
                 .userPassword(userPassword)
-                .userNickName(userNickName)
+                .userNickname(userNickName)
                 .userImage(null)
-                .role(Collections.singletonList(UserRole.USER.name()))
+                .role(UserRole.USER)
                 .build();
         return user;
     }

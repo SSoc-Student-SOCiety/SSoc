@@ -3,11 +3,13 @@ package gwangju.ssafy.backend.domain.user.service;
 import gwangju.ssafy.backend.domain.user.dto.*;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
-import gwangju.ssafy.backend.global.common.dto.MailCodeDto;
-import gwangju.ssafy.backend.global.common.dto.MailSendDto;
-import gwangju.ssafy.backend.global.common.dto.TokenDto;
-import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
+import gwangju.ssafy.backend.global.common.dto.*;
 import gwangju.ssafy.backend.global.component.jwt.TokenProvider;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenRequestDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenResponseDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +18,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +36,6 @@ class UserServiceImpl implements UserService {
     private final JavaMailSender emailSender;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final TokenProvider tokenProvider;
 
     private final StringRedisTemplate redisTemplate;
 
@@ -75,7 +73,7 @@ class UserServiceImpl implements UserService {
 
     // 로그인 처리 부분
     @Override
-    public UserLoginResponseDto loginCheckUser(UserLoginRequestDto userLoginRequestDto) {
+    public TokenUserInfoDto loginCheckUser(UserLoginRequestDto userLoginRequestDto) {
         User user = userRepository.findByUserEmail(userLoginRequestDto.getUserEmail()).orElseThrow(() ->
                 new IllegalArgumentException("해당 이메일을 가진 회원이 존재하지 않습니다. 이메일을 다시한번 확인해주세요."));
         String realPassword = user.getUserPassword();
@@ -83,29 +81,20 @@ class UserServiceImpl implements UserService {
         if(!passwordEncoder.matches(userLoginRequestDto.getUserPassword(), realPassword)) {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다. 다시한번 확인해주세요.");
         }
-
         // Dto의 email, 비밀번호을 받고 UssrnamePasswordAuthenticationToken 객체 생성
 //        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUserEmail(), realPassword);
 //        log.info(String.valueOf(authenticationToken));
 //        log.info(authenticationToken.getCredentials().toString());
 //        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        TokenDto tokenDto = tokenProvider.generateTokenDto(user);
+//        TokenDto tokenDto = tokenProvider.generateTokenDto(user);
 
-        log.info(user.getUserEmail());
-        log.info(user.getUsername());
-        log.info(user.getUserNickName());
-        log.info(user.getUserPassword());
-
-        UserDto userDto = UserDto.builder()
+        return TokenUserInfoDto.builder()
+                .id(user.getId())
                 .userEmail(user.getUserEmail())
-                .userNickName(user.getUserNickName())
-                .userName(user.getUsername())
-                .build();
-
-        return UserLoginResponseDto.builder()
-                .userInfo(userDto)
-                .token(tokenDto)
+                .userNickname(user.getUserNickname())
+                .userName(user.getUserName())
+                .role(user.getRole().toString())
                 .build();
     }
 
@@ -113,11 +102,13 @@ class UserServiceImpl implements UserService {
     public void logoutUser(HttpServletRequest request) {
         // accessToken redisTemplate 블랙리스트 추가
         String jwt = request.getHeader("Authorization").substring(7);
-        ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
-        logoutValueOperations.set(jwt, jwt);    // redis set 명령어
+        log.info(jwt);
+//        ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
+//        logoutValueOperations.set(jwt, jwt);    // redis set 명령어
     }
 
     // 재발급
+//    @Override
 //    @Transactional
 //    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
 //        // refresh Token 검증
@@ -126,17 +117,21 @@ class UserServiceImpl implements UserService {
 //        }
 //
 //        // access Token에서 Authentication 객체 가져오기
-//        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+//        Claims claims = tokenProvider.getClaims(tokenRequestDto.getAccessToken());
+//        log.info(claims.toString());
+//        User user = userRepository.findByUserEmail(claims.getSubject()).get();
+//
+//        // 여기에 다시 해당 user의 refresh토큰값 redis에 저장하는 과정 만들어야 됨
 //
 //        // 새로운 토큰 재발급해서 반환
-//        return tokenProvider.generateTokenDto(authentication);
+//        return tokenProvider.generateTokenDto(user);
 //    }
 
     // 회원정보에서 닉네임만 수정
     @Override
     public void updateNickName(UserUpdateDto userUpdateDto) {
         User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).get();
-        user.updateUserNickName(userUpdateDto.getUserNickName());
+        user.updateUserNickname(userUpdateDto.getUserNickName());
     }
 
     // 회원정보에서 프로필 이미지만 수정
@@ -170,6 +165,45 @@ class UserServiceImpl implements UserService {
     public void tempPassword(UserDto userDto, MailCodeDto mailCodeDto) {
         User user = userRepository.findByUserEmail(userDto.getUserEmail()).get();
         user.updatePassword(passwordEncoder.encode(mailCodeDto.getEmailCode()));
+    }
+
+    // 토큰 값 체크
+//    @Override
+//    public TokenResponseDto tokenCheck(TokenRequestDto tokenRequestDto) {
+//        Claims claims = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+//        log.info(claims.toString());
+//        // AccessToken 만료 됐는지 판단
+//        long accessTokenExpireTime = claims.getExpiration().getTime();
+//        long nowTime = System.currentTimeMillis();
+//        log.info(String.valueOf(nowTime));
+//        log.info(String.valueOf((accessTokenExpireTime + 1000*60 - nowTime)));
+//        TokenResponseDto tokenResponseDto = null;
+//        // accessToken 만료되지 않은 경우 -> 성공(0) + 성공(0)
+//        if(accessTokenExpireTime + tokenProvider.getAccessTokenExpireTime() - nowTime > 0) {
+//            TokenResponseDto.builder()
+//                    .code(0)
+//                    .accessToken(tokenRequestDto.getAccessToken())
+//                    .refreshToken(tokenRequestDto.getRefreshToken())
+//                    .build();
+//        }
+//        // accessToekn 만료된 경우
+//        else {
+//            // refreshToken은 만료되지 않은 경우 -> 성공(0) + 실패(1)
+//
+//            // refreshToekn도 만료된 경우 -> 실패(1) + 실패(1)
+//        }
+//        return tokenResponseDto;
+//    }
+
+    @Override
+    public UserInfoDto userInfomationFind(UserDto userDto) {
+        User user = userRepository.findByUserEmail(userDto.getUserEmail()).get();
+        return UserInfoDto.builder()
+                .userEmail(user.getUserEmail())
+                .userPassword(user.getUserPassword())
+                .userName(user.getUserName())
+                .userImage(user.getUserImage())
+                .build();
     }
 
 }
