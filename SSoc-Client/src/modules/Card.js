@@ -7,8 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 export const Card = (props) => {
   const navigation = useNavigation();
   const onPressDetail = () => {
-    const { onPress,  ...otherProps } = props;
-    console.log(otherProps); 
+    const { onPress, ...otherProps } = props;
+
     navigation.navigate("GroupDetailScreen", otherProps);
   };
   return (

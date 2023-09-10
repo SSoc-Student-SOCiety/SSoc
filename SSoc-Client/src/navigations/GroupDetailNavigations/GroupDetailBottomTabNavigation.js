@@ -1,10 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
 
 import { BoardListScreen } from "../../screens/GroupDetailBottomTabs/Board/BoardListScreen";
 import { BookingScreen } from "../../screens/GroupDetailBottomTabs/Booking/BookingScreen";
 import { ScheduleScreen } from "../../screens/GroupDetailBottomTabs/Schedule/ScheduleScreen";
-import { WeeklySettlementScreen } from "../../screens/GroupDetailBottomTabs/Settlement/WeeklySettlementScreen";
 import { SettlementsTopTabs } from "../../screens/GroupDetailBottomTabs/Settlement/SettlementsTopTabs";
 import { TabIcon } from "../../components/Icons/TabIcon";
 const Tabs = createBottomTabNavigator();
