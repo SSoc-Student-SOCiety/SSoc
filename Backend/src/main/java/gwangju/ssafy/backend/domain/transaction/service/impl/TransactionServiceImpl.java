@@ -62,6 +62,6 @@ public class TransactionServiceImpl implements TransactionService {
 			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
 
 		return transactionRepository.findAllByGroupAccountId(account.getId(), request.getLimit(),
-			request.getPageNumber());
+			request.getPageNumber(), request.getStartDate(), request.getEndDate());
 	}
 }
