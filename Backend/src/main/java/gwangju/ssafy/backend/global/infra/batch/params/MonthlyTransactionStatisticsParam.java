@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 public class MonthlyTransactionStatisticsParam {
 
 	@Value("#{jobParameters[year]}")
-	private Long year;
+	private Integer year;
 	@Value("#{jobParameters[month]}")
-	private Long month;
+	private Integer month;
 
 
 }
