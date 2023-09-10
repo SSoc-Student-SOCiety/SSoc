@@ -1,10 +1,11 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { GroupDetailBottomTabNavigation } from "./GroupDetailBottomTabNavigation";
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { BoardDetailScreen } from '../../screens/GroupDetailBottomTabs/Board/BoardDetailScreen'
+import { GroupDetailBottomTabNavigation } from './GroupDetailBottomTabNavigation'
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 export const GroupDetailStackNavigation = ({ route }) => {
-  const { tabName } = route.params;
-  console.log(tabName);
+  const { tabName } = route.params
+  console.log(tabName)
   return (
     <Stack.Navigator
       screenOptions={{
@@ -16,6 +17,12 @@ export const GroupDetailStackNavigation = ({ route }) => {
         component={GroupDetailBottomTabNavigation}
         options={{ tabName: tabName }}
       />
+
+      <Stack.Screen
+        name="BoardDetailScreen"
+        component={BoardDetailScreen}
+        options={{ tabName: tabName }}
+      />
     </Stack.Navigator>
-  );
-};
+  )
+}

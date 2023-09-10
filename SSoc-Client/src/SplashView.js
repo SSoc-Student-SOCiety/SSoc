@@ -20,7 +20,7 @@ export const SplashView = () => {
 
   const tempData = {
     dataHeader: {
-      successCode: 1,
+      successCode: 0,
       resultCode: 0,
       resultMessage: null,
     },
