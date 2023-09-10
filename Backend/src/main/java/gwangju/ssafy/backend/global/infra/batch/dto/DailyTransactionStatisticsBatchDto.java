@@ -13,21 +13,20 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionStatisticsBatchDto {
+public class DailyTransactionStatisticsBatchDto {
 	// groupAccountId
 	private Long id;
 	private Long totalWithdrawal;
 	private Long totalDeposit;
-	private LocalDate startDate;
-	private LocalDate endDate;
+	private LocalDate date;
 
 	public DailyTransactionStatistics toEntity() {
 		return DailyTransactionStatistics.builder()
 			.groupAccountId(this.id)
 			.withdrawal(this.totalWithdrawal)
 			.deposit(this.totalDeposit)
-			.date(this.startDate)
-			.dayOfWeek(this.startDate.getDayOfWeek().name())
+			.date(this.date)
+			.dayOfWeek(this.date.getDayOfWeek().name())
 			.build();
 	}
 }
