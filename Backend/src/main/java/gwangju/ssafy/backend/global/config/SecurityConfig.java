@@ -1,13 +1,13 @@
 package gwangju.ssafy.backend.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gwangju.ssafy.backend.global.component.jwt.JwtAccessDeniedHandler;
-import gwangju.ssafy.backend.global.component.jwt.JwtAuthenticationEntryPoint;
-import gwangju.ssafy.backend.global.component.jwt.TokenProvider;
+import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
+import gwangju.ssafy.backend.global.component.security.JwtAccessDeniedHandler;
+import gwangju.ssafy.backend.global.component.security.JwtAuthenticationEntryPoint;
+import gwangju.ssafy.backend.global.component.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,11 +27,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(securedEnabled = true,prePostEnabled = true)
 public class SecurityConfig {
-    private final TokenProvider tokenProvider;
+
+    private final JwtService jwtService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final StringRedisTemplate redisTemplate;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -52,12 +52,6 @@ public class SecurityConfig {
                 .sessionManagement((sessionManagementConfigurer) ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.exceptionHandling((exceptionHandling) ->
-                exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                        .accessDeniedHandler(jwtAccessDeniedHandler));
-
-
-
         http.formLogin(AbstractHttpConfigurer::disable);
         http.logout(AbstractHttpConfigurer::disable);
 
@@ -66,7 +60,13 @@ public class SecurityConfig {
 //                        .logoutSuccessUrl("/user/join")
 //                        .invalidateHttpSession(true));  // 로그아웃 시 생성된 사용자 세션 삭제
 
-        http.apply(new JwtSecurityConfig(tokenProvider, redisTemplate));
+        http.exceptionHandling((exceptionHandling) ->
+                exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler));
+
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+
 
         return http.build();
     }
@@ -89,6 +89,22 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // 빈 중복 에러 발생
+//    @Bean
+//    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint() {
+//        return new JwtAuthenticationEntryPoint();
+//    }
+//
+//    @Bean
+//    public JwtAccessDeniedHandler jwtAccessDeniedHandler() {
+//        return new JwtAccessDeniedHandler();
+//    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtService);
     }
 
 }

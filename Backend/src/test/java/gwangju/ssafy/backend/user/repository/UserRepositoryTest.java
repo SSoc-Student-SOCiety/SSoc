@@ -27,7 +27,7 @@ public class UserRepositoryTest {
                 .userEmail("test1234@yonsei.ac.kr")
                 .userPassword("1234")
                 .userName("테스트1")
-                .userNickName("테스트 닉네임")
+                .userNickname("테스트 닉네임")
 
                 .build();
         // when
@@ -48,7 +48,7 @@ public class UserRepositoryTest {
                 .userEmail("test1234@yonsei.ac.kr")
                 .userPassword("1234")
                 .userName("테스트1")
-                .userNickName("테스트 닉네임")
+                .userNickname("테스트 닉네임")
 
                 .build();
         // when
