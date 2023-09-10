@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserUpdateDto {
     private String userEmail;
-    private String userPassword;
+    private String userNowPassword; // 현재 비밀번호
+    private String userChangePassword;  // 변경할 비밀번호
     private String userNickName;
     private String userImage;
 }

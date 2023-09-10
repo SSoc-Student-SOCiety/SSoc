@@ -1,14 +1,16 @@
 package gwangju.ssafy.backend.domain.user.service;
 
 import gwangju.ssafy.backend.domain.user.dto.*;
-import gwangju.ssafy.backend.global.common.dto.TokenDto;
-import gwangju.ssafy.backend.global.common.dto.TokenRequestDto;
+import gwangju.ssafy.backend.global.common.dto.*;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenRequestDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenResponseDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
     // 이메일 보내기
-    void sendSimpleMessage(MailDto mailDto);
+    void sendSimpleMessage(MailSendDto mailSendDto);
 
     // 이메일 중복체크를 위해 이메일이 존재하는지 여부 조회
     boolean existsUserByUserEmail(String userEmail);
@@ -17,11 +19,11 @@ public interface UserService {
     void signUpUser(UserSignUpRequestDto userSignUpRequestDto);
 
     // 로그인 처리
-    UserLoginResponseDto loginCheckUser(UserLoginRequestDto loginUserDto);
+    TokenUserInfoDto loginCheckUser(UserLoginRequestDto loginUserDto);
 
     void logoutUser(HttpServletRequest request);
 
-    TokenDto reissue(TokenRequestDto tokenRequestDto);
+//    TokenDto reissue(TokenRequestDto tokenRequestDto);
 
     // 유저정보에서 닉네임만 수정
     void updateNickName(UserUpdateDto userUpdateDto);
@@ -30,6 +32,15 @@ public interface UserService {
     void updateImage(UserUpdateDto userUpdateDto);
 
     // 유저정보에서 패스워드만 수정
-    boolean updatePassword(UserUpdateDto userUpdateDto);
+    int updatePassword(UserUpdateDto userUpdateDto);
+
+    // 임시 비밀번호 발급 및 db에 임시 비밀번호 저장
+    void tempPassword(UserDto userDto, MailCodeDto mailCodeDto);
+
+//    TokenResponseDto tokenCheck(TokenRequestDto tokenRequestDto);
+
+    // 유저 이메일로 해당 유저 정보 불러오기
+    UserInfoDto userInfomationFind(UserDto userDto);
+
 
 }

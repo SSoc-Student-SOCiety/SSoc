@@ -10,12 +10,10 @@ import { useCallback } from "react";
 import { TouchableOpacity } from "react-native";
 import { SearchButton } from "./SearchButton";
 export const MainSearchBar = () => {
-  const onPressSearch = useCallback(()=>{
-    console.log("test");
-  })
+  const onPressSearch = useCallback(() => {});
 
   return (
-    <View style={styles.searchBar}  >
+    <View style={styles.searchBar}>
       <Typography fontSize={15} fontColor={Color.GRAY}>
         결산 내역이 궁금하다면?{" "}
       </Typography>
@@ -27,11 +25,15 @@ export const MainSearchBar = () => {
       </View>
 
       <Spacer space={10} />
-   
-      <Button
-       onPress ={onPressSearch}>
+
+      <Button onPress={onPressSearch}>
         <TouchableOpacity>
-          <SearchButton color={Color.DARK_BLUE} title={"학생회 / 동아리 공금 현황 보러가기"} iconName={"airplane-outline" } isIcon={true}/>
+          <SearchButton
+            color={Color.DARK_BLUE}
+            title={"학생회 / 동아리 공금 현황 보러가기"}
+            iconName={"airplane-outline"}
+            isIcon={true}
+          />
         </TouchableOpacity>
       </Button>
     </View>

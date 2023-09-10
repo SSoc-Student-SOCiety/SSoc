@@ -1,13 +1,11 @@
 package gwangju.ssafy.backend.global.infra.batch.jobs;
 
-import static gwangju.ssafy.backend.domain.transaction.entity.QGroupAccount.groupAccount;
 import static gwangju.ssafy.backend.domain.transaction.entity.QTransaction.transaction;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import gwangju.ssafy.backend.domain.transaction.entity.DailyTransactionStatistics;
-import gwangju.ssafy.backend.domain.transaction.entity.QGroupAccount;
-import gwangju.ssafy.backend.global.infra.batch.dto.TransactionStatisticsBatchDto;
+import gwangju.ssafy.backend.global.infra.batch.dto.DailyTransactionStatisticsBatchDto;
 import gwangju.ssafy.backend.global.infra.batch.library.querydsl.reader.QuerydslNoOffsetIdPagingItemReader;
 import gwangju.ssafy.backend.global.infra.batch.library.querydsl.reader.expression.Expression;
 import gwangju.ssafy.backend.global.infra.batch.library.querydsl.reader.options.QuerydslNoOffsetNumberOptions;
@@ -56,7 +54,7 @@ public class DailyTransactionStatisticsJobConfig {
 	public Step dailyTransactionStatisticsStep(JobRepository jobRepository,
 		PlatformTransactionManager transactionManager) {
 		return new StepBuilder("daily_transaction_statistics", jobRepository)
-			.<TransactionStatisticsBatchDto, DailyTransactionStatistics>chunk(CHUNK_SIZE,
+			.<DailyTransactionStatisticsBatchDto, DailyTransactionStatistics>chunk(CHUNK_SIZE,
 				transactionManager)
 			.reader(dailyTransactionStatisticsReader())
 			.processor(dailyTransactionStatisticsProcessor())
@@ -66,18 +64,17 @@ public class DailyTransactionStatisticsJobConfig {
 
 	@Bean
 	@JobScope
-	public QuerydslNoOffsetIdPagingItemReader<TransactionStatisticsBatchDto, Long> dailyTransactionStatisticsReader() {
-		QuerydslNoOffsetNumberOptions<TransactionStatisticsBatchDto, Long> options =
+	public QuerydslNoOffsetIdPagingItemReader<DailyTransactionStatisticsBatchDto, Long> dailyTransactionStatisticsReader() {
+		QuerydslNoOffsetNumberOptions<DailyTransactionStatisticsBatchDto, Long> options =
 			new QuerydslNoOffsetNumberOptions<>(transaction.groupAccount.id, Expression.ASC);
 
 		return new QuerydslNoOffsetIdPagingItemReader<>(emf, CHUNK_SIZE, options,
 			queryFactory -> queryFactory
-				.select(Projections.fields(TransactionStatisticsBatchDto.class,
+				.select(Projections.fields(DailyTransactionStatisticsBatchDto.class,
 					transaction.groupAccount.id.as("id"),
 					transaction.withdrawal.sum().as("totalWithdrawal"),
 					transaction.deposit.sum().as("totalDeposit"),
-					Expressions.asDate(jobParam.getStartDate()).as("startDate"),
-					Expressions.asDate(jobParam.getEndDate()).as("endDate")))
+					Expressions.asDate(jobParam.getStartDate()).as("date")))
 				.from(transaction)
 				.where(transaction.date.goe(LocalDateTime.of(jobParam.getStartDate(),
 				LocalTime.MIN)),
@@ -88,8 +85,8 @@ public class DailyTransactionStatisticsJobConfig {
 
 	@Bean
 	@StepScope
-	public ItemProcessor<TransactionStatisticsBatchDto, DailyTransactionStatistics> dailyTransactionStatisticsProcessor() {
-		return TransactionStatisticsBatchDto::toEntity;
+	public ItemProcessor<DailyTransactionStatisticsBatchDto, DailyTransactionStatistics> dailyTransactionStatisticsProcessor() {
+		return DailyTransactionStatisticsBatchDto::toEntity;
 	}
 
 	@Bean

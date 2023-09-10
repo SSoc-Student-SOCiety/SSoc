@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.global.common.dto;
+package gwangju.ssafy.backend.global.component.jwt.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

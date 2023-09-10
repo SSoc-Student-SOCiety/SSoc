@@ -9,7 +9,6 @@ export const MainHeader = (props) => {
   const navigation = useNavigation();
   //to-do setting 화면가기 구현하기
   const onPressSetting = useCallback(() => {
-    console.log("setting button test");
     navigation.navigate("SettingScreen");
   }, []);
   return (

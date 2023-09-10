@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.domain.user.dto;
 
-import gwangju.ssafy.backend.global.common.dto.TokenDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import lombok.*;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -8,6 +9,6 @@ import lombok.*;
 @Builder
 @Getter
 public class UserLoginResponseDto {
-    private UserDto userInfo;
+    private TokenUserInfoDto userInfo;
     private TokenDto token;
 }
