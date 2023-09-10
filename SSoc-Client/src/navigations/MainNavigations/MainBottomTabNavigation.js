@@ -8,7 +8,6 @@ import { TabIcon } from "../../components/Icons/TabIcon";
 const Tabs = createBottomTabNavigator();
 
 export const MainBottomTabNavigation = ({ tabName }) => {
-  console.log("test", tabName);
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({

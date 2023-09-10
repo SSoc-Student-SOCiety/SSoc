@@ -38,7 +38,6 @@ export const GroupDetailScreen = ({ route }) => {
   });
 
   const onPressGoToTab = useCallback((tabName) => {
-    console.log(tabName);
     navigation.navigate("GroupDetailTab", { tabName });
   });
 
