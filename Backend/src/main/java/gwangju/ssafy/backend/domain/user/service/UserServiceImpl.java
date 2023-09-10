@@ -9,6 +9,7 @@ import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenRequestDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenResponseDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
+import gwangju.ssafy.backend.global.component.jwt.repository.RefreshRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -32,6 +33,8 @@ class UserServiceImpl implements UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final UserRepository userRepository;
+
+    private final RefreshRepository refreshRepository;
 
     private final JavaMailSender emailSender;
 
@@ -81,13 +84,6 @@ class UserServiceImpl implements UserService {
         if(!passwordEncoder.matches(userLoginRequestDto.getUserPassword(), realPassword)) {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다. 다시한번 확인해주세요.");
         }
-        // Dto의 email, 비밀번호을 받고 UssrnamePasswordAuthenticationToken 객체 생성
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginRequestDto.getUserEmail(), realPassword);
-//        log.info(String.valueOf(authenticationToken));
-//        log.info(authenticationToken.getCredentials().toString());
-//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-//        TokenDto tokenDto = tokenProvider.generateTokenDto(user);
 
         return TokenUserInfoDto.builder()
                 .id(user.getId())
@@ -102,9 +98,8 @@ class UserServiceImpl implements UserService {
     public void logoutUser(HttpServletRequest request) {
         // accessToken redisTemplate 블랙리스트 추가
         String jwt = request.getHeader("Authorization").substring(7);
-        log.info(jwt);
-//        ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
-//        logoutValueOperations.set(jwt, jwt);    // redis set 명령어
+//        log.info(jwt);
+
     }
 
     // 재발급

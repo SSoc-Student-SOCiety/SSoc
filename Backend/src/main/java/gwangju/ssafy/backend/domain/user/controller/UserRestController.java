@@ -7,10 +7,14 @@ import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
 import gwangju.ssafy.backend.global.infra.email.EmailService;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -81,6 +85,15 @@ public class UserRestController {
             return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
         }
         return ResponseEntity.ok().body(Message.success(userLoginResponseDto));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Message> logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginActiveUserDto loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
+        log.info(loginActiveUserDto.getUserEmail());
+        jwtService.deleteRefreshToken(loginActiveUserDto.getUserEmail());
+        return ResponseEntity.ok().body(Message.success());
     }
 
     // JWT 토큰 재발급

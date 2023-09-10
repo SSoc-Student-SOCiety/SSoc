@@ -9,13 +9,14 @@ import lombok.NonNull;
 public interface JwtService {
 
     // 토큰 발급
-    public TokenDto issueToken(@NonNull TokenUserInfoDto info);
+    TokenDto issueToken(@NonNull TokenUserInfoDto info);
 
     // 토큰 재발급
-    public TokenDto refreshToken(@NonNull String refreshToken);
+    TokenDto refreshToken(@NonNull String refreshToken);
 
     // access 토큰 파싱
-    public TokenUserInfoDto parseAccessToken(@NonNull String accessToken);
+    TokenUserInfoDto parseAccessToken(@NonNull String accessToken);
 
+    void deleteRefreshToken(String userEmail);
 
 }

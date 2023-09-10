@@ -71,4 +71,10 @@ public class JwtServiceImpl implements JwtService {
                 jwtParser.parseToken(accessToken, jwtUtils.getEncodedKey())
         );
     }
+
+    // redisTemplate을 통해 refresh 토큰 삭제(블랙리스트 추가)
+    @Override
+    public void deleteRefreshToken(String userEmail) {
+        refreshRepository.delete(userEmail);
+    }
 }
