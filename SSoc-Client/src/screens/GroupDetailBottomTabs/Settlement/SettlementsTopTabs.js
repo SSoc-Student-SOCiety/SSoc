@@ -1,10 +1,7 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { TabActions } from "@react-navigation/native";
-import { DailySettlementScreen } from "./DailySettlementScreen";
+import { SettlementReportScreen } from "./SettlementReportScreen";
 import { MonthlySettlementScreen } from "./MonthlySettlementSceen";
-import { WeeklySettlementScreen } from "./WeeklySettlementScreen";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { DaillySettlementScreen } from "./DailySettlementScreen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View } from "react-native";
 import { StackHeader } from "../../../modules/StackHeader";
@@ -21,10 +18,13 @@ export const SettlementsTopTabs = () => {
           headerShown: false,
         })}
       >
-        <Tab.Screen name="Daily" component={DailySettlementScreen}></Tab.Screen>
         <Tab.Screen
-          name="Weekly"
-          component={WeeklySettlementScreen}
+          name="Report"
+          component={SettlementReportScreen}
+        ></Tab.Screen>
+        <Tab.Screen
+          name="Daily"
+          component={DaillySettlementScreen}
         ></Tab.Screen>
         <Tab.Screen
           name="Monthly"
