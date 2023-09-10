@@ -1,11 +1,9 @@
-package gwangju.ssafy.backend.global.component.security;
+package gwangju.ssafy.backend.global.component.jwt.security;
 
 import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
-import gwangju.ssafy.backend.global.component.jwt.TokenProvider;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -54,12 +52,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(StringUtils.hasText(token)) {
             try {
                 LoginActiveUserDto loginActiveUserDto = LoginActiveUserDto.from(jwtService.parseAccessToken(token));
-
+                log.info(loginActiveUserDto.getUserEmail());
                 saveLoginUserInSecurityContext(loginActiveUserDto);
             }
             catch(Exception e) {
                 SecurityContextHolder.clearContext();
-                request.setAttribute("jwtError", e);
+
+//                request.setAttribute("jwtError", e);
+//                throw new TokenException(ErrorCode.INVALID_TOKEN, e);
             }
         }
     }

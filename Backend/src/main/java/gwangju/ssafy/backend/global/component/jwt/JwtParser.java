@@ -1,5 +1,7 @@
 package gwangju.ssafy.backend.global.component.jwt;
 
+import gwangju.ssafy.backend.global.exception.ErrorCode;
+import gwangju.ssafy.backend.global.exception.TokenException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class JwtParser {
         }
         catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
+//            throw new TokenException(ErrorCode.INVALID_TOKEN, e);
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
@@ -29,6 +32,7 @@ public class JwtParser {
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
         }
+
 
         return claims;
     }

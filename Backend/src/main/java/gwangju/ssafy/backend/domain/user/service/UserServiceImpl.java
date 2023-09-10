@@ -191,12 +191,12 @@ class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public UserInfoDto userInfomationFind(UserDto userDto) {
-        User user = userRepository.findByUserEmail(userDto.getUserEmail()).get();
+    public UserInfoDto userInformationFind(String userEmail) {
+        User user = userRepository.findByUserEmail(userEmail).get();
         return UserInfoDto.builder()
                 .userEmail(user.getUserEmail())
-                .userPassword(user.getUserPassword())
                 .userName(user.getUserName())
+                .userNickname(user.getUserNickname())
                 .userImage(user.getUserImage())
                 .build();
     }

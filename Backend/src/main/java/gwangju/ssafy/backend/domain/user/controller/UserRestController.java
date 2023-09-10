@@ -6,9 +6,8 @@ import gwangju.ssafy.backend.global.common.dto.*;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
+import gwangju.ssafy.backend.global.exception.ErrorCode;
 import gwangju.ssafy.backend.global.infra.email.EmailService;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,9 +88,15 @@ public class UserRestController {
 
     @PostMapping("/logout")
     public ResponseEntity<Message> logout() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginActiveUserDto loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
-        log.info(loginActiveUserDto.getUserEmail());
+        Authentication authentication = null;
+        LoginActiveUserDto loginActiveUserDto = null;
+        try {
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
+        }
+        catch(Exception e) {
+            return ResponseEntity.ok().body(Message.fail(null, ErrorCode.INVALID_TOKEN.getErrorMessage()));
+        }
         jwtService.deleteRefreshToken(loginActiveUserDto.getUserEmail());
         return ResponseEntity.ok().body(Message.success());
     }
@@ -178,12 +183,21 @@ public class UserRestController {
         return ResponseEntity.ok().body(Message.success());
     }
 
-    // 회원정보 불러오기
+    // 회원정보 불러오기 (앱 처음 구동 시)
     @PostMapping("/info")
-    public ResponseEntity<Message<UserInfoDto>> userInfomation(@RequestBody UserDto userDto) {
-        UserInfoDto userInfoDto = null;
+    public ResponseEntity<Message<UserInfoDto>> userInformationFind() {
         log.info("==================회원 정보 불러오기 Controller 진입=============");
-        return ResponseEntity.ok().body(Message.success());
+        Authentication authentication = null;
+        LoginActiveUserDto loginActiveUserDto = null;
+        try {
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
+        }
+        catch(Exception e) {
+            return ResponseEntity.ok().body(Message.fail(null, ErrorCode.INVALID_TOKEN.getErrorMessage()));
+        }
+        UserInfoDto userInfoDto = userService.userInformationFind(loginActiveUserDto.getUserEmail());
+        return ResponseEntity.ok().body(Message.success(userInfoDto));
     }
 
 

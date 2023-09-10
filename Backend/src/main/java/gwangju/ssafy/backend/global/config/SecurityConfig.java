@@ -1,10 +1,9 @@
 package gwangju.ssafy.backend.global.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
-import gwangju.ssafy.backend.global.component.security.JwtAccessDeniedHandler;
-import gwangju.ssafy.backend.global.component.security.JwtAuthenticationEntryPoint;
-import gwangju.ssafy.backend.global.component.security.JwtAuthenticationFilter;
+import gwangju.ssafy.backend.global.component.jwt.security.JwtAccessDeniedHandler;
+import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationEntryPoint;
+import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

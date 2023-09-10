@@ -40,7 +40,7 @@ public interface UserService {
 //    TokenResponseDto tokenCheck(TokenRequestDto tokenRequestDto);
 
     // 유저 이메일로 해당 유저 정보 불러오기
-    UserInfoDto userInfomationFind(UserDto userDto);
+    UserInfoDto userInformationFind(String userEmail);
 
 
 }
