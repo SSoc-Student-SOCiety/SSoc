@@ -1,10 +1,10 @@
-package gwangju.ssafy.backend.domain.calendar.dto;
+package gwangju.ssafy.backend.domain.schedule.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import gwangju.ssafy.backend.domain.calendar.entity.Schedule;
+import gwangju.ssafy.backend.domain.schedule.entity.Schedule;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;

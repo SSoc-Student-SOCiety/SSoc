@@ -1,13 +1,13 @@
-package gwangju.ssafy.backend.domain.calendar.service.impl;
+package gwangju.ssafy.backend.domain.schedule.service.impl;
 
-import gwangju.ssafy.backend.domain.calendar.dto.CreateScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.dto.DeleteScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.dto.EditScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.dto.ScheduleInfo;
-import gwangju.ssafy.backend.domain.calendar.dto.SearchScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.entity.Schedule;
-import gwangju.ssafy.backend.domain.calendar.repository.ScheduleRepository;
-import gwangju.ssafy.backend.domain.calendar.service.ScheduleService;
+import gwangju.ssafy.backend.domain.schedule.dto.CreateScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.dto.DeleteScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.dto.EditScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.dto.ScheduleInfo;
+import gwangju.ssafy.backend.domain.schedule.dto.SearchScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.entity.Schedule;
+import gwangju.ssafy.backend.domain.schedule.repository.ScheduleRepository;
+import gwangju.ssafy.backend.domain.schedule.service.ScheduleService;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;

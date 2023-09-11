@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.domain.calendar.dto;
+package gwangju.ssafy.backend.domain.schedule.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;

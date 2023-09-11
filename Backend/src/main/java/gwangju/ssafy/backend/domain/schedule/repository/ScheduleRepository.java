@@ -1,6 +1,6 @@
-package gwangju.ssafy.backend.domain.calendar.repository;
+package gwangju.ssafy.backend.domain.schedule.repository;
 
-import gwangju.ssafy.backend.domain.calendar.entity.Schedule;
+import gwangju.ssafy.backend.domain.schedule.entity.Schedule;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

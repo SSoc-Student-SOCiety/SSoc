@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.domain.calendar.entity;
+package gwangju.ssafy.backend.domain.schedule.entity;
 
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import jakarta.persistence.Column;

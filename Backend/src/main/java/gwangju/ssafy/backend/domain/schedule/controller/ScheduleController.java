@@ -1,16 +1,15 @@
-package gwangju.ssafy.backend.domain.calendar.controller;
+package gwangju.ssafy.backend.domain.schedule.controller;
 
-import gwangju.ssafy.backend.domain.calendar.dto.CreateScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.dto.DeleteScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.dto.EditScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.dto.ScheduleInfo;
-import gwangju.ssafy.backend.domain.calendar.dto.SearchScheduleRequest;
-import gwangju.ssafy.backend.domain.calendar.service.ScheduleService;
+import gwangju.ssafy.backend.domain.schedule.dto.CreateScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.dto.DeleteScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.dto.EditScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.dto.ScheduleInfo;
+import gwangju.ssafy.backend.domain.schedule.dto.SearchScheduleRequest;
+import gwangju.ssafy.backend.domain.schedule.service.ScheduleService;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
