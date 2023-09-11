@@ -4,6 +4,7 @@ import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
 import gwangju.ssafy.backend.global.component.jwt.security.JwtAccessDeniedHandler;
 import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationEntryPoint;
 import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationFilter;
+import gwangju.ssafy.backend.global.exception.ExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,8 +65,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(jwtAccessDeniedHandler));
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-
+        http.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class);
 
         return http.build();
     }
@@ -106,4 +106,8 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(jwtService);
     }
 
+    @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilter() {
+        return new ExceptionHandlerFilter();
+    }
 }

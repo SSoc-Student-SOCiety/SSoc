@@ -13,7 +13,7 @@ public interface UserService {
     void sendSimpleMessage(MailSendDto mailSendDto);
 
     // 이메일 중복체크를 위해 이메일이 존재하는지 여부 조회
-    boolean existsUserByUserEmail(String userEmail);
+    void existsUserByUserEmail(String userEmail);
 
     // 회원가입 처리
     void signUpUser(UserSignUpRequestDto userSignUpRequestDto);
@@ -40,7 +40,7 @@ public interface UserService {
 //    TokenResponseDto tokenCheck(TokenRequestDto tokenRequestDto);
 
     // 유저 이메일로 해당 유저 정보 불러오기
-    UserInfoDto userInformationFind(String userEmail);
+    TokenUserInfoDto userInformationFind(String userEmail);
 
 
 }

@@ -1,10 +1,11 @@
 package gwangju.ssafy.backend.global.component.jwt.service;
-
-import gwangju.ssafy.backend.domain.user.dto.UserDto;
-import gwangju.ssafy.backend.domain.user.dto.UserLoginResponseDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import lombok.NonNull;
+
+import java.util.Optional;
 
 public interface JwtService {
 
@@ -18,5 +19,10 @@ public interface JwtService {
     TokenUserInfoDto parseAccessToken(@NonNull String accessToken);
 
     void deleteRefreshToken(String userEmail);
+
+    Optional<String> find(String userEmail);
+
+    // 복호화 작업
+    Jws<Claims> getClaims(String jwt);
 
 }

@@ -21,6 +21,7 @@ public class TokenUserInfoDto {
     private String userEmail;
     private String userName;
     private String userNickname;
+    private String userImageUrl;
     private String role;
 
     public Claims toClaims(int expiresMin) {

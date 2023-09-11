@@ -2,6 +2,8 @@ package gwangju.ssafy.backend.global.component.jwt.security;
 
 import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
+import gwangju.ssafy.backend.global.exception.ErrorCode;
+import gwangju.ssafy.backend.global.exception.TokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +25,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
 
+    public  static final String REFRESH_HEADER = "Refresh";
+
     private final JwtService jwtService;
 
     // 실제 필터링 로직은 doFilterInternal에 들어감
@@ -31,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 1. Request Header 에서 토큰을 꺼냄
         String jwt = getJwtToken(request);
-        log.info(jwt);  // accessToekn값
+//        log.info(jwt);  // accessToekn값
 
         authenticate(request, jwt);
 
@@ -50,17 +54,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public void authenticate(HttpServletRequest request, String token) {
         if(StringUtils.hasText(token)) {
-            try {
-                LoginActiveUserDto loginActiveUserDto = LoginActiveUserDto.from(jwtService.parseAccessToken(token));
-                log.info(loginActiveUserDto.getUserEmail());
-                saveLoginUserInSecurityContext(loginActiveUserDto);
-            }
-            catch(Exception e) {
-                SecurityContextHolder.clearContext();
-
-//                request.setAttribute("jwtError", e);
-//                throw new TokenException(ErrorCode.INVALID_TOKEN, e);
-            }
+            LoginActiveUserDto loginActiveUserDto = LoginActiveUserDto.from(jwtService.parseAccessToken(token));
+            log.info(loginActiveUserDto.getUserEmail());
+            saveLoginUserInSecurityContext(loginActiveUserDto);
+//            SecurityContextHolder.clearContext();
         }
     }
 

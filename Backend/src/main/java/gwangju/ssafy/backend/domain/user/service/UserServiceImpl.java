@@ -10,6 +10,9 @@ import gwangju.ssafy.backend.global.component.jwt.dto.TokenRequestDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenResponseDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.repository.RefreshRepository;
+import gwangju.ssafy.backend.global.exception.EmailException;
+import gwangju.ssafy.backend.global.exception.ErrorCode;
+import gwangju.ssafy.backend.global.exception.UserException;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -58,8 +61,10 @@ class UserServiceImpl implements UserService {
 
     // 이에일 중복 체크를 위해 이메일이 존재하는지 여부 조회
     @Override
-    public boolean existsUserByUserEmail(String userEmail) {
-        return userRepository.existsUserByUserEmail(userEmail);
+    public void existsUserByUserEmail(String userEmail) {
+        if(userRepository.existsUserByUserEmail(userEmail)) {
+            throw new UserException(ErrorCode.EXIST_USER_EMAIL);
+        }
     }
 
 
@@ -67,11 +72,11 @@ class UserServiceImpl implements UserService {
     @Override
     public void signUpUser(UserSignUpRequestDto userRequestDto) {
         if(userRepository.existsUserByUserEmail(userRequestDto.getUserEmail())) {
-            throw new RuntimeException("이미 가입되어 있는 이메일입니다.");
+            throw new UserException(ErrorCode.EXIST_USER_EMAIL);
         }
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword())); // 패스워드 암호화 작업
-        User user = userRepository.save(userRequestDto.toEntity());
-        log.info(user.getId().toString());
+//        User user = userRepository.save(userRequestDto.toEntity());
+        userRepository.save(userRequestDto.toEntity());
     }
 
     // 로그인 처리 부분
@@ -191,13 +196,14 @@ class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public UserInfoDto userInformationFind(String userEmail) {
+    public TokenUserInfoDto userInformationFind(String userEmail) {
         User user = userRepository.findByUserEmail(userEmail).get();
-        return UserInfoDto.builder()
+        return TokenUserInfoDto.builder()
+                .id(user.getId())
                 .userEmail(user.getUserEmail())
                 .userName(user.getUserName())
                 .userNickname(user.getUserNickname())
-                .userImage(user.getUserImage())
+                .userImageUrl(user.getUserImageUrl())
                 .build();
     }
 
