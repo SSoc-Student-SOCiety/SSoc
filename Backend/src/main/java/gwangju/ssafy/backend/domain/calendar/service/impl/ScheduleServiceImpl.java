@@ -3,6 +3,8 @@ package gwangju.ssafy.backend.domain.calendar.service.impl;
 import gwangju.ssafy.backend.domain.calendar.dto.CreateScheduleRequest;
 import gwangju.ssafy.backend.domain.calendar.dto.DeleteScheduleRequest;
 import gwangju.ssafy.backend.domain.calendar.dto.EditScheduleRequest;
+import gwangju.ssafy.backend.domain.calendar.dto.ScheduleInfo;
+import gwangju.ssafy.backend.domain.calendar.dto.SearchScheduleRequest;
 import gwangju.ssafy.backend.domain.calendar.entity.Schedule;
 import gwangju.ssafy.backend.domain.calendar.repository.ScheduleRepository;
 import gwangju.ssafy.backend.domain.calendar.service.ScheduleService;
@@ -10,6 +12,8 @@ import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +56,22 @@ public class ScheduleServiceImpl implements ScheduleService {
 		scheduleRepository.delete(schedule);
 
 		return schedule.getId();
+	}
+
+	@Override
+	public List<ScheduleInfo> searchSchedule(SearchScheduleRequest request) {
+		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
+				request.getUserId())
+			.orElseThrow(() -> new RuntimeException(" 그룹원 X"));
+
+		LocalDate base = request.getDate();
+		LocalDate start = request.getDate().minusDays(15);
+		LocalDate end = request.getDate().plusDays(15);
+
+		List<Schedule> result = scheduleRepository.findAllByGroupIdAndPeriod(
+			request.getGroupId(), start, end);
+
+		return result.stream().map(ScheduleInfo::of).toList();
 	}
 
 	private GroupMember validateManager(Long groupId, Long userId) {
