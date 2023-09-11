@@ -1,9 +1,11 @@
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import * as Color from "../../../components/Colors/colors";
 import { useCurrentDate } from "../../../util/hooks/useCurrentDate";
 import { LineGraphSection } from "../../../modules/Settlement/LineGraphSection";
-import { TransactionListSection } from "../../../modules/Settlement/TransactionListSection";
-
+import { TransactionItem } from "../../../modules/Settlement/TransactionItem";
+import { Typography } from "../../../components/Basic/Typography";
+import { Divider } from "../../../components/Basic/Divider";
+import { FlatList } from "react-native";
 const weekLabels = ["월", "화", "수", "목", "금", "토", "일"];
 const mockData = [
   Math.random() * 100,
@@ -19,32 +21,37 @@ export const DaillySettlementScreen = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
-      <LineGraphSection
-        title={`지난 7일 모아보기`}
-        labels={weekLabels}
-        data={mockData}
+      <View style={{flex:1}}> 
+        <LineGraphSection
+          title={`지난 7일 모아보기`}
+          labels={weekLabels}
+          data={mockData}
+        />
+      </View>
+      <View style={{flex:1.2}}>
+        <View style={{ marginHorizontal: 25, marginVertical: 10 }}>
+          <Typography fontSize={24}>거래 내역</Typography>
+        </View>
+        <Divider />
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 30 }} 
+        style={styles.commonItem}
+        data={transactionList}
+        renderItem={({ item }) => {
+          console.log("start")
+
+          console.log(item); 
+          return <TransactionItem item={item}></TransactionItem>;
+        }}
       />
-      <TransactionListSection transactionList={TRANSACTION_LIST} />
+    </View>
+    
     </View>
   );
 };
 
-const useCurrentWeekNumber = (month, year) => {
-  const today = new Date();
 
-  const firstDayOfMonth = new Date(year, month - 1, 1);
-
-  const dayOfWeek = firstDayOfMonth.getDay();
-
-  const firstWeekStartDate = new Date(firstDayOfMonth);
-  firstWeekStartDate.setDate(1 - dayOfWeek);
-  const currentDay = today.getDate();
-  const weekNumber = Math.ceil((currentDay + dayOfWeek) / 7);
-
-  return weekNumber;
-};
-
-const TRANSACTION_LIST = [
+const transactionList = [
   {
     id: 1,
     name: "김밥천국",
@@ -85,4 +92,32 @@ const TRANSACTION_LIST = [
     withdrawl: "194600",
     deposit: "0",
   },
+  {
+    id: 6,
+    name: "알파문구3",
+    note: "구비 용품 구매",
+    date: "2023.04.15",
+    withdrawl: "194600",
+    deposit: "0",
+  },
+  {
+    id: 7,
+    name: "알파문구2",
+    note: "구비 용품 구매",
+    date: "2023.04.15",
+    withdrawl: "194600",
+    deposit: "0",
+  },
+  {
+    id: 8,
+    name: "알파문구1",
+    note: "구비 용품 구매",
+    date: "2023.04.15",
+    withdrawl: "194600",
+    deposit: "0",
+  },
 ];
+
+var styles = StyleSheet.create({
+  commonItem: { paddingTop: 30, paddingHorizontal: 20},
+});
