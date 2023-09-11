@@ -1,12 +1,14 @@
 package gwangju.ssafy.backend.domain.calendar.controller;
 
 import gwangju.ssafy.backend.domain.calendar.dto.CreateScheduleRequest;
+import gwangju.ssafy.backend.domain.calendar.dto.DeleteScheduleRequest;
 import gwangju.ssafy.backend.domain.calendar.dto.EditScheduleRequest;
 import gwangju.ssafy.backend.domain.calendar.service.ScheduleService;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,4 +35,10 @@ public class ScheduleController {
 		return ResponseEntity.ok().body(Message.success(scheduleService.editSchedule(request)));
 	}
 
+	@DeleteMapping("/{scheduleId}")
+	public ResponseEntity<Message<Long>> deleteSchedule(@RequestBody DeleteScheduleRequest request,
+		@PathVariable("scheduleId") Long scheduleId) {
+		request.setScheduleId(scheduleId);
+		return ResponseEntity.ok().body(Message.success(scheduleService.deleteSchedule(request)));
+	}
 }

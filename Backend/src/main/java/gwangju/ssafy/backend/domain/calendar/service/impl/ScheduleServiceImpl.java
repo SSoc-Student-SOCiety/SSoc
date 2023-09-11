@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.domain.calendar.service.impl;
 
 import gwangju.ssafy.backend.domain.calendar.dto.CreateScheduleRequest;
+import gwangju.ssafy.backend.domain.calendar.dto.DeleteScheduleRequest;
 import gwangju.ssafy.backend.domain.calendar.dto.EditScheduleRequest;
 import gwangju.ssafy.backend.domain.calendar.entity.Schedule;
 import gwangju.ssafy.backend.domain.calendar.repository.ScheduleRepository;
@@ -37,6 +38,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 		schedule.edit(request.getTitle(), request.getContent(), request.getCategory(),
 			request.getStartedAt());
+
+		return schedule.getId();
+	}
+
+	@Override
+	public Long deleteSchedule(DeleteScheduleRequest request) {
+		Schedule schedule = scheduleRepository.findById(request.getScheduleId())
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 일정"));
+
+		validateManager(schedule.getGroup().getId(), request.getUserId());
+
+		scheduleRepository.delete(schedule);
 
 		return schedule.getId();
 	}
