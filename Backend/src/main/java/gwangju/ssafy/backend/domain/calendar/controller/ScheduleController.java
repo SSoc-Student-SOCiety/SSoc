@@ -6,6 +6,8 @@ import gwangju.ssafy.backend.domain.calendar.service.ScheduleService;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +26,10 @@ public class ScheduleController {
 		return ResponseEntity.ok().body(Message.success(scheduleService.createSchedule(request)));
 	}
 
-	@PutMapping
-	public ResponseEntity<Message<Long>> editSchedule(@RequestBody EditScheduleRequest request) {
+	@PutMapping("/{scheduleId}")
+	public ResponseEntity<Message<Long>> editSchedule(@RequestBody EditScheduleRequest request,
+		@PathVariable("scheduleId") Long scheduleId) {
+		request.setScheduleId(scheduleId);
 		return ResponseEntity.ok().body(Message.success(scheduleService.editSchedule(request)));
 	}
 
