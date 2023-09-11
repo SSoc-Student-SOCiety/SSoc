@@ -4,14 +4,14 @@ import {
   View,
   TouchableOpacity,
   Modal,
-  Pressable
+  Pressable,
 } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { DatePicker } from "react-native-date-picker";
 import React, { useCallback, useState } from "react";
 import { StackHeader } from "../../../modules/StackHeader";
 import * as Color from "../../../components/Colors/colors";
-import ActionButton from 'react-native-action-button';
+import ActionButton from "react-native-action-button";
 import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "../../../components/Basic/Typography";
 
@@ -20,31 +20,22 @@ const timeToString = (time) => {
   return date.toISOString().split("T")[0];
 };
 export const ScheduleScreen = () => {
-  const [selected, setSelected] = useState("");
-  const [isManager, setIsManager] = useState(false); 
+  const [isManager, setIsManager] = useState(false);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [items, setItems] = React.useState({});
-  const [visibleDatePicker, setVisibleDatePicker] = useState(false);
 
-  const [selectedItem, setSelectedItem ] = useState(); 
+  const [selectedItemId, setSelectedItemId] = useState();
+  const [selectedItemName, setSelectedItemName] = useState();
+  const [selectedDate, setSelectedDate] = useState();
 
-  
-  const handleDateChange = (newDate) => {
-    setSelectedDate(newDate);
-  };
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const handleConfirm = () => {
-    // 여기서 선택한 날짜를 처리하거나 모달을 닫을 수 있습니다.
-    toggleModal();
-  };
-
-
-  const onPressDelete = useCallback((item)=>{
-    setIsModalVisible(true)
-    setSelectedItem(item);
-    console.log(item);
-  })
+  const onPressDelete = useCallback((name, id, date) => {
+    setIsModalVisible(true);
+    setSelectedItemName(name);
+    setSelectedItemId(id);
+    setSelectedDate(date);
+    console.log(id);
+  });
 
   const loadItems = (day) => {
     setTimeout(() => {
@@ -56,15 +47,15 @@ export const ScheduleScreen = () => {
 
         if (!items[strTime]) {
           items[strTime] = [];
-           
+
           const numItems = Math.floor(Math.random() * 3 + 1);
           for (let j = 0; j < numItems; j++) {
             items[strTime].push({
-              id: count, 
+              id: count,
               name: "Item for " + strTime + " #" + j,
               day: strTime,
             });
-            count++; 
+            count++;
           }
         }
       }
@@ -77,17 +68,19 @@ export const ScheduleScreen = () => {
     }, 50);
   };
   const renderItem = (item) => {
-    console.log(item); 
-    return (  
+    return (
       <View style={styles.item}>
-          <Typography fontSize={15} color={Color.WHITE}>{item.name+" "+item.id}</Typography>
-          <TouchableOpacity onPress={()=>onPressDelete(item)}>
-            <View> 
-              <Ionicons name={"trash"} size={20} color={Color.WHITE}/>
-            </View>
-          </TouchableOpacity>
+        <Typography fontSize={15} color={Color.WHITE}>
+          {item.name + " " + item.id}
+        </Typography>
+        <TouchableOpacity
+          onPress={() => onPressDelete(item.name, item.id, item.day)}
+        >
+          <View>
+            <Ionicons name={"trash"} size={20} color={Color.WHITE} />
+          </View>
+        </TouchableOpacity>
       </View>
-     
     );
   };
 
@@ -108,64 +101,72 @@ export const ScheduleScreen = () => {
         renderItem={renderItem}
       />
       <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item
-            buttonColor="#9b59b6"
-            title="New Task"
-            onPress={() => {setIsModalVisible(true)}}>
-            <Ionicons name="back" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#3498db"
-            title="Notifications"
-            onPress={() => {setIsModalVisible(true)}}>
-            <Ionicons
-              name="android-notifications-none"
-              style={styles.actionButtonIcon}
-            />
-          </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#1abc9c"
-            title="일정등록"
-            onPress={() => {setIsModalVisible(true)}}>
-            <Ionicons name="android-done-all" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-        </ActionButton>
+        <ActionButton.Item
+          buttonColor="#9b59b6"
+          title="New Task"
+          onPress={() => {
+            setIsModalVisible(true);
+          }}
+        >
+          <Ionicons name="back" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#3498db"
+          title="Notifications"
+          onPress={() => {
+            setIsModalVisible(true);
+          }}
+        >
+          <Ionicons
+            name="android-notifications-none"
+            style={styles.actionButtonIcon}
+          />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#1abc9c"
+          title="일정등록"
+          onPress={() => {
+            setIsModalVisible(true);
+          }}
+        >
+          <Ionicons name="android-done-all" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+      </ActionButton>
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => {
-            setIsModalVisible(!isModalVisible);
-          }}>
-            <View style={styles.modalView}>
-              
-              <Text style={styles.modalText}>{selectedItem.date}의 {selectedItem.name}일정을 삭제하시겠습니까? {selectedItem.id}</Text>
-              <View style={{flexDirection:"row"}}>
-                <View style={{margin:10}}> 
-                  <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setIsModalVisible(false)}>
-                    <Text style={styles.textStyle}>확인</Text>
-                  </Pressable>
-                </View>
-                <View  style={{margin:10}}>
-
-                  <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setIsModalVisible(false)}>
-                    <Text style={styles.textStyle}>취소</Text>
-                  </Pressable>
-                </View>
-                
-              </View>
-              
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setIsModalVisible(!isModalVisible);
+        }}
+      >
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>
+            {selectedItemId} {selectedDate}날 {selectedItemName}의
+          </Text>
+          <Text style={styles.modalText}>일정을 삭제하시겠습니까?</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ margin: 10 }}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setIsModalVisible(false)}
+              >
+                <Text style={styles.textStyle}>확인</Text>
+              </Pressable>
             </View>
-         
-        </Modal>
-    
-      </View>
-
+            <View style={{ margin: 10 }}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setIsModalVisible(false)}
+              >
+                <Text style={styles.textStyle}>취소</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 };
 
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
-    flexDirection :"row", 
+    flexDirection: "row",
     borderRadius: 10,
     padding: 10,
     marginRight: 10,
@@ -183,22 +184,23 @@ const styles = StyleSheet.create({
     backgroundColor: Color.LIGHT_BLUE,
     height: 60,
     width: 300,
-    justifyContent:"space-around",
-    alignItems:"center"
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    marginTop: 350,
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -213,18 +215,18 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
