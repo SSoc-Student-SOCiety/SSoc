@@ -1,20 +1,41 @@
 import { View } from "react-native";
-
+import { Typography } from "../../../components/Basic/Typography";
 import * as Color from "../../../components/Colors/colors";
 import { useCurrentDate } from "../../../util/hooks/useCurrentDate";
 import { LineGraphSection } from "../../../modules/Settlement/LineGraphSection";
-import { TransactionListSection } from "../../../modules/Settlement/TransactionListSection";
+import { Divider } from "../../../components/Basic/Divider";
+import { FlatList } from "react-native";
+import { StyleSheet } from "react-native";
+import { TransactionItem } from "../../../modules/Settlement/TransactionItem";
 export const MonthlySettlementScreen = () => {
   const { year, month, day, today } = useCurrentDate();
 
   return (
-    <View style={{ backgroundColor: Color.WHITE }}>
-      <LineGraphSection
-        title={`${year}년 모아보기`}
-        labels={monthLabels}
-        data={mockData}
+    <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
+      <View style={{flex:1}}> 
+        <LineGraphSection
+          title={`${year}년 모아보기`}
+          labels={monthLabels}
+          data={mockData}
+        />
+      </View>
+      <View style={{flex:1.2}}>
+        <View style={{ marginHorizontal: 25, marginVertical: 10 }}>
+          <Typography fontSize={24}>거래 내역</Typography>
+        </View>
+        <Divider />
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 30 }} 
+        style={styles.commonItem}
+        data={transactionList}
+        renderItem={({ item }) => {
+          console.log("start")
+
+          console.log(item); 
+          return <TransactionItem item={item}></TransactionItem>;
+        }}
       />
-      <TransactionListSection transactionList={TRANSACTION_LIST} />
+    </View>
     </View>
   );
 };
@@ -49,7 +70,7 @@ const mockData = [
   Math.random() * 100,
 ];
 
-const TRANSACTION_LIST = [
+const transactionList = [
   {
     id: 1,
     name: "김밥천국",
@@ -91,3 +112,7 @@ const TRANSACTION_LIST = [
     deposit: "0",
   },
 ];
+
+var styles = StyleSheet.create({
+  commonItem: { paddingTop: 30, paddingHorizontal: 20},
+});
