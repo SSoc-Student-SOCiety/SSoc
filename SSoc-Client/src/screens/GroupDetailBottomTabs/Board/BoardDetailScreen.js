@@ -1,11 +1,11 @@
-import { ScrollView, Text, View } from 'react-native'
+import { View } from 'react-native'
 import * as Color from '../../../components/Colors/colors'
-import { BoardDetailTopTabs } from './BoardDetatilTopTab'
+import { BoardDetailTopTabs } from './BoardDetatilTopTabs'
 
-export const BoardDetailScreen = (props) => {
+export const BoardDetailScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
-      <BoardDetailTopTabs board={props.route.params.board} />
+      <BoardDetailTopTabs />
     </View>
   )
 }

@@ -45,6 +45,7 @@ export const SearchResultScreen=()=>{
             {/* to-do 무한 스크롤 구현하기 */}
             <FlatList
                 style={styles.commonItem}
+                contentContainerStyle={{ paddingBottom: 30 }}
                 data={IMAGE_LIST}
                 renderItem={({ item }) => {
                 return(

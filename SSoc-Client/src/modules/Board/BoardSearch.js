@@ -1,7 +1,7 @@
 import { View } from 'react-native'
-import * as Color from '../../../components/Colors/colors'
-import { SingleLineInput } from '../../../components/Input/SingleLineInput'
-import SettingBtn from '../../../modules/SettingButton'
+import * as Color from '../../components/Colors/colors'
+import { SingleLineInput } from '../../components/Input/SingleLineInput'
+import SettingBtn from '../SettingButton'
 
 const BoardSearch = () => {
   return (
