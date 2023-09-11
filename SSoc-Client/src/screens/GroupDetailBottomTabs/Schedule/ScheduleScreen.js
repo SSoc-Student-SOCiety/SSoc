@@ -14,6 +14,7 @@ import * as Color from "../../../components/Colors/colors";
 import ActionButton from "react-native-action-button";
 import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "../../../components/Basic/Typography";
+import { DeleteModal } from "../../../components/Modal/DeleteModal";
 
 const timeToString = (time) => {
   const date = new Date(time);
@@ -132,40 +133,12 @@ export const ScheduleScreen = () => {
           <Ionicons name="android-done-all" style={styles.actionButtonIcon} />
         </ActionButton.Item>
       </ActionButton>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => {
-          setIsModalVisible(!isModalVisible);
-        }}
-      >
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>
-            {selectedItemId} {selectedDate}날 {selectedItemName}의
-          </Text>
-          <Text style={styles.modalText}>일정을 삭제하시겠습니까?</Text>
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ margin: 10 }}>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setIsModalVisible(false)}
-              >
-                <Text style={styles.textStyle}>확인</Text>
-              </Pressable>
-            </View>
-            <View style={{ margin: 10 }}>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setIsModalVisible(false)}
-              >
-                <Text style={styles.textStyle}>취소</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <DeleteModal
+        isModalVisible={isModalVisible}
+        selectedItemId={selectedItemId}
+        selectedItemName={selectedItemName}
+        setIsModalVisible={setIsModalVisible}
+      />
     </View>
   );
 };
