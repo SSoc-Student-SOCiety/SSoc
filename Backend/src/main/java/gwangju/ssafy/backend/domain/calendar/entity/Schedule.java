@@ -44,4 +44,11 @@ public class Schedule {
 	@Column
 	private LocalDate startedAt;
 
+	public void edit(String title, String content, String category, LocalDate startedAt) {
+		this.title = title;
+		this.content = content;
+		this.category = category;
+		this.startedAt = startedAt;
+	}
+
 }
