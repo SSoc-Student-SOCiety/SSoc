@@ -1,13 +1,19 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { Divider } from '../../../components/Basic/Divider'
-import { ProfileImage } from '../../../modules/ProfileImage'
-import * as Color from '../../../components/Colors/colors'
+import { Divider } from '../../components/Basic/Divider'
+import { ProfileImage } from '../../modules/ProfileImage'
+import * as Color from '../../components/Colors/colors'
+import { useNavigation } from '@react-navigation/native'
 
 export const ContentCard = (props) => {
   const content = props.content
+  const navigation = useNavigation()
   return (
     <View style={{ padding: 10, flexDirection: 'column' }}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ContentDetailScreen', { content })
+        }}
+      >
         <Divider />
         <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10, marginTop: 8, alignItems: 'center', marginHorizontal: 25 }}>
           <ProfileImage
@@ -19,11 +25,11 @@ export const ContentCard = (props) => {
             <Text style={{ paddingBottom: 3, color: Color.GRAY }}>{content.anonymous_flag == 1 ? '익명' : content.userNick}</Text>
             <Text style={{ paddingBottom: 3, color: Color.GRAY }}>
               {content.createDate}
-              {content.modifyDate != '' ? ' (수정일: ' + content.modifyDate + ')' : null}
+              {content.modifyDate != '' || content.modifyDate != null ? ' (' + content.modifyDate + ')' : null}
             </Text>
           </View>
         </View>
-        <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10, marginTop: 8, alignItems: 'center', marginHorizontal: 32 }}>
+        <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10, marginTop: 8, alignItems: 'center', marginHorizontal: 32, height: 40 }}>
           <Text style={{ color: Color.GRAY }}>{content.content}</Text>
         </View>
         <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10, marginTop: 8, alignItems: 'center', marginHorizontal: 32, justifyContent: 'space-evenly' }}>

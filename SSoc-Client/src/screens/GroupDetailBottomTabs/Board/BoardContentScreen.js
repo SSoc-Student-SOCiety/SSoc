@@ -1,23 +1,64 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import BoardSearch from './BoardSearch'
+import { useState } from 'react'
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import * as Color from '../../../components/Colors/colors'
-import ContentList from './ContentList'
+import { Icon } from '../../../components/Icons/Icons'
+import BoardSearch from '../../../modules/Board/BoardSearch'
+import ContentList from '../../../modules/Board/ContentList'
+import WriteContent from '../../../modules/Board/WriteContentForm'
 
 export const BoardContentScreen = (props) => {
-  //   console.log(props.board)
+  const [writeNewContent, setWriteNewContent] = useState(false)
+  const groupMemberRole = 'MANAGER'
+  // const groupMemberRole = 'MEMBER'
   return (
-    <ScrollView style={styles.container}>
+    <View style={{ backgroundColor: Color.WHITE, marginBottom: 70 }}>
       <BoardSearch />
-      <View style={{ flexDirection: 'column' }}>
-        <ContentList board={props.board} />
-      </View>
-    </ScrollView>
+      <ScrollView>
+        <View style={{ flexDirection: 'column' }}>
+          <ContentList board={props.board} />
+        </View>
+      </ScrollView>
+      {props.board.id == 2 && groupMemberRole != 'MANAGER' ? null : (
+        <View style={styles.plusBtn}>
+          <TouchableOpacity
+            onPress={() => {
+              setWriteNewContent(true)
+            }}
+          >
+            <Icon
+              name="add-circle"
+              size={50}
+              color={Color.BLUE}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={writeNewContent}
+        onBackdropPress={() => setWriteNewContent(false)}
+        onRequestClose={() => {
+          setWriteNewContent(false)
+          // TO-DO
+          // content 추가 fetch
+        }}
+      >
+        <WriteContent
+          board={props.board}
+          groupMemberRole={groupMemberRole}
+          setWriteNewContent={setWriteNewContent}
+        />
+      </Modal>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.WHITE,
+  plusBtn: {
+    position: 'absolute',
+    bottom: 30,
+    right: 40,
   },
 })
