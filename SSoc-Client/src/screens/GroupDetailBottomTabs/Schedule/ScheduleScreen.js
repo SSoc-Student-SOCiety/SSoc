@@ -13,7 +13,6 @@ import * as Color from "../../../components/Colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "../../../components/Basic/Typography";
 import { DeleteModal } from "../../../components/Modal/DeleteModal";
-import { AddScheduleForm } from "../../../modules/Schedule/AddScheduleForm";
 import { ManagerActionButton } from "../../../modules/CommonModules/ManagerActionButton";
 
 const timeToString = (time) => {
@@ -21,17 +20,14 @@ const timeToString = (time) => {
   return date.toISOString().split("T")[0];
 };
 export const ScheduleScreen = () => {
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [items, setItems] = React.useState({});
-  const [writeNewContent, setWriteNewContent] = useState(false)
+  const [writeNewContent, setWriteNewContent] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState();
   const [selectedItemName, setSelectedItemName] = useState();
   const [selectedDate, setSelectedDate] = useState();
-  const groupMemberRole = 'MANAGER'
+  const groupMemberRole = "MANAGER";
   // const groupMemberRole = 'MEMBER'
-
-
 
   const onPressDelete = useCallback((name, id, date) => {
     setIsModalVisible(true);
@@ -77,8 +73,7 @@ export const ScheduleScreen = () => {
         <Typography fontSize={15} color={Color.WHITE}>
           {item.name + " " + item.id}
         </Typography>
-        {groupMemberRole != 'MANAGER' ? null 
-        :(
+        {groupMemberRole != "MANAGER" ? null : (
           <TouchableOpacity
             onPress={() => onPressDelete(item.name, item.id, item.day)}
           >
@@ -90,9 +85,9 @@ export const ScheduleScreen = () => {
       </View>
     );
   };
-  const onPressAdd = ()=>{
+  const onPressAdd = () => {
     setWriteNewContent(true);
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -110,17 +105,15 @@ export const ScheduleScreen = () => {
         refreshing={false}
         renderItem={renderItem}
       />
-      
-      <ManagerActionButton groupMemberRole={groupMemberRole}/>
 
-           
+      <ManagerActionButton groupMemberRole={groupMemberRole} />
+
       <DeleteModal
         isModalVisible={isModalVisible}
         selectedItemId={selectedItemId}
         selectedItemName={selectedItemName}
         setIsModalVisible={setIsModalVisible}
       />
-         
     </View>
   );
 };
@@ -184,5 +177,4 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
- 
 });
