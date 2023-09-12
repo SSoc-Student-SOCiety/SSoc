@@ -16,7 +16,6 @@ public class CreatePostRequest {
 
 	private Long userId;
 	private Long groupId;
-
 	private String title;
 	private String content;
 	private PostCategory category;

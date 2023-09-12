@@ -1,5 +1,14 @@
 package gwangju.ssafy.backend.domain.post.service.impl;
 
+import static gwangju.ssafy.backend.domain.post.exception.PostError.ALREADY_DELETED_POST;
+import static gwangju.ssafy.backend.domain.post.exception.PostError.NOT_EXISTS_POST;
+import static gwangju.ssafy.backend.domain.post.exception.PostError.NOT_GROUP_MANAGER;
+import static gwangju.ssafy.backend.domain.post.exception.PostError.NOT_GROUP_MEMBER;
+import static gwangju.ssafy.backend.domain.post.exception.PostError.NOT_POST_OWNER;
+
+import gwangju.ssafy.backend.domain.group.entity.GroupMember;
+import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.post.dto.CreatePostRequest;
 import gwangju.ssafy.backend.domain.post.dto.DeletePostRequest;
 import gwangju.ssafy.backend.domain.post.dto.EditPostRequest;
@@ -7,11 +16,9 @@ import gwangju.ssafy.backend.domain.post.dto.PostInfo;
 import gwangju.ssafy.backend.domain.post.dto.SearchPostRequest;
 import gwangju.ssafy.backend.domain.post.entity.Post;
 import gwangju.ssafy.backend.domain.post.entity.enums.PostCategory;
+import gwangju.ssafy.backend.domain.post.exception.PostException;
 import gwangju.ssafy.backend.domain.post.repository.PostRepository;
 import gwangju.ssafy.backend.domain.post.service.PostService;
-import gwangju.ssafy.backend.domain.group.entity.GroupMember;
-import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
-import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +37,6 @@ public class PostServiceImpl implements PostService {
 		GroupMember member = getGroupMember(request.getGroupId(),
 			request.getUserId());
 
-		// 카테고리가 공지사항인지 확인
 		if (request.getCategory().equals(PostCategory.NOTICE)) {
 			validateManager(member);
 		}
@@ -50,7 +56,7 @@ public class PostServiceImpl implements PostService {
 		Post post = getPost(request.getPostId(), request.getUserId());
 
 		if (post.isDeleted()) {
-			throw new RuntimeException("삭제된 게시글");
+			throw new PostException(ALREADY_DELETED_POST);
 		}
 
 		post.edit(request.getTitle(), request.getContent());
@@ -77,24 +83,23 @@ public class PostServiceImpl implements PostService {
 	}
 
 	private GroupMember getGroupMember(Long groupId, Long userId) {
-		return groupMemberRepository.findByGroupIdAndUserId(groupId,
-				userId)
-			.orElseThrow(() -> new RuntimeException("그룹원 X"));
+		return groupMemberRepository.findByGroupIdAndUserId(groupId, userId)
+			.orElseThrow(() -> new PostException(NOT_GROUP_MEMBER));
 	}
 
 	private Post getPost(Long postId, Long userId) {
 		Post post = postRepository.findById(postId)
-			.orElseThrow(() -> new RuntimeException("게시글 없음"));
+			.orElseThrow(() -> new PostException(NOT_EXISTS_POST));
 
 		if (!post.getUser().getId().equals(userId)) {
-			throw new RuntimeException("게시글 작성자가 아님");
+			throw new PostException(NOT_POST_OWNER);
 		}
 		return post;
 	}
 
 	private void validateManager(GroupMember member) {
 		if (!member.getRole().equals(GroupMemberRole.MANAGER)) {
-			throw new RuntimeException("매니저가 아님");
+			throw new PostException(NOT_GROUP_MANAGER);
 		}
 	}
 }
