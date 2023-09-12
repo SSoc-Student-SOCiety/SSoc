@@ -19,6 +19,7 @@ public class JwtUtils {
     public static final String KEY_EMAIL = "userEmail";
     public static final String KEY_NAME = "userName";
     public static final String KEY_NICKNAME = "userNickname";
+    public static final String KEY_IMAGEURL = "userImageUrl";
     public static final String KEY_ROLES = "roles";
 
     @Value("${jwt.secret}")

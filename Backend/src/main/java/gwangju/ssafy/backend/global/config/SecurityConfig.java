@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -55,17 +56,14 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
         http.logout(AbstractHttpConfigurer::disable);
 
-//        http.logout((logout) ->
-//                logout.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-//                        .logoutSuccessUrl("/user/join")
-//                        .invalidateHttpSession(true));  // 로그아웃 시 생성된 사용자 세션 삭제
-
         http.exceptionHandling((exceptionHandling) ->
                 exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .accessDeniedHandler(jwtAccessDeniedHandler));
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class);
+
+
 
         return http.build();
     }
@@ -110,4 +108,5 @@ public class SecurityConfig {
     public ExceptionHandlerFilter exceptionHandlerFilter() {
         return new ExceptionHandlerFilter();
     }
+
 }
