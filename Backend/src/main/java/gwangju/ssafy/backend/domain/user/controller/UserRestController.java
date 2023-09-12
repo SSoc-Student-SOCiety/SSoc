@@ -130,20 +130,21 @@ public class UserRestController {
     // 앱 구동 시 회원 정보 불러오기
     @PostMapping("/start")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Message<TokenUserInfoDto>> userAppStart(
+    public ResponseEntity<Message<UserLoginResponseDto>> userAppStart(
             @AuthenticationPrincipal LoginActiveUserDto loginActiveUserDto) {
         log.info("==================앱 처음 구동시 회원정보 Controller 진입=============");
         TokenUserInfoDto tokenUserInfoDto = TokenUserInfoDto.convert(loginActiveUserDto);
-        return ResponseEntity.ok().body(Message.success(tokenUserInfoDto, "0", null));
+        UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
+                .userInfo(tokenUserInfoDto)
+                .build();
+        return ResponseEntity.ok().body(Message.success(userLoginResponseDto, "0", null));
     }
 
     // 회원 탈퇴
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<Message> deleteUser() {
+    public ResponseEntity<Message> deleteUser(@AuthenticationPrincipal LoginActiveUserDto loginActiveUserDto) {
         log.info("==================회원 탈퇴 Controller 진입=============");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginActiveUserDto loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
         userService.deleteUser(loginActiveUserDto.getId());
         return ResponseEntity.ok().body(Message.success(loginActiveUserDto));   // 삭제한 유저정보 반환
     }
