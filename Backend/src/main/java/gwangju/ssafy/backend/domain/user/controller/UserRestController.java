@@ -12,9 +12,13 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 
 @RestController
@@ -33,8 +37,7 @@ public class UserRestController {
     // 이메일을 통한 인증코드 보내기 -> 토큰 필요 없음
     @PostMapping("/email/send")
     public ResponseEntity<Message<MailCodeDto>> sendMail(@RequestBody UserDto userDto) throws Exception {
-        MailCodeDto mailCodeDto = null;
-        mailCodeDto = emailService.sendSimpleMessage(userDto.getUserEmail(), true);
+        MailCodeDto mailCodeDto = emailService.sendSimpleMessage(userDto.getUserEmail(), true);
         log.info("메일 전송 완료");
         return ResponseEntity.ok().body(Message.success(mailCodeDto));
     }
@@ -70,16 +73,16 @@ public class UserRestController {
 
     // 로그아웃 -> 토큰 필요
     @PostMapping("/logout")
-    public ResponseEntity<Message> logout() {
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public ResponseEntity<Message> logout(@AuthenticationPrincipal LoginActiveUserDto loginActiveUserDto) {
         log.info("==================로그아웃 진입=============");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginActiveUserDto loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
         jwtService.deleteRefreshToken(loginActiveUserDto.getUserEmail());
         return ResponseEntity.ok().body(Message.success());
     }
 
     // 닉네임 수정 -> 토큰 필요
     @PostMapping("/update/nickname")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Message<TokenUserInfoDto>> updateNickName(@RequestBody UserUpdateDto userUpdateDto) {
         log.info("==================회원정보 닉네임 수정 Controller 진입=============");
         TokenUserInfoDto tokenUserInfoDto = userService.updateNickName(userUpdateDto);  // 닉네임 최신화
@@ -88,6 +91,7 @@ public class UserRestController {
 
     // 비밀번호 수정 -> 토큰 필요
     @PostMapping("/update/password")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Message<TokenUserInfoDto>> updatePassword(@RequestBody UserUpdateDto userUpdateDto) {
         log.info("==================회원정보 비밀번호 수정 Controller 진입=============");
         TokenUserInfoDto tokenUserInfoDto = userService.updatePassword(userUpdateDto);
@@ -96,6 +100,7 @@ public class UserRestController {
 
     // 프로필 이미지 수정 -> 토큰 필요
     @PostMapping("/update/image")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Message<TokenUserInfoDto>> updateImage(@RequestBody UserUpdateDto userUpdateDto) {
         log.info("==================회원정보 프로필 이미지 수정 Controller 진입=============");
         TokenUserInfoDto tokenUserInfoDto = userService.updateImage(userUpdateDto);
@@ -104,6 +109,7 @@ public class UserRestController {
 
     // 닉네임, 패스워드 수정 -> 토큰 필요
     @PostMapping("/update/nickname/password")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Message<TokenUserInfoDto>> updateNickNameAndPassword(@RequestBody UserUpdateDto userUpdateDto, HttpServletRequest request) {
         log.info("==================회원정보 닉네임, 비밀번호 수정 Controller 진입=============");
         userService.updateNickName(userUpdateDto);
@@ -123,15 +129,16 @@ public class UserRestController {
 
     // 앱 구동 시 회원 정보 불러오기
     @PostMapping("/start")
-    public ResponseEntity<Message<LoginActiveUserDto>> userAppStart() {
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public ResponseEntity<Message<LoginActiveUserDto>> userAppStart(
+            @AuthenticationPrincipal LoginActiveUserDto loginActiveUserDto) {
         log.info("==================앱 처음 구동시 회원정보 Controller 진입=============");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginActiveUserDto loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
         return ResponseEntity.ok().body(Message.success(loginActiveUserDto, "1", null));
     }
 
     // 회원 탈퇴
     @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<Message> deleteUser() {
         log.info("==================회원 탈퇴 Controller 진입=============");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -141,13 +148,14 @@ public class UserRestController {
     }
 
     // 회원 정보 불러오기
-    @PostMapping("/info")
-    public ResponseEntity<Message<LoginActiveUserDto>> userInfo() {
-        log.info("==================회원 정보 불러오기 Controller 진입=============");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginActiveUserDto loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
-        return ResponseEntity.ok().body(Message.success(loginActiveUserDto, "1", null));
-    }
+//    @PostMapping("/info")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public ResponseEntity<Message<LoginActiveUserDto>> userInfo() {
+//        log.info("==================회원 정보 불러오기 Controller 진입=============");
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        LoginActiveUserDto loginActiveUserDto = (LoginActiveUserDto) authentication.getPrincipal();
+//        return ResponseEntity.ok().body(Message.success(loginActiveUserDto, "1", null));
+//    }
 
 
 }

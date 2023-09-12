@@ -1,0 +1,1 @@
+insert into users(email, password, name, nickname, image, role) values("admin1234@yonsei.ac.kr", "1234", "관리자", "관리자닉네임", null,  "user");
