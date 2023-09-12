@@ -67,7 +67,7 @@ public class PostController {
 	@GetMapping
 	public ResponseEntity<Message<List<PostInfo>>> searchPost(
 		@AuthenticationPrincipal LoginActiveUserDto login,
-		@RequestBody SearchPostRequest request
+		SearchPostRequest request
 	) {
 		request.setUserId(login.getId());
 		return ResponseEntity.ok().body(Message.success(postService.searchPost(request)));

@@ -69,7 +69,7 @@ public class CommentController {
 	@GetMapping("/comments")
 	public ResponseEntity<Message<List<CommentInfo>>> searchComment(
 		@AuthenticationPrincipal LoginActiveUserDto login,
-		@RequestBody SearchCommentRequest request,
+		SearchCommentRequest request,
 		@PathVariable Long postId
 	) {
 		request.setUserId(login.getId());
