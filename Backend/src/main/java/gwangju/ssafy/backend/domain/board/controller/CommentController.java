@@ -1,8 +1,10 @@
 package gwangju.ssafy.backend.domain.board.controller;
 
 import gwangju.ssafy.backend.domain.board.dto.CreateCommentRequest;
+import gwangju.ssafy.backend.domain.board.dto.EditCommentRequest;
 import gwangju.ssafy.backend.domain.board.service.CommentService;
 import gwangju.ssafy.backend.global.common.dto.Message;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,5 +25,12 @@ public class CommentController {
 		@PathVariable Long postId) {
 		request.setPostId(postId);
 		return ResponseEntity.ok().body(Message.success(commentService.createComment(request)));
+	}
+
+	@PostMapping("/{postId}/comment/{commentId}")
+	public ResponseEntity<Message<Long>> editComment(@RequestBody EditCommentRequest request,
+		@PathVariable Long commentId) {
+		request.setCommentId(commentId);
+		return ResponseEntity.ok().body(Message.success(commentService.editComment(request)));
 	}
 }

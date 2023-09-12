@@ -44,4 +44,8 @@ public class Comment extends BaseEntity {
 	@Column
 	private boolean isDeleted;
 
+	public void edit(String content, boolean isAnonymous) {
+		this.content = content;
+		this.isAnonymous = isAnonymous;
+	}
 }
