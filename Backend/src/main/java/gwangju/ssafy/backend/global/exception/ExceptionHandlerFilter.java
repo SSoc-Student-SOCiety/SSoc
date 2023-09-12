@@ -60,6 +60,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 //            log.info(request.getServletPath());
 
             String refreshToken = request.getHeader(JwtAuthenticationFilter.REFRESH_HEADER);
+            // 쌍따옴표 붙여서 나오는 부분 제거
+            if(refreshToken != null) {
+                refreshToken = refreshToken.replaceAll("\"", "");
+            }
             if (StringUtils.hasText(refreshToken) && refreshToken.startsWith((JwtAuthenticationFilter.BEARER_PREFIX))) {
                 refreshToken = refreshToken.substring(7);
             }
@@ -78,6 +82,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             }
             // 로그아웃 요청 아닌 경우
             else {
+                log.info(errorCode.toString());
                 // AccessToken 만료되고 RefreshToken은 살아있는 경우
                 if(errorCode.toString().equals("ACCESS_EXPIRED_TOKEN")) {
                     // refresh 토큰을 이용하여 Access, Refresh 토큰 재발급
