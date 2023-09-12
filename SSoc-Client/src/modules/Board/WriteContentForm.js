@@ -36,7 +36,7 @@ const WriteContent = (props) => {
         style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(211, 211, 211, 0.5)' }}
       >
         <TouchableWithoutFeedback>
-          <View style={{ flexDirection: 'column', width: '85%', backgroundColor: Color.WHITE, borderColor: Color.BLUE, borderWidth: 1, borderRadius: 20 }}>
+          <View style={{ flexDirection: 'column', width: '90%', backgroundColor: Color.WHITE, borderColor: Color.BLUE, borderWidth: 1, borderRadius: 20 }}>
             <View style={{ backgroundColor: Color.BLUE, width: '100%', height: board.boardId == 1 ? '10%' : '12%', borderTopRightRadius: 15, borderTopLeftRadius: 15, alignItems: 'center', justifyContent: 'center' }}>
               <Text style={{ fontSize: 20, color: Color.WHITE, fontWeight: 'bold' }}>{board.boardId == 1 ? '' : board.boardName + ' > '}게시글 작성</Text>
             </View>
@@ -85,10 +85,7 @@ const WriteContent = (props) => {
                     <Text style={{ fontSize: 18 }}>제목: </Text>
                   </View>
                   <View style={{ width: '80%', backgroundColor: Color.LIGHT_GRAY, borderRadius: 5 }}>
-                    <SingleLineInput
-                      fontSize={18}
-                      placeholder="제목을 입력해주세요."
-                    />
+                    <SingleLineInput placeholder="제목을 입력해주세요." />
                   </View>
                 </View>
 

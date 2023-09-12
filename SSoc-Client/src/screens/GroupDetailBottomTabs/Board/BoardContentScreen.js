@@ -12,12 +12,8 @@ export const BoardContentScreen = (props) => {
   // const groupMemberRole = 'MEMBER'
   return (
     <View style={{ backgroundColor: Color.WHITE, marginBottom: 70 }}>
-      <BoardSearch />
-      <ScrollView>
-        <View style={{ flexDirection: 'column' }}>
-          <ContentList board={props.board} />
-        </View>
-      </ScrollView>
+      <BoardSearch category={props.board.category} />
+      <ContentList board={props.board} />
       {props.board.id == 2 && groupMemberRole != 'MANAGER' ? null : (
         <View style={styles.plusBtn}>
           <TouchableOpacity
@@ -39,11 +35,6 @@ export const BoardContentScreen = (props) => {
         transparent={true}
         visible={writeNewContent}
         onBackdropPress={() => setWriteNewContent(false)}
-        onRequestClose={() => {
-          setWriteNewContent(false)
-          // TO-DO
-          // content 추가 fetch
-        }}
       >
         <WriteContent
           board={props.board}

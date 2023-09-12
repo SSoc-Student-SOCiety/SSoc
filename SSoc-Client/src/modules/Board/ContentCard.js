@@ -8,14 +8,13 @@ export const ContentCard = (props) => {
   const content = props.content
   const navigation = useNavigation()
   return (
-    <View style={{ padding: 10, flexDirection: 'column' }}>
+    <View style={{ margin: 8, flexDirection: 'column', borderRadius: 10, borderWidth: 0.2, borderBottomWidth: 2, borderColor: Color.GRAY }}>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('ContentDetailScreen', { content })
         }}
       >
-        <Divider />
-        <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10, marginTop: 8, alignItems: 'center', marginHorizontal: 25 }}>
+        <View style={{ flex: 1, flexDirection: 'row', marginBottom: 8, marginTop: 8, alignItems: 'center', marginHorizontal: 25 }}>
           <ProfileImage
             size={40}
             url={content.userImage}
@@ -29,18 +28,20 @@ export const ContentCard = (props) => {
             </Text>
           </View>
         </View>
-        <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10, marginTop: 8, alignItems: 'center', marginHorizontal: 32, height: 40 }}>
-          <Text style={{ color: Color.GRAY }}>{content.content}</Text>
+
+        <View style={{ flex: 1, flexDirection: 'row', marginBottom: 8, marginTop: 8, alignItems: 'center', marginHorizontal: 32, height: 40 }}>
+          <Text>{content.content}</Text>
         </View>
-        <View style={{ flex: 1, flexDirection: 'row', marginBottom: 10, marginTop: 8, alignItems: 'center', marginHorizontal: 32, justifyContent: 'space-evenly' }}>
-          <View style={{ borderColor: Color.BLUE, borderRadius: 10, padding: 10, borderWidth: 1 }}>
-            <Text style={{ color: Color.DARK_BLUE }}>좋아요 {content.likes}</Text>
+
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', marginHorizontal: 30, justifyContent: 'space-evenly', marginVertical: 15 }}>
+          <View style={{ flexGrow: 1, alignItems: 'center' }}>
+            <Text style={{ color: Color.GRAY }}>좋아요 {content.likes}</Text>
           </View>
-          <View style={{ borderColor: Color.BLUE, borderRadius: 10, padding: 10, borderWidth: 1 }}>
-            <Text style={{ color: Color.DARK_BLUE }}>댓글 {content.comments}</Text>
+          <View style={{ flexGrow: 1, alignItems: 'center' }}>
+            <Text style={{ color: Color.GRAY }}>댓글 {content.comments}</Text>
           </View>
-          <View style={{ borderColor: Color.BLUE, borderRadius: 10, padding: 10, borderWidth: 1 }}>
-            <Text style={{ color: Color.DARK_BLUE }}>조회수 {content.views}</Text>
+          <View style={{ flexGrow: 1, alignItems: 'center' }}>
+            <Text style={{ color: Color.GRAY }}>조회수 {content.views}</Text>
           </View>
         </View>
       </TouchableOpacity>

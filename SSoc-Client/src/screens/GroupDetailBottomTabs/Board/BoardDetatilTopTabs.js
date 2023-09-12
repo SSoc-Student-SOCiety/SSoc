@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { StackHeader } from '../../../modules/StackHeader'
 import { BoardContentScreen } from './BoardContentScreen'
 

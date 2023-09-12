@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import { Typography } from '../../components/Basic/Typography'
+import { useState } from 'react'
+import { View, Text, TouchableOpacity, Modal } from 'react-native'
 import * as Color from '../../components/Colors/colors'
 import { Icon } from '../../components/Icons/Icons'
+import CommentModal from './CommentModal'
 
 const ContentDetailFooter = (props) => {
   const content = props.content
+  const [showComment, setShowComment] = useState(false)
   return (
     <View style={{ height: '10%', borderTopWidth: 0.5 }}>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingHorizontal: 20 }}>
@@ -18,7 +20,11 @@ const ContentDetailFooter = (props) => {
             <Text style={{ fontSize: 20 }}>{' ' + content.likes}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setShowComment(true)
+          }}
+        >
           <View style={{ flexDirection: 'row', padding: 15, margin: 3, alignItems: 'center' }}>
             <Icon
               name="md-chatbubble-ellipses-outline"
@@ -28,6 +34,20 @@ const ContentDetailFooter = (props) => {
             <Text style={{ fontSize: 20 }}>{' ' + content.comments}</Text>
           </View>
         </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showComment}
+          onBackdropPress={() => setShowComment(false)}
+          onRequestClose={() => {
+            setShowComment(false)
+          }}
+        >
+          <CommentModal
+            setShowComment={setShowComment}
+            content={content}
+          />
+        </Modal>
       </View>
     </View>
   )

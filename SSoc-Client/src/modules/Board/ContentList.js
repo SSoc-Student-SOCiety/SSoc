@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { TouchableOpacity, View, Text, FlatList, ScrollView } from 'react-native'
+import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { ContentCard } from './ContentCard'
 
 const ContentList = (props) => {
@@ -84,11 +85,16 @@ const ContentList = (props) => {
 
   return (
     <View>
-      {tempData.dataBody.map((item) => (
-        <View>
-          <ContentCard content={item} />
-        </View>
-      ))}
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 70 }}
+        data={tempData.dataBody}
+        renderItem={({ item }) => (
+          <View>
+            <ContentCard content={item} />
+          </View>
+        )}
+        keyExtractor={(item) => item.postId}
+      />
     </View>
   )
 }
