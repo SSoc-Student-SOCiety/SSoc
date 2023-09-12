@@ -33,6 +33,9 @@ public interface UserService {
 //    TokenResponseDto tokenCheck(TokenRequestDto tokenRequestDto);
 
     // 유저 이메일로 해당 유저 정보 불러오기
-    TokenUserInfoDto userInformationFind(String userEmail);
+//    TokenUserInfoDto userInformationFind(String userEmail);
+
+    // id값을 받아와 해당 유저 정보 삭제
+    void deleteUser(Long id);
 
 }

@@ -10,13 +10,13 @@ import java.util.Collection;
 @Getter
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
-    private LoginActiveUserDto pricipal;
+    private LoginActiveUserDto principal;
 
     private Object credentials;
 
-    public JwtAuthenticationToken(LoginActiveUserDto pricipal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    public JwtAuthenticationToken(LoginActiveUserDto principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
-        this.pricipal = pricipal;
+        this.principal = principal;
         this.credentials = credentials;
         super.setAuthenticated(true);
     }
@@ -27,7 +27,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public Object getPrincipal() {
-        return this.getPricipal();
+    public LoginActiveUserDto getPrincipal() {
+        return this.principal;
     }
 }

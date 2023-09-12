@@ -32,11 +32,8 @@ import static gwangju.ssafy.backend.global.component.jwt.JwtUtils.*;
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
-    private ResponseEntity<Message> responseEntity = null;
     @Autowired
     private JwtService jwtService;
-    @Autowired
-    private JwtUtils jwtUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

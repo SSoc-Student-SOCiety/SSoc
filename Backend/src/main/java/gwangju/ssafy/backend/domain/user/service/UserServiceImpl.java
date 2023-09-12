@@ -131,16 +131,23 @@ class UserServiceImpl implements UserService {
     }
 
     // 유저 이메일을 통해 회원정보 불러오기
+//    @Override
+//    public TokenUserInfoDto userInformationFind(String userEmail) {
+//        User user = userRepository.findByUserEmail(userEmail).orElseThrow(() ->
+//                new UserException(ErrorCode.NOT_FOUND_USER));
+//        return TokenUserInfoDto.builder()
+//                .id(user.getId())
+//                .userEmail(user.getUserEmail())
+//                .userName(user.getUserName())
+//                .userNickname(user.getUserNickname())
+//                .userImageUrl(user.getUserImageUrl())
+//                .build();
+//    }
+
+    // 유저 아이디를 통한 회원정보 삭제
     @Override
-    public TokenUserInfoDto userInformationFind(String userEmail) {
-        User user = userRepository.findByUserEmail(userEmail).get();
-        return TokenUserInfoDto.builder()
-                .id(user.getId())
-                .userEmail(user.getUserEmail())
-                .userName(user.getUserName())
-                .userNickname(user.getUserNickname())
-                .userImageUrl(user.getUserImageUrl())
-                .build();
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
 }
