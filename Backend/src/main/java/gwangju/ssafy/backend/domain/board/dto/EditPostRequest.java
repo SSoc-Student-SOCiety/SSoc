@@ -12,10 +12,10 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class CreatePostRequest {
+public class EditPostRequest {
 
 	private Long userId;
-	private Long groupId;
+	private Long postId;
 
 	private String title;
 	private String content;

@@ -1,11 +1,14 @@
 package gwangju.ssafy.backend.domain.board.controller;
 
 import gwangju.ssafy.backend.domain.board.dto.CreatePostRequest;
+import gwangju.ssafy.backend.domain.board.dto.EditPostRequest;
 import gwangju.ssafy.backend.domain.board.service.PostService;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +21,15 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping
-	public ResponseEntity<Message> createPost(@RequestBody CreatePostRequest request) {
+	public ResponseEntity<Message<Long>> createPost(@RequestBody CreatePostRequest request) {
 		return ResponseEntity.ok().body(Message.success(postService.createPost(request)));
 	}
-	
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Message<Long>> editPost(@RequestBody EditPostRequest request,
+		@PathVariable("id") Long id) {
+		request.setPostId(id);
+		return ResponseEntity.ok().body(Message.success(postService.editPost(request)));
+	}
+
 }

@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.domain.board.service.impl;
 
 import gwangju.ssafy.backend.domain.board.dto.CreatePostRequest;
+import gwangju.ssafy.backend.domain.board.dto.EditPostRequest;
 import gwangju.ssafy.backend.domain.board.entity.Post;
 import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
 import gwangju.ssafy.backend.domain.board.repository.PostRepository;
@@ -37,9 +38,24 @@ public class PostServiceImpl implements PostService {
 			.user(member.getUser())
 			.title(request.getTitle())
 			.content(request.getContent())
-			.isAnonymous(request.isAnonymous())
+			.isAnonymous(request.getIsAnonymous())
 			.category(request.getCategory())
 			.build()).getId();
+	}
+
+	@Override
+	public Long editPost(EditPostRequest request) {
+		Post post = postRepository.findById(request.getPostId())
+			.orElseThrow(() -> new RuntimeException("게시글 없음"));
+
+		if (!post.getUser().getId().equals(request.getUserId())) {
+			throw new RuntimeException("게시글 작성자가 아님");
+		}
+
+		post.editAll(request.getTitle(), request.getContent(), request.getCategory(),
+			request.getIsAnonymous());
+
+		return post.getId();
 	}
 
 	private void validateManager(GroupMember member) {
