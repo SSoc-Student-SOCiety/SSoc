@@ -72,7 +72,7 @@ public class ReplyController {
 	@GetMapping
 	public ResponseEntity<Message<List<ReplyInfo>>> searchReply(
 		@AuthenticationPrincipal LoginActiveUserDto login,
-		@RequestBody SearchReplyRequest request,
+		SearchReplyRequest request,
 		@PathVariable Long postId
 	) {
 		request.setUserId(login.getId());
