@@ -1,6 +1,8 @@
 package gwangju.ssafy.backend.global.infra.email;
 
 import gwangju.ssafy.backend.global.common.dto.MailCodeDto;
+import gwangju.ssafy.backend.global.exception.EmailException;
+import gwangju.ssafy.backend.global.exception.ErrorCode;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -65,13 +67,11 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public MailCodeDto sendSimpleMessage(String to, boolean signupCheck) throws Exception {
         MimeMessage message = createMessage(to, signupCheck);
-        System.out.println(message);
         try {
             emailSender.send(message);
         }
         catch(MailException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException();
+            throw new EmailException(ErrorCode.NOT_SEND_EMAIL);
         }
 
         return MailCodeDto.builder().userEmail(to).emailCode(ePw).build();
