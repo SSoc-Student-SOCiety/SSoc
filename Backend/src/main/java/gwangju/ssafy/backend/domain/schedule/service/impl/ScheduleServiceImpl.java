@@ -1,5 +1,8 @@
 package gwangju.ssafy.backend.domain.schedule.service.impl;
 
+import gwangju.ssafy.backend.domain.group.entity.GroupMember;
+import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.schedule.dto.CreateScheduleRequest;
 import gwangju.ssafy.backend.domain.schedule.dto.DeleteScheduleRequest;
 import gwangju.ssafy.backend.domain.schedule.dto.EditScheduleRequest;
@@ -8,14 +11,11 @@ import gwangju.ssafy.backend.domain.schedule.dto.SearchScheduleRequest;
 import gwangju.ssafy.backend.domain.schedule.entity.Schedule;
 import gwangju.ssafy.backend.domain.schedule.repository.ScheduleRepository;
 import gwangju.ssafy.backend.domain.schedule.service.ScheduleService;
-import gwangju.ssafy.backend.domain.group.entity.GroupMember;
-import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
-import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -58,6 +58,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return schedule.getId();
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<ScheduleInfo> searchSchedule(SearchScheduleRequest request) {
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),

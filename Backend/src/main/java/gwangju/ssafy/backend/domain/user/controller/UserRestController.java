@@ -130,10 +130,11 @@ public class UserRestController {
     // 앱 구동 시 회원 정보 불러오기
     @PostMapping("/start")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<Message<LoginActiveUserDto>> userAppStart(
+    public ResponseEntity<Message<TokenUserInfoDto>> userAppStart(
             @AuthenticationPrincipal LoginActiveUserDto loginActiveUserDto) {
         log.info("==================앱 처음 구동시 회원정보 Controller 진입=============");
-        return ResponseEntity.ok().body(Message.success(loginActiveUserDto, "1", null));
+        TokenUserInfoDto tokenUserInfoDto = TokenUserInfoDto.convert(loginActiveUserDto);
+        return ResponseEntity.ok().body(Message.success(tokenUserInfoDto, "0", null));
     }
 
     // 회원 탈퇴

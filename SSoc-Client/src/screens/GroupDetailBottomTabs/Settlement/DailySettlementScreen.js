@@ -6,6 +6,9 @@ import { TransactionItem } from "../../../modules/Settlement/TransactionItem";
 import { Typography } from "../../../components/Basic/Typography";
 import { Divider } from "../../../components/Basic/Divider";
 import { FlatList } from "react-native";
+import React, {useState} from "react";
+
+
 const weekLabels = ["월", "화", "수", "목", "금", "토", "일"];
 const mockData = [
   Math.random() * 100,
@@ -29,6 +32,7 @@ export const DaillySettlementScreen = () => {
         />
       </View>
       <View style={{flex:1.2}}>
+      
         <View style={{ marginHorizontal: 25, marginVertical: 10 }}>
           <Typography fontSize={24}>거래 내역</Typography>
         </View>
@@ -38,9 +42,6 @@ export const DaillySettlementScreen = () => {
         style={styles.commonItem}
         data={transactionList}
         renderItem={({ item }) => {
-          console.log("start")
-
-          console.log(item); 
           return <TransactionItem item={item}></TransactionItem>;
         }}
       />

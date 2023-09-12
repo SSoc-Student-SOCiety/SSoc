@@ -5,7 +5,6 @@ import { Divider } from "../../components/Basic/Divider";
 import * as Color from "../../components/Colors/colors";
 
 export const TransactionItem = ({ item }) => {
-  console.log(item);
   return (
     <View>
       <View style={{ marginHorizontal: 10 }}>
