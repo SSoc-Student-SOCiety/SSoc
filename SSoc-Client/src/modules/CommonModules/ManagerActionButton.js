@@ -28,7 +28,7 @@ export const ManagerActionButton =({groupMemberRole})=>{
               buttonColor="#9b59b6"
               title="영수증 등록"
               onPress={() => {
-                navigation.navigate("AddRecieptScreen")
+                navigation.navigate("AddReceiptScreen")
               }}
             >
               <Ionicons name="receipt" style={styles.actionButtonIcon}/>
