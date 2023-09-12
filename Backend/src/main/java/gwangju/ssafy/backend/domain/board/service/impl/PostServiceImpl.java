@@ -12,10 +12,10 @@ import gwangju.ssafy.backend.domain.board.service.PostService;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -67,6 +67,7 @@ public class PostServiceImpl implements PostService {
 		return post.getId();
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<PostInfo> searchPost(SearchPostRequest request) {
 		getGroupMember(request.getGroupId(), request.getUserId());

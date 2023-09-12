@@ -47,6 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
 		transaction.changeNote(request.getNote());
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<TransactionInfo> getTransactions(GetTransactionsRequest request) {
 
