@@ -11,12 +11,9 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class EditPostRequest {
+public class DeletePostRequest {
 
 	private Long userId;
 	private Long postId;
-
-	private String title;
-	private String content;
 
 }

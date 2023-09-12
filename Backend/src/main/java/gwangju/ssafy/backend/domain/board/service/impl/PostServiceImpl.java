@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.domain.board.service.impl;
 
 import gwangju.ssafy.backend.domain.board.dto.CreatePostRequest;
+import gwangju.ssafy.backend.domain.board.dto.DeletePostRequest;
 import gwangju.ssafy.backend.domain.board.dto.EditPostRequest;
 import gwangju.ssafy.backend.domain.board.entity.Post;
 import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
@@ -45,16 +46,34 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public Long editPost(EditPostRequest request) {
-		Post post = postRepository.findById(request.getPostId())
-			.orElseThrow(() -> new RuntimeException("게시글 없음"));
+		Post post = getPost(request.getPostId(), request.getUserId());
 
-		if (!post.getUser().getId().equals(request.getUserId())) {
-			throw new RuntimeException("게시글 작성자가 아님");
+		if (post.isDeleted()) {
+			throw new RuntimeException("삭제된 게시글");
 		}
 
 		post.edit(request.getTitle(), request.getContent());
 
 		return post.getId();
+	}
+
+	@Override
+	public Long deletePost(DeletePostRequest request) {
+		Post post = getPost(request.getPostId(), request.getUserId());
+
+		post.delete();
+
+		return post.getId();
+	}
+
+	private Post getPost(Long postId, Long userId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new RuntimeException("게시글 없음"));
+
+		if (!post.getUser().getId().equals(userId)) {
+			throw new RuntimeException("게시글 작성자가 아님");
+		}
+		return post;
 	}
 
 	private void validateManager(GroupMember member) {

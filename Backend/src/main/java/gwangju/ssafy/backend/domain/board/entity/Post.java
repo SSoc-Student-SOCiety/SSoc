@@ -50,11 +50,18 @@ public class Post extends BaseEntity {
 	@Lob
 	private String content;
 
-	@Column(name = "IS_ANONYMOUS")
+	@Column
 	private boolean isAnonymous;
+
+	@Column
+	private boolean isDeleted;
 
 	public void edit(String title, String content) {
 		this.title = title;
 		this.content = content;
+	}
+
+	public void delete() {
+		isDeleted = true;
 	}
 }
