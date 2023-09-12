@@ -41,6 +41,8 @@ export const GroupDetailScreen = ({ route }) => {
     navigation.navigate("GroupDetailTab", { tabName });
   });
 
+  // TO-DO (수린)
+  // 4개 버튼 탭 눌렀을 때 groupId값도 같이 넘겨줘야함. 위의 navigate tabname과 함께 같이 쏴야할 듯 합니당
   const ButtonData = [
     {
       title: "공금 사용현황",

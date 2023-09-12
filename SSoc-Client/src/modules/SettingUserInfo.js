@@ -22,6 +22,7 @@ const SettingUserInfo = () => {
     setIsEditMode(false)
   }
 
+  console.log(userInfo)
   return (
     <View>
       <View style={{ marginTop: 20, marginLeft: 20 }}>
@@ -32,7 +33,7 @@ const SettingUserInfo = () => {
         <View style={styles.basicUserInfo}>
           <SettingProfileImage
             size={110}
-            url={userInfo.userImageUrl}
+            url={userInfo.userImageUrl == null ? '' : userInfo.userImageUrl}
           >
             {/* 이미지 수정 아이콘을 오른쪽 밑에 두기 위한 temp flex */}
             <View style={{ flex: 1 }}></View>

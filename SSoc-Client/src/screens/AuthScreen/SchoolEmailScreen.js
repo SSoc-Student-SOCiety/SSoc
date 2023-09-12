@@ -43,6 +43,7 @@ const SchoolEmailScreen = (props) => {
     try {
       const response = await getEmailCheckFetch(userEmail)
       const data = await response.json()
+      console.log(data)
       await setCheckEmailData(data)
     } catch (e) {
       console.log(e)

@@ -8,13 +8,15 @@ import WriteContent from '../../../modules/Board/WriteContentForm'
 
 export const BoardContentScreen = (props) => {
   const [writeNewContent, setWriteNewContent] = useState(false)
-  const groupMemberRole = 'MANAGER'
-  // const groupMemberRole = 'MEMBER'
+  console.log('BoardContentScreen.js (props)', props)
+  const groupMemberRole = props.groupMemberRole
+  const board = props.board
+
   return (
     <View style={{ backgroundColor: Color.WHITE, marginBottom: 70 }}>
-      <BoardSearch category={props.board.category} />
-      <ContentList board={props.board} />
-      {props.board.id == 2 && groupMemberRole != 'MANAGER' ? null : (
+      <BoardSearch category={board.category} />
+      <ContentList board={board} />
+      {board.category == 'NOTICE' && groupMemberRole != 'MANAGER' ? null : (
         <View style={styles.plusBtn}>
           <TouchableOpacity
             onPress={() => {
@@ -37,7 +39,7 @@ export const BoardContentScreen = (props) => {
         onBackdropPress={() => setWriteNewContent(false)}
       >
         <WriteContent
-          board={props.board}
+          board={board}
           groupMemberRole={groupMemberRole}
           setWriteNewContent={setWriteNewContent}
         />

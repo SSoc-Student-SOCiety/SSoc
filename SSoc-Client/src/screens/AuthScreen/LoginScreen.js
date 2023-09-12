@@ -54,6 +54,7 @@ const LoginScreen = (props) => {
 
   useEffect(() => {
     if (authInfo != null) {
+      console.log('LoginScreens.js (authInfo) : ', authInfo)
       if (authInfo.dataHeader.successCode == 0) {
         console.log(authInfo.dataBody.token)
         setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refreshToken)

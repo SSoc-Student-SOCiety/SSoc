@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { useState } from 'react'
 
 const SettingImgEditButton = (props) => {
-  const imageUrl = props.userInfo.userImageUrl
+  const imageUrl = props.userInfo.userImageUrl == null ? '' : props.userInfo.userImageUrl
   const [newImageUrl, setNewImageUrl] = useState('')
   // 권한 요청을 위한 hooks
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()

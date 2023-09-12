@@ -5,40 +5,34 @@ import { BoardContentScreen } from './BoardContentScreen'
 
 const Tab = createMaterialTopTabNavigator()
 
-export const BoardDetailTopTabs = () => {
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: null,
+export const BoardDetailTopTabs = (props) => {
+  const groupId = props.groupId
+  const groupMemberRole = props.groupMemberRole
+  console.log('BoardDetailTopTabs.js (groupId) : ', groupId)
+  console.log('BoardDetailTopTabs.js (groupMemberRole) : ', groupMemberRole)
+
+  const boardList = [
+    {
+      groupId: groupId,
+      boardName: '전체글',
+      category: '',
     },
-    dataBody: [
-      {
-        groupId: '1',
-        boardId: '1',
-        boardName: '전체글',
-        category: 'TOTAL',
-      },
-      {
-        groupId: '1',
-        boardId: '2',
-        boardName: '공지게시판',
-        category: 'ALERT',
-      },
-      {
-        groupId: '1',
-        boardId: '3',
-        boardName: '자유게시판',
-        category: 'FREE',
-      },
-      {
-        groupId: '1',
-        boardId: '4',
-        boardName: '건의함',
-        category: '건의',
-      },
-    ],
-  }
+    {
+      groupId: groupId,
+      boardName: '공지게시판',
+      category: 'NOTICE',
+    },
+    {
+      groupId: groupId,
+      boardName: '자유게시판',
+      category: 'FREE',
+    },
+    {
+      groupId: groupId,
+      boardName: '건의함',
+      category: 'SUGGEST',
+    },
+  ]
 
   // TO-DO
   // FlatList로 할지 map으로 할지 좀 더 고민해봐야할 듯
@@ -51,14 +45,15 @@ export const BoardDetailTopTabs = () => {
           headerShown: false,
         })}
       >
-        {tempData.dataBody.map((item) => {
+        {boardList.map((item) => {
           return (
             <Tab.Screen
               name={item.boardName}
               children={() => (
                 <BoardContentScreen
-                  key={item.boardId}
+                  key={item.category}
                   board={item}
+                  groupMemberRole={groupMemberRole}
                 />
               )}
             ></Tab.Screen>

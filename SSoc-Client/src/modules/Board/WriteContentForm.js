@@ -41,7 +41,7 @@ const WriteContent = (props) => {
               <Text style={{ fontSize: 20, color: Color.WHITE, fontWeight: 'bold' }}>{board.boardId == 1 ? '' : board.boardName + ' > '}게시글 작성</Text>
             </View>
             <KeyboardAwareScrollView>
-              {board.boardId == 1 ? (
+              {board.category == '' ? (
                 <View style={{ flex: 1, flexDirection: 'col', paddingHorizontal: 10, paddingVertical: 5, borderColor: Color.GRAY, borderWidth: 0.3, borderBottomWidth: 2, borderRadius: 5, margin: 10, marginBottom: 0 }}>
                   <View style={{ flex: 1, marginHorizontal: 4, marginVertical: 2 }}>
                     <Text style={{ fontSize: 16 }}>작성할 게시판 선택: </Text>
