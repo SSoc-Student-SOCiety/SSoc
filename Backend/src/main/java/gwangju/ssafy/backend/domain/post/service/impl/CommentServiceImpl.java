@@ -9,6 +9,8 @@ import gwangju.ssafy.backend.domain.post.dto.EditCommentRequest;
 import gwangju.ssafy.backend.domain.post.dto.SearchCommentRequest;
 import gwangju.ssafy.backend.domain.post.entity.Comment;
 import gwangju.ssafy.backend.domain.post.entity.Post;
+import gwangju.ssafy.backend.domain.post.exception.PostError;
+import gwangju.ssafy.backend.domain.post.exception.PostException;
 import gwangju.ssafy.backend.domain.post.repository.CommentRepository;
 import gwangju.ssafy.backend.domain.post.repository.PostRepository;
 import gwangju.ssafy.backend.domain.post.service.CommentService;
@@ -29,11 +31,11 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Long createComment(CreateCommentRequest request) {
 		Post post = postRepository.findById(request.getPostId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 게시글"));
+			.orElseThrow(() -> new PostException(PostError.NOT_EXISTS_POST));
 
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(post.getGroup().getId(),
 				request.getUserId())
-			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+			.orElseThrow(() -> new PostException(PostError.NOT_GROUP_MEMBER));
 
 		return commentRepository.save(Comment.builder()
 			.post(post)
@@ -48,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
 		Comment comment = getComment(request.getCommentId());
 
 		if (comment.isDeleted()) {
-			throw new RuntimeException("삭제된 댓글");
+			throw new PostException(PostError.ALREADY_DELETED_COMMENT);
 		}
 
 		validateCommentUser(request.getUserId(), comment);
@@ -72,25 +74,25 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public List<CommentInfo> searchComment(SearchCommentRequest request) {
 		Post post = postRepository.findById(request.getPostId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 게시글"));
+			.orElseThrow(() -> new PostException(PostError.NOT_EXISTS_POST));
 
-		if(post.isDeleted()) throw new RuntimeException("삭제된 게시글");
+		if(post.isDeleted()) throw new PostException(PostError.ALREADY_DELETED_POST);
 
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(post.getGroup().getId(),
 				request.getUserId())
-			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+			.orElseThrow(() -> new PostException(PostError.NOT_GROUP_MEMBER));
 
 		return commentRepository.findAllInPostByCond(request.getPostId(), request.getFilter());
 	}
 
 	private Comment getComment(Long commentId) {
 		return commentRepository.findById(commentId)
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 댓글"));
+			.orElseThrow(() -> new PostException(PostError.NOT_EXISTS_COMMENT));
 	}
 
 	private static void validateCommentUser(Long userId, Comment comment) {
 		if (!comment.getUser().getId().equals(userId)) {
-			throw new RuntimeException("댓글 작성자가 아님");
+			throw new PostException(PostError.NOT_COMMENT_OWNER);
 		}
 	}
 
