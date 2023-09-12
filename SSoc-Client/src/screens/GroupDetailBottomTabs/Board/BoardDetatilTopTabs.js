@@ -52,8 +52,8 @@ export const BoardDetailTopTabs = (props) => {
               children={() => (
                 <BoardContentScreen
                   key={item.category}
-                  board={item}
                   groupMemberRole={groupMemberRole}
+                  board={item}
                 />
               )}
             ></Tab.Screen>

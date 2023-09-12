@@ -13,6 +13,8 @@ export default getAPIHost = () => {
 }
 const url = getAPIHost()
 
+// UserFetch
+///////////////////
 export const getAuthDataFetch = async (accessToken, refreshToken) => {
   return await fetch(url + '/user/start', {
     method: 'POST',
@@ -154,5 +156,24 @@ export const getChangeAllFetch = async (userEmail, userNowPassword, userChangePa
       userNickName: userNickName,
       userImage: userImage,
     }),
+  })
+}
+
+// BoardFetch
+///////////////////
+export const getContentListFetch = async (groupId, keyword, category, lastPostId) => {
+  const baseUrl = 'https://example.com/api/posts' // API 엔드포인트 URL
+  const url = new URL(baseUrl)
+  url.searchParams.append('groupId', groupId)
+  url.searchParams.append('filter.keyword', keyword || '') // 생략 가능
+  url.searchParams.append('filter.category', category || '') // 생략 가능
+  url.searchParams.append('filter.lastPostId', lastPostId || '') // 생략 가능
+  url.searchParams.append('filter.pageSize', '10') // 고정값
+  return await fetch(url.toString(), {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
   })
 }

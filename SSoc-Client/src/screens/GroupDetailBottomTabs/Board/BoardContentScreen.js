@@ -8,9 +8,10 @@ import WriteContent from '../../../modules/Board/WriteContentForm'
 
 export const BoardContentScreen = (props) => {
   const [writeNewContent, setWriteNewContent] = useState(false)
-  console.log('BoardContentScreen.js (props)', props)
-  const groupMemberRole = props.groupMemberRole
   const board = props.board
+  const groupMemberRole = props.groupMemberRole
+
+  console.log('BoardContentScreen.js (props)', props)
 
   return (
     <View style={{ backgroundColor: Color.WHITE, marginBottom: 70 }}>

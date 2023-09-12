@@ -34,13 +34,14 @@ export const SplashView = () => {
       getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
     } else {
       if (authInfo == null) {
-        if (accessToken == null || refreshToken == null) {
-          setTimeout(() => {
-            navigation.reset({ routes: [{ name: 'SchoolEmail' }] })
-          }, 1500)
-        } else {
-          getAuthData()
-        }
+        // if (accessToken == null || refreshToken == null) {
+        //   setTimeout(() => {
+        //     navigation.reset({ routes: [{ name: 'SchoolEmail' }] })
+        //   }, 1500)
+        // } else {
+        //   getAuthData()
+        // }
+        setGoMainPage(true)
       }
 
       if (authInfo != null) {
