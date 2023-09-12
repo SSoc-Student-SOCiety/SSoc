@@ -5,12 +5,19 @@ import { Typography } from '../components/Basic/Typography'
 import SettingBtn from './SettingButton'
 import { Spacer } from '../components/Basic/Spacer'
 import { useRecoilState } from 'recoil'
-import { goMainPageState } from '../util/RecoilUtil/Atoms'
-import { removeTokens } from '../util/TokenUtil'
+import { goMainPageState, UserInfoState } from '../util/RecoilUtil/Atoms'
+import { removeTokens, getTokens } from '../util/TokenUtil'
+import { getLogoutFetch } from '../util/FetchUtil'
 
 const SettingLogout = () => {
   const [isTokenRemove, setIsTokenRemove] = useState(false)
+  const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
+  const [logoutData, setLogoutData] = useState(null)
+
   const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
+  const [userInfo, setUserInfo] = useRecoilState(UserInfoState)
 
   const onPressLogout = async () => {
     Alert.alert(
@@ -21,8 +28,7 @@ const SettingLogout = () => {
         {
           text: '로그아웃',
           onPress: () => {
-            removeTokens()
-            setIsTokenRemove(true)
+            getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
           },
           style: 'destructive',
         },
@@ -33,11 +39,36 @@ const SettingLogout = () => {
     )
   }
 
-  useEffect(() => {
-    if (isTokenRemove == true) {
-      setGoMainPage(false)
+  const getLogoutData = async () => {
+    try {
+      const response = await getLogoutFetch(accessToken, refreshToken)
+      const data = await response.json()
+      console.log(data)
+      await setLogoutData(data)
+    } catch (e) {
+      console.log(e)
     }
-  }, [isTokenRemove])
+  }
+
+  useEffect(() => {
+    if (isTokenGet) {
+      getLogoutData()
+      setIsTokenGet(false)
+    }
+    if (logoutData != null) {
+      console.log(logoutData)
+      if (logoutData.dataHeader.successCode == 0) {
+        removeTokens()
+        setUserInfo(null)
+        setIsTokenRemove(true)
+      }
+      setLogoutData(null)
+    }
+    if (isTokenRemove) {
+      setGoMainPage(false)
+      setIsTokenRemove(false)
+    }
+  }, [isTokenRemove, logoutData, isTokenGet])
 
   return (
     <View>

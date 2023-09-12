@@ -16,20 +16,12 @@ const FindPassWordScreen = () => {
   const [userEmail, setUserEmail] = useState('')
   const [userTempPwData, setUserTempPwData] = useState(null)
 
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: null,
-    },
-    dataBody: null,
-  }
-
   const getTempPassWordData = async () => {
     try {
       const response = await getTempPassWordFetch(userEmail)
       const data = await response.json()
-      await setUserTempPwData(tempData)
+      console.log(data)
+      await setUserTempPwData(data)
     } catch (e) {
       console.log(e)
     }

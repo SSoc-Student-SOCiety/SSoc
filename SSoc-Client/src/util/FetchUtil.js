@@ -13,14 +13,14 @@ export default getAPIHost = () => {
 }
 const url = getAPIHost()
 
-export const getAuthDataFetch = async (accessToken, refleshToken) => {
+export const getAuthDataFetch = async (accessToken, refreshToken) => {
   return await fetch(url + '/user/start', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: accessToken,
-      Refresh: refleshToken,
+      Refresh: refreshToken,
     },
   })
 }
@@ -91,6 +91,18 @@ export const getTempPassWordFetch = async (userEmail) => {
     body: JSON.stringify({
       userEmail: userEmail,
     }),
+  })
+}
+
+export const getLogoutFetch = async (accessToken, refreshToken) => {
+  return await fetch(url + '/user/logout', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
   })
 }
 

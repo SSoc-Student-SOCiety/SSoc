@@ -55,7 +55,8 @@ const LoginScreen = (props) => {
   useEffect(() => {
     if (authInfo != null) {
       if (authInfo.dataHeader.successCode == 0) {
-        setTokens('Bearer ' + authInfo.dataBody.token.accessToken, 'Bearer ' + authInfo.dataBody.token.refleshToken)
+        console.log(authInfo.dataBody.token)
+        setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refreshToken)
         setUser(authInfo.dataBody.userInfo)
         setGoMainPage(true)
       } else {

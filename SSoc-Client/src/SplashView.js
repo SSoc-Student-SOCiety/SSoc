@@ -9,18 +9,18 @@ import { goMainPageState, UserInfoState } from './util/RecoilUtil/Atoms'
 export const SplashView = () => {
   const navigation = useNavigation()
 
-  const [refleshToken, setRefleshToken] = useState(null)
   const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
 
   const [authInfo, setAuthInfo] = useState(null)
-  const [isTokenGet, setIsTokenGet] = useState(false)
 
   const [user, setUser] = useRecoilState(UserInfoState)
   const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
 
-  const getAuthData = async (accessToken, refleshToken) => {
+  const getAuthData = async () => {
     try {
-      const response = await getAuthDataFetch(accessToken, refleshToken)
+      const response = await getAuthDataFetch(accessToken, refreshToken)
       const data = await response.json()
       console.log(data)
       await setAuthInfo(data)
@@ -31,23 +31,29 @@ export const SplashView = () => {
 
   const authFlow = () => {
     if (!isTokenGet) {
-      getTokens(setAccessToken, setRefleshToken, setIsTokenGet)
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
     } else {
+      console.log('accessToken: ', accessToken)
+      console.log('refreshToken: ', refreshToken)
       if (authInfo == null) {
-        if (accessToken == null || refleshToken == null) {
-          setTimeout(() => {
-            navigation.reset({ routes: [{ name: 'SchoolEmail' }] })
-          }, 1500)
-        } else {
-          getAuthData()
-        }
+        // if (accessToken == null || accessToken == 'Bearer undefined' || refreshToken == null || refreshToken == 'Bearer undefined') {
+        //   setTimeout(() => {
+        //     navigation.reset({ routes: [{ name: 'SchoolEmail' }] })
+        //   }, 1500)
+        // } else {
+        //   getAuthData()
+        // }
+        setTimeout(() => {
+          navigation.reset({ routes: [{ name: 'SchoolEmail' }] })
+        }, 1500)
       }
 
       if (authInfo != null) {
+        console.log(authInfo)
         if (authInfo.dataHeader.successCode == 0) {
           setUser(authInfo.dataBody.userInfo)
           if (authInfo.dataHeader.resultCode == 1) {
-            setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refleshToken)
+            setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refreshToken)
           }
           setTimeout(() => {
             setGoMainPage(true)
