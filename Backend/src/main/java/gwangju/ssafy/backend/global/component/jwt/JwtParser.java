@@ -30,6 +30,8 @@ public class JwtParser {
                     .setSigningKey(sercretKey)
                     .build()
                     .parseClaimsJws(token).getBody();
+            log.info(token);
+
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | UnsupportedJwtException |
                  IllegalArgumentException e) {
 //            log.info("잘못된 JWT 서명입니다. (유효하지 않은 인증 토큰입니다)");
@@ -38,6 +40,7 @@ public class JwtParser {
 
 //            log.info("만료된 JWT 토큰입니다.");
             String refreshToken = request.getHeader(JwtAuthenticationFilter.REFRESH_HEADER);
+            log.info(refreshToken);
             if (StringUtils.hasText(refreshToken) && refreshToken.startsWith((JwtAuthenticationFilter.BEARER_PREFIX))) {
                 refreshToken = refreshToken.substring(7);
                 try {

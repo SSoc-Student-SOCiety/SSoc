@@ -2,6 +2,7 @@ package gwangju.ssafy.backend.global.component.jwt.dto;
 
 import static javax.management.timer.Timer.ONE_MINUTE;
 
+import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -62,6 +63,18 @@ public class TokenUserInfoDto {
                 .userName(user.getUserName())
                 .userImageUrl(user.getUserImageUrl())
                 .role(user.getRole().toString())
+                .build();
+    }
+
+    // 로그인 활성화 유저 변환
+    public static TokenUserInfoDto convert(LoginActiveUserDto info) {
+        return TokenUserInfoDto.builder()
+                .id(info.getId())
+                .userEmail(info.getUserEmail())
+                .userName(info.getUserName())
+                .userNickname(info.getUserNickname())
+                .userImageUrl(info.getUserImageUrl())
+                .role(info.getRole())
                 .build();
     }
 
