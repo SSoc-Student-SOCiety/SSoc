@@ -1,9 +1,10 @@
 package gwangju.ssafy.backend.domain.board.service.impl;
 
 import gwangju.ssafy.backend.domain.board.dto.CreateCommentRequest;
+import gwangju.ssafy.backend.domain.board.dto.DeleteCommentRequest;
 import gwangju.ssafy.backend.domain.board.dto.EditCommentRequest;
-import gwangju.ssafy.backend.domain.board.entity.Post;
 import gwangju.ssafy.backend.domain.board.entity.Comment;
+import gwangju.ssafy.backend.domain.board.entity.Post;
 import gwangju.ssafy.backend.domain.board.repository.CommentRepository;
 import gwangju.ssafy.backend.domain.board.repository.PostRepository;
 import gwangju.ssafy.backend.domain.board.service.CommentService;
@@ -41,20 +42,39 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Long editComment(EditCommentRequest request) {
-		Comment comment = commentRepository.findById(request.getCommentId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 댓글"));
+		Comment comment = getComment(request.getCommentId());
 
 		if (comment.isDeleted()) {
 			throw new RuntimeException("삭제된 댓글");
 		}
 
-		if (!comment.getUser().getId().equals(request.getUserId())) {
-			throw new RuntimeException("댓글 작성자가 아님");
-		}
+		validateCommentUser(request.getUserId(), comment);
 
 		comment.edit(request.getContent(), request.getIsAnonymous());
 
 		return comment.getId();
+	}
+
+	@Override
+	public Long deleteComment(DeleteCommentRequest request) {
+		Comment comment = getComment(request.getCommentId());
+
+		validateCommentUser(request.getUserId(), comment);
+
+		comment.delete();
+
+		return comment.getId();
+	}
+
+	private Comment getComment(Long commentId) {
+		return commentRepository.findById(commentId)
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 댓글"));
+	}
+
+	private static void validateCommentUser(Long userId, Comment comment) {
+		if (!comment.getUser().getId().equals(userId)) {
+			throw new RuntimeException("댓글 작성자가 아님");
+		}
 	}
 
 }

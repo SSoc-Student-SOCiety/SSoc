@@ -48,4 +48,8 @@ public class Comment extends BaseEntity {
 		this.content = content;
 		this.isAnonymous = isAnonymous;
 	}
+
+	public void delete() {
+		this.isDeleted = true;
+	}
 }
