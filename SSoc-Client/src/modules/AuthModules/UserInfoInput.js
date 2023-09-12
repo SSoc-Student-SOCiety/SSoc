@@ -17,20 +17,11 @@ const UserInfoInput = (props) => {
   const [userNick, setUserNick] = useState('')
   const [registerResultData, setRegisterResultData] = useState(null)
 
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: null,
-    },
-    dataBody: null,
-  }
-
   const getRegisterResultData = async () => {
     try {
       const response = await getRegisterResultFetch(props.userEmail, userPw, userName, userNick)
       const data = await response.json()
-      setRegisterResultData(tempData)
+      setRegisterResultData(data)
     } catch (e) {
       console.log(e)
     }
@@ -53,7 +44,7 @@ const UserInfoInput = (props) => {
       if (registerResultData.dataHeader.successCode == 0) {
         navigation.reset({ routes: [{ name: 'RegisterSuccess' }] })
       } else {
-        Alert.alert('회원가입에 실패했습니다.', '다시 시도해주세요.')
+        Alert.alert('회원가입에 실패했습니다.', registerResultData.dataHeader.resultMessage)
       }
     }
     setRegisterResultData(null)

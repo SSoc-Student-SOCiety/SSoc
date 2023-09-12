@@ -11,18 +11,6 @@ const SchoolEmailInput = (props) => {
   const [emailAuthCodeData, setEmailAuthCodeData] = useState(null)
   const [waitTime, setWaitTime] = useState(false)
 
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: null,
-    },
-    dataBody: {
-      userEmail: 'tlsehdrms124@yonsei.ac.kr',
-      emailCode: '5naH20s2',
-    },
-  }
-
   const onPressCheckEmail = () => {
     if (waitTime == false) {
       getEmailAuthCodeData()
@@ -36,7 +24,8 @@ const SchoolEmailInput = (props) => {
     try {
       const response = await getEmailAuthCodeFetch(userEmail)
       const data = await response.json()
-      await setEmailAuthCodeData(tempData)
+      console.log(data)
+      await setEmailAuthCodeData(data)
     } catch (e) {
       console.log(e)
     }
