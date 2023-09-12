@@ -37,7 +37,6 @@ public class UserServiceTest {
         given(userRepository.existsUserByUserEmail(user.getUserEmail())).willReturn(true);
 
         // when
-        boolean emailFind = userService.existsUserByUserEmail(user.getUserEmail());
 
         // then
 

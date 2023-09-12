@@ -43,7 +43,7 @@ public class User extends BaseEntity {
     private String userNickname;    // 유저 닉네임
 
     @Column(name = "image")
-    private String userImage;
+    private String userImageUrl;
 
 //    @Column(name = "authority")
     @Enumerated(EnumType.STRING)
@@ -61,7 +61,7 @@ public class User extends BaseEntity {
 
     // 유저 프로필 이미지만 세팅 (회원정보 수정 - 닉네임)
     public void updateUserImage(String userImage) {
-        this.userImage = userImage;
+        this.userImageUrl = userImage;
     }
 
 }

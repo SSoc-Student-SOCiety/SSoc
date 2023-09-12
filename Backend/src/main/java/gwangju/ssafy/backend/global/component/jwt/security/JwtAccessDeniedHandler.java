@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.global.component.security;
+package gwangju.ssafy.backend.global.component.jwt.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

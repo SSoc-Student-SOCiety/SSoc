@@ -16,6 +16,7 @@ public class LoginActiveUserDto {
     private String userEmail;
     private String userName;
     private String userNickname;
+    private String userImageUrl;
     private String role;
 
     public static LoginActiveUserDto from(TokenUserInfoDto info) {
@@ -24,6 +25,7 @@ public class LoginActiveUserDto {
                 .userEmail(info.getUserEmail())
                 .userName(info.getUserName())
                 .userNickname(info.getUserNickname())
+                .userImageUrl(info.getUserImageUrl())
                 .role(info.getRole())
                 .build();
 

@@ -1,6 +1,8 @@
 package gwangju.ssafy.backend.global.component.jwt.dto;
 
 import static javax.management.timer.Timer.ONE_MINUTE;
+
+import gwangju.ssafy.backend.domain.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ public class TokenUserInfoDto {
     private String userEmail;
     private String userName;
     private String userNickname;
+    private String userImageUrl;
     private String role;
 
     public Claims toClaims(int expiresMin) {
@@ -47,6 +50,18 @@ public class TokenUserInfoDto {
                 .userName(claims.get(KEY_NAME, String.class))
                 .userNickname(claims.get(KEY_NICKNAME, String.class))
                 .role(claims.get(KEY_ROLES, String.class))
+                .build();
+    }
+
+    // 유저 업데이트 시 사용할 static 메서드
+    public static TokenUserInfoDto update(User user) {
+        return TokenUserInfoDto.builder()
+                .id(user.getId())
+                .userEmail(user.getUserEmail())
+                .userNickname(user.getUserNickname())
+                .userName(user.getUserName())
+                .userImageUrl(user.getUserImageUrl())
+                .role(user.getRole().toString())
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.global.component.security;
+package gwangju.ssafy.backend.global.component.jwt.security;
 
 import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
 import lombok.Getter;

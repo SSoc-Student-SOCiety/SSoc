@@ -7,9 +7,9 @@ import lombok.*;
 @Getter
 @Builder
 public class UserInfoDto {
+    private Long id;
     private String userEmail;
-    private String userPassword;
     private String userName;
-    private String userNickName;
-    private String userImage;
+    private String userNickname;
+    private String userImageUrl;
 }

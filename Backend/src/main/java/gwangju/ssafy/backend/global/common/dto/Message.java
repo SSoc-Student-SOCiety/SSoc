@@ -25,6 +25,13 @@ public class Message<T> {
 			.build();
 	}
 
+	public static <T> Message<T> success(T dataBody, String code, String resultMessage) {
+		return Message.<T>builder()
+				.dataHeader(DataHeader.success(code, resultMessage))
+				.dataBody(dataBody)
+				.build();
+	}
+
 	public static Message success() {
 		return Message.builder()
 			.dataHeader(DataHeader.success())
@@ -53,6 +60,14 @@ public class Message<T> {
 			return DataHeader.builder()
 				.successCode(0)
 				.build();
+		}
+
+		private static DataHeader success(String code, String resultMessage) {
+			return DataHeader.builder()
+					.successCode(0)
+					.resultCode(code)
+					.resultMessage(resultMessage)
+					.build();
 		}
 
 		private static DataHeader fail(String resultCode, String resultMessage) {
