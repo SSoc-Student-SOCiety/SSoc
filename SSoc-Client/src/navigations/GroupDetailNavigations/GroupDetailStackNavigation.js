@@ -2,6 +2,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { BoardDetailScreen } from '../../screens/GroupDetailBottomTabs/Board/BoardDetailScreen'
 import { GroupDetailBottomTabNavigation } from './GroupDetailBottomTabNavigation'
 import ContentDetailScreen from '../../screens/GroupDetailBottomTabs/Board/ContentDetailScreen'
+import { AddScheduleScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddScheduleScreen'
+import { AddReceiptScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddReceiptScreen'
+import { BookingManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/BookingManageScreen'
+import { MemberManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/MemberManageScreen'
 
 const Stack = createNativeStackNavigator()
 export const GroupDetailStackNavigation = ({ route }) => {
@@ -35,6 +39,26 @@ export const GroupDetailStackNavigation = ({ route }) => {
         component={ContentDetailScreen}
         options={{ tabName: tabName }}
       />
+      <Stack.Screen 
+        name ="AddScheduleScreen"
+        component ={AddScheduleScreen}
+        options={{tabName: tabName}}
+        />
+        <Stack.Screen 
+        name ="AddReceiptScreen"
+        component ={AddReceiptScreen}
+        options={{tabName: tabName}}
+        />
+        <Stack.Screen 
+        name ="BookingManageScreen"
+        component ={BookingManageScreen}
+        options={{tabName: tabName}}
+        />
+        <Stack.Screen 
+        name ="MemberManageScreen"
+        component ={MemberManageScreen}
+        options={{tabName: tabName}}
+        />
     </Stack.Navigator>
   )
 }

@@ -6,6 +6,7 @@ import ContentDetailPost from '../../../modules/Board/ContentDetailPost'
 import ContentDetailFooter from '../../../modules/Board/ContentDetailFooter'
 
 const ContentDetailScreen = (props) => {
+  console.log(props.route.params); 
   const content = props.route.params.content
   return (
     <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
