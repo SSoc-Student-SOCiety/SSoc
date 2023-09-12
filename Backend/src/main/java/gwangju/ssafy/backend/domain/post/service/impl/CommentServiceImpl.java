@@ -1,8 +1,10 @@
 package gwangju.ssafy.backend.domain.post.service.impl;
 
+import gwangju.ssafy.backend.domain.post.dto.CommentInfo;
 import gwangju.ssafy.backend.domain.post.dto.CreateCommentRequest;
 import gwangju.ssafy.backend.domain.post.dto.DeleteCommentRequest;
 import gwangju.ssafy.backend.domain.post.dto.EditCommentRequest;
+import gwangju.ssafy.backend.domain.post.dto.SearchCommentRequest;
 import gwangju.ssafy.backend.domain.post.entity.Comment;
 import gwangju.ssafy.backend.domain.post.entity.Post;
 import gwangju.ssafy.backend.domain.post.repository.CommentRepository;
@@ -11,6 +13,7 @@ import gwangju.ssafy.backend.domain.post.service.CommentService;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +67,18 @@ public class CommentServiceImpl implements CommentService {
 		comment.delete();
 
 		return comment.getId();
+	}
+
+	@Override
+	public List<CommentInfo> searchComment(SearchCommentRequest request) {
+		Post post = postRepository.findById(request.getPostId())
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 게시글"));
+
+		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(post.getGroup().getId(),
+				request.getUserId())
+			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+
+		return commentRepository.findAllInPostByCond(request.getPostId(), request.getFilter());
 	}
 
 	private Comment getComment(Long commentId) {

@@ -1,13 +1,17 @@
 package gwangju.ssafy.backend.domain.post.controller;
 
+import gwangju.ssafy.backend.domain.post.dto.CommentInfo;
 import gwangju.ssafy.backend.domain.post.dto.CreateCommentRequest;
 import gwangju.ssafy.backend.domain.post.dto.DeleteCommentRequest;
 import gwangju.ssafy.backend.domain.post.dto.EditCommentRequest;
+import gwangju.ssafy.backend.domain.post.dto.SearchCommentRequest;
 import gwangju.ssafy.backend.domain.post.service.CommentService;
 import gwangju.ssafy.backend.global.common.dto.Message;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,5 +45,12 @@ public class CommentController {
 		@PathVariable Long commentId) {
 		request.setCommentId(commentId);
 		return ResponseEntity.ok().body(Message.success(commentService.deleteComment(request)));
+	}
+
+	@GetMapping("/{postId}/comment")
+	public ResponseEntity<Message<List<CommentInfo>>> searchComment(@RequestBody SearchCommentRequest request,
+		@PathVariable Long postId) {
+		request.setPostId(postId);
+		return ResponseEntity.ok().body(Message.success(commentService.searchComment(request)));
 	}
 }
