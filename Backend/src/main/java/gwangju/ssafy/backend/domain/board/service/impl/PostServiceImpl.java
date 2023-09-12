@@ -3,6 +3,8 @@ package gwangju.ssafy.backend.domain.board.service.impl;
 import gwangju.ssafy.backend.domain.board.dto.CreatePostRequest;
 import gwangju.ssafy.backend.domain.board.dto.DeletePostRequest;
 import gwangju.ssafy.backend.domain.board.dto.EditPostRequest;
+import gwangju.ssafy.backend.domain.board.dto.PostInfo;
+import gwangju.ssafy.backend.domain.board.dto.SearchPostRequest;
 import gwangju.ssafy.backend.domain.board.entity.Post;
 import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
 import gwangju.ssafy.backend.domain.board.repository.PostRepository;
@@ -11,6 +13,7 @@ import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +27,8 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public Long createPost(CreatePostRequest request) {
-
-		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
-				request.getUserId())
-			.orElseThrow(() -> new RuntimeException("그룹원 X"));
+		GroupMember member = getGroupMember(request.getGroupId(),
+			request.getUserId());
 
 		// 카테고리가 공지사항인지 확인
 		if (request.getCategory().equals(PostCategory.NOTICE)) {
@@ -64,6 +65,20 @@ public class PostServiceImpl implements PostService {
 		post.delete();
 
 		return post.getId();
+	}
+
+	@Override
+	public List<PostInfo> searchPost(SearchPostRequest request) {
+		getGroupMember(request.getGroupId(), request.getUserId());
+
+		return postRepository.findAllInGroupByCond(request.getGroupId(),
+			request.getFilter());
+	}
+
+	private GroupMember getGroupMember(Long groupId, Long userId) {
+		return groupMemberRepository.findByGroupIdAndUserId(groupId,
+				userId)
+			.orElseThrow(() -> new RuntimeException("그룹원 X"));
 	}
 
 	private Post getPost(Long postId, Long userId) {
