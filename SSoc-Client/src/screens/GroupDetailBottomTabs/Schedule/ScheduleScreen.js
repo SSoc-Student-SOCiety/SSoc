@@ -7,28 +7,31 @@ import {
   Pressable,
 } from "react-native";
 import { Agenda } from "react-native-calendars";
-import { DatePicker } from "react-native-date-picker";
 import React, { useCallback, useState } from "react";
 import { StackHeader } from "../../../modules/StackHeader";
 import * as Color from "../../../components/Colors/colors";
-import ActionButton from "react-native-action-button";
 import { Ionicons } from "@expo/vector-icons";
 import { Typography } from "../../../components/Basic/Typography";
 import { DeleteModal } from "../../../components/Modal/DeleteModal";
+import { AddScheduleForm } from "../../../modules/Schedule/AddScheduleForm";
+import { ManagerActionButton } from "../../../modules/CommonModules/ManagerActionButton";
 
 const timeToString = (time) => {
   const date = new Date(time);
   return date.toISOString().split("T")[0];
 };
 export const ScheduleScreen = () => {
-  const [isManager, setIsManager] = useState(false);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [items, setItems] = React.useState({});
-
+  const [writeNewContent, setWriteNewContent] = useState(false)
   const [selectedItemId, setSelectedItemId] = useState();
   const [selectedItemName, setSelectedItemName] = useState();
   const [selectedDate, setSelectedDate] = useState();
+  const groupMemberRole = 'MANAGER'
+  // const groupMemberRole = 'MEMBER'
+
+
 
   const onPressDelete = useCallback((name, id, date) => {
     setIsModalVisible(true);
@@ -74,16 +77,22 @@ export const ScheduleScreen = () => {
         <Typography fontSize={15} color={Color.WHITE}>
           {item.name + " " + item.id}
         </Typography>
-        <TouchableOpacity
-          onPress={() => onPressDelete(item.name, item.id, item.day)}
-        >
-          <View>
-            <Ionicons name={"trash"} size={20} color={Color.WHITE} />
-          </View>
-        </TouchableOpacity>
+        {groupMemberRole != 'MANAGER' ? null 
+        :(
+          <TouchableOpacity
+            onPress={() => onPressDelete(item.name, item.id, item.day)}
+          >
+            <View>
+              <Ionicons name={"trash"} size={20} color={Color.WHITE} />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     );
   };
+  const onPressAdd = ()=>{
+    setWriteNewContent(true);
+  }
 
   return (
     <View style={styles.container}>
@@ -101,44 +110,17 @@ export const ScheduleScreen = () => {
         refreshing={false}
         renderItem={renderItem}
       />
-      <ActionButton buttonColor="rgba(231,76,60,1)">
-        <ActionButton.Item
-          buttonColor="#9b59b6"
-          title="New Task"
-          onPress={() => {
-            setIsModalVisible(true);
-          }}
-        >
-          <Ionicons name="back" style={styles.actionButtonIcon} />
-        </ActionButton.Item>
-        <ActionButton.Item
-          buttonColor="#3498db"
-          title="Notifications"
-          onPress={() => {
-            setIsModalVisible(true);
-          }}
-        >
-          <Ionicons
-            name="android-notifications-none"
-            style={styles.actionButtonIcon}
-          />
-        </ActionButton.Item>
-        <ActionButton.Item
-          buttonColor="#1abc9c"
-          title="일정등록"
-          onPress={() => {
-            setIsModalVisible(true);
-          }}
-        >
-          <Ionicons name="android-done-all" style={styles.actionButtonIcon} />
-        </ActionButton.Item>
-      </ActionButton>
+      
+      <ManagerActionButton groupMemberRole={groupMemberRole}/>
+
+           
       <DeleteModal
         isModalVisible={isModalVisible}
         selectedItemId={selectedItemId}
         selectedItemName={selectedItemName}
         setIsModalVisible={setIsModalVisible}
       />
+         
     </View>
   );
 };
@@ -202,4 +184,5 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
+ 
 });

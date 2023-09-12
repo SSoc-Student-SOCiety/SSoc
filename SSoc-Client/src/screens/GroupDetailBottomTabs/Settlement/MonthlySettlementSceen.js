@@ -29,9 +29,6 @@ export const MonthlySettlementScreen = () => {
         style={styles.commonItem}
         data={transactionList}
         renderItem={({ item }) => {
-          console.log("start")
-
-          console.log(item); 
           return <TransactionItem item={item}></TransactionItem>;
         }}
       />
