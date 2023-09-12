@@ -13,17 +13,15 @@ export default getAPIHost = () => {
 }
 const url = getAPIHost()
 
-export const getAuthDataFetch = async (refleshToken, accessToken) => {
-  return await fetch(url + '/user/info', {
+export const getAuthDataFetch = async (accessToken, refleshToken) => {
+  return await fetch(url + '/user/start', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refleshToken,
     },
-    body: JSON.stringify({
-      refleshToken: refleshToken,
-      accessToken: accessToken,
-    }),
   })
 }
 

@@ -24,33 +24,11 @@ const LoginScreen = (props) => {
   const [user, setUser] = useRecoilState(UserInfoState)
   const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
 
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: 1,
-      resultMessage: null,
-    },
-    dataBody: {
-      userInfo: {
-        userEmail: 'shinhan@ssafy.ac.kr',
-        userName: '김싸피',
-        userNickName: '김신한',
-        userImageUrl: 'https://images.pexels.com/photos/14268955/pexels-photo-14268955.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      },
-      token: {
-        grantType: 'bearer',
-        accessToken: 'testSplashScreen_REFLASH_AccessToken',
-        refleshToken: 'testSplashScreen_REFLASH_RefleshToken',
-        accessTokenExpiresIn: 12345153351,
-      },
-    },
-  }
-
   const getLoginData = async () => {
     try {
       const response = await getLoginDataFetch(userEmail, userPassWord)
       const data = await response.json()
-      await setAuthInfo(tempData)
+      await setAuthInfo(data)
     } catch (e) {
       console.log(e)
     }
@@ -77,15 +55,12 @@ const LoginScreen = (props) => {
   useEffect(() => {
     if (authInfo != null) {
       if (authInfo.dataHeader.successCode == 0) {
-        if (authInfo.dataHeader.resultCode == 1) {
-          setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refleshToken)
-        }
+        setTokens('Bearer ' + authInfo.dataBody.token.accessToken, 'Bearer ' + authInfo.dataBody.token.refleshToken)
         setUser(authInfo.dataBody.userInfo)
         setGoMainPage(true)
       } else {
-        Alert.alert('아이디 또는 비밀번호를 확인해주세요.')
+        Alert.alert(authInfo.dataHeader.resultMessage)
       }
-      setAuthInfo(null)
     }
   }, [authInfo])
 

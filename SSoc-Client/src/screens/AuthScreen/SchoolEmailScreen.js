@@ -14,31 +14,23 @@ import { getEmailCheckFetch } from '../../util/FetchUtil'
 
 const SchoolEmailScreen = (props) => {
   const navigation = useNavigation()
-  // const [school, setSchool] = useState('');
   const [userId, setUserId] = useState('')
-  const [email, setEmail] = useState('')
+  const [schoolEmail, setSchoolEmail] = useState('')
   const [userEmail, setUserEmail] = useState('')
+  const [school, setSchool] = useState('')
+
   const [checkEmailData, setCheckEmailData] = useState(null)
 
   const schoolList = {
-    신한대학교: 'shinhan.ac.kr',
-    싸피대학교: 'ssafy.ac.kr',
-  }
-
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: '해당 이메일이 존재합니다.',
-    },
-    dataBody: null,
+    'shinhan.ac.kr': '신한대학교',
+    'ssafy.ac.kr': '싸피대학교',
   }
 
   const onPressRegister = () => {
-    if (email.length < 2 || userId.length < 2) {
+    if (school.length == 0 || userId.length < 2) {
       Alert.alert('학교와 이메일을 정확히 기입해주세요.')
     } else {
-      setUserEmail(userId + '@' + email)
+      setUserEmail(userId + '@' + schoolEmail)
       getEmailCheckData(userEmail)
     }
   }
@@ -51,7 +43,7 @@ const SchoolEmailScreen = (props) => {
     try {
       const response = await getEmailCheckFetch(userEmail)
       const data = await response.json()
-      await setCheckEmailData(tempData)
+      await setCheckEmailData(data)
     } catch (e) {
       console.log(e)
     }
@@ -78,57 +70,62 @@ const SchoolEmailScreen = (props) => {
         <Logo />
         <Spacer space={10} />
         <View style={{ margin: 20 }}>
+          <Typography
+            fontSize={16}
+            color={Color.DARK_BLUE}
+          >
+            <Text style={{ fontWeight: 'bold' }}>학교 이메일</Text>
+          </Typography>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flex: 5, backgroundColor: Color.LIGHT_GRAY, borderRadius: 10 }}>
+              <SingleLineInput
+                fontSize={20}
+                onChangeText={(text) => {
+                  setUserId(text)
+                }}
+              />
+            </View>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Text>@</Text>
+            </View>
+            <View style={{ flex: 5, backgroundColor: Color.LIGHT_GRAY, borderRadius: 10 }}>
+              <SingleLineInput
+                fontSize={20}
+                onChangeText={(text) => {
+                  setSchoolEmail(text)
+                  if (schoolList[text]) {
+                    setSchool(schoolList[text])
+                  }
+                }}
+              />
+            </View>
+          </View>
+          <Spacer space={4} />
+
+          <Typography
+            fontSize={14}
+            color={Color.LIGHT_BLUE}
+          >
+            학교 이메일이 필요해요!
+          </Typography>
+          <Spacer space={16} />
+
           <AuthInput
             fontSize={16}
             title="학교"
-            placeholder="ex) OO대학교"
-            onChangeText={(text) => {
-              if (schoolList[text]) {
-                setEmail(schoolList[text])
-              } else {
-                setEmail('')
-              }
-            }}
+            editable={false}
+            bgColor={Color.GRAY}
+            value={school}
           />
           <Typography
             fontSize={14}
             color={Color.GRAY}
           >
-            <Text>* 학교명을 정확히 기입해주세요!{'\n  '}정확히 기입시 이메일이 나타납니다 :)</Text>
+            <Text>* 학교 이메일을 정확히 기입 시 학교가 나타납니다.</Text>
           </Typography>
+
           <Spacer space={16} />
           <View>
-            <Typography
-              fontSize={16}
-              color={Color.DARK_BLUE}
-            >
-              <Text style={{ fontWeight: 'bold' }}>학교 이메일</Text>
-            </Typography>
-            <Spacer space={4} />
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <View style={{ flex: 5, backgroundColor: Color.LIGHT_GRAY, borderRadius: 10 }}>
-                <SingleLineInput
-                  fontSize={20}
-                  onChangeText={(text) => {
-                    setUserId(text)
-                  }}
-                />
-              </View>
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>@</Text>
-              </View>
-              <View style={{ flex: 5, backgroundColor: Color.GRAY, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                <Typography fontSize={16}>{email}</Typography>
-              </View>
-            </View>
-
-            <Typography
-              fontSize={14}
-              color={Color.LIGHT_BLUE}
-            >
-              학교 이메일이 필요해요!
-            </Typography>
-            <Spacer space={16} />
             <Button>
               <TouchableOpacity onPress={onPressRegister}>
                 <View
