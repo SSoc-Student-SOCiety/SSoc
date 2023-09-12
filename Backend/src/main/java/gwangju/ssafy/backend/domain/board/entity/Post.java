@@ -1,10 +1,13 @@
 package gwangju.ssafy.backend.domain.board.entity;
 
+import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,7 +41,8 @@ public class Post extends BaseEntity {
 	@JoinColumn
 	private Group group;
 
-
+	@Enumerated(EnumType.STRING)
+	private PostCategory category;
 
 	@Column
 	private String title;

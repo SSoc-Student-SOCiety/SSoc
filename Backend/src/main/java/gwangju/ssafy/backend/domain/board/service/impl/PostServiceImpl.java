@@ -38,6 +38,7 @@ public class PostServiceImpl implements PostService {
 			.title(request.getTitle())
 			.content(request.getContent())
 			.isAnonymous(request.isAnonymous())
+			.category(request.getCategory())
 			.build()).getId();
 	}
 
