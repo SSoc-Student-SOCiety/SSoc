@@ -53,10 +53,8 @@ public class Post extends BaseEntity {
 	@Column(name = "IS_ANONYMOUS")
 	private boolean isAnonymous;
 
-	public void editAll(String title, String content, PostCategory category, boolean isAnonymous) {
+	public void edit(String title, String content) {
 		this.title = title;
 		this.content = content;
-		this.category = category;
-		this.isAnonymous = isAnonymous;
 	}
 }

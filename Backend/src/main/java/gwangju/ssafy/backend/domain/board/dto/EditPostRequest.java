@@ -19,7 +19,5 @@ public class EditPostRequest {
 
 	private String title;
 	private String content;
-	private PostCategory category;
-	private Boolean isAnonymous;
 
 }

@@ -52,8 +52,7 @@ public class PostServiceImpl implements PostService {
 			throw new RuntimeException("게시글 작성자가 아님");
 		}
 
-		post.editAll(request.getTitle(), request.getContent(), request.getCategory(),
-			request.getIsAnonymous());
+		post.edit(request.getTitle(), request.getContent());
 
 		return post.getId();
 	}
