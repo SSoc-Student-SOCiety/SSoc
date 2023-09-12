@@ -16,10 +16,10 @@ import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
 import gwangju.ssafy.backend.domain.group.repository.SchoolRepository;
 import gwangju.ssafy.backend.domain.group.service.GroupMemberService;
 import gwangju.ssafy.backend.domain.group.service.GroupService;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
@@ -77,11 +77,13 @@ class GroupServiceImpl implements GroupService {
 
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<GroupSimpleInfo> searchGroup(GroupSearchCond cond) {
 		return groupRepository.findAllBySearchCond(cond);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<GroupSimpleInfo> searchMyGroup(MyGroupSearchCond cond) {
 		return groupRepository.findMyGroups(cond);

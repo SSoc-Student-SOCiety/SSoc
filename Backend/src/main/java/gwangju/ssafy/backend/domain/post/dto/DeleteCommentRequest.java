@@ -1,6 +1,5 @@
-package gwangju.ssafy.backend.domain.board.dto;
+package gwangju.ssafy.backend.domain.post.dto;
 
-import gwangju.ssafy.backend.domain.board.dto.cond.SearchPostCond;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +11,9 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class SearchPostRequest {
+public class DeleteCommentRequest {
 
 	private Long userId;
-	private Long groupId;
-
-	private SearchPostCond filter;
+	private Long commentId;
 
 }

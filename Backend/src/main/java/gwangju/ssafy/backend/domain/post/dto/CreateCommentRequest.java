@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.domain.board.dto;
+package gwangju.ssafy.backend.domain.post.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,11 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class DeletePostRequest {
+public class CreateCommentRequest {
 
 	private Long userId;
 	private Long postId;
+	private String content;
+	private Boolean isAnonymous;
 
 }

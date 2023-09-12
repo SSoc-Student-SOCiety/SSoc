@@ -10,9 +10,9 @@ import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
 import gwangju.ssafy.backend.domain.group.service.GroupMemberService;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
@@ -39,6 +39,7 @@ class GroupMemberServiceImpl implements GroupMemberService {
 			.build());
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public GetMemberRoleResponse getMemberRole(GetMemberRoleRequest request) {
 

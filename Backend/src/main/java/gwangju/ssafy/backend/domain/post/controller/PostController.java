@@ -1,11 +1,11 @@
-package gwangju.ssafy.backend.domain.board.controller;
+package gwangju.ssafy.backend.domain.post.controller;
 
-import gwangju.ssafy.backend.domain.board.dto.CreatePostRequest;
-import gwangju.ssafy.backend.domain.board.dto.DeletePostRequest;
-import gwangju.ssafy.backend.domain.board.dto.EditPostRequest;
-import gwangju.ssafy.backend.domain.board.dto.PostInfo;
-import gwangju.ssafy.backend.domain.board.dto.SearchPostRequest;
-import gwangju.ssafy.backend.domain.board.service.PostService;
+import gwangju.ssafy.backend.domain.post.dto.CreatePostRequest;
+import gwangju.ssafy.backend.domain.post.dto.DeletePostRequest;
+import gwangju.ssafy.backend.domain.post.dto.EditPostRequest;
+import gwangju.ssafy.backend.domain.post.dto.PostInfo;
+import gwangju.ssafy.backend.domain.post.dto.SearchPostRequest;
+import gwangju.ssafy.backend.domain.post.service.PostService;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

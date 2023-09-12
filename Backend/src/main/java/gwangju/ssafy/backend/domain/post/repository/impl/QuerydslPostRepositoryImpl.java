@@ -1,6 +1,6 @@
-package gwangju.ssafy.backend.domain.board.repository.impl;
+package gwangju.ssafy.backend.domain.post.repository.impl;
 
-import static gwangju.ssafy.backend.domain.board.entity.QPost.post;
+import static gwangju.ssafy.backend.domain.post.entity.QPost.post;
 import static gwangju.ssafy.backend.domain.user.entity.QUser.user;
 
 import com.querydsl.core.BooleanBuilder;
@@ -8,12 +8,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import gwangju.ssafy.backend.domain.board.dto.PostInfo;
-import gwangju.ssafy.backend.domain.board.dto.cond.SearchPostCond;
-import gwangju.ssafy.backend.domain.board.entity.QPost;
-import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
-import gwangju.ssafy.backend.domain.board.repository.QuerydslPostRepository;
-import gwangju.ssafy.backend.domain.user.entity.QUser;
+import gwangju.ssafy.backend.domain.post.dto.PostInfo;
+import gwangju.ssafy.backend.domain.post.dto.cond.SearchPostCond;
+import gwangju.ssafy.backend.domain.post.entity.enums.PostCategory;
+import gwangju.ssafy.backend.domain.post.repository.QuerydslPostRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

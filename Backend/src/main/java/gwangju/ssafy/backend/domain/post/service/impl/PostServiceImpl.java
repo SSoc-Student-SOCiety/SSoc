@@ -1,21 +1,21 @@
-package gwangju.ssafy.backend.domain.board.service.impl;
+package gwangju.ssafy.backend.domain.post.service.impl;
 
-import gwangju.ssafy.backend.domain.board.dto.CreatePostRequest;
-import gwangju.ssafy.backend.domain.board.dto.DeletePostRequest;
-import gwangju.ssafy.backend.domain.board.dto.EditPostRequest;
-import gwangju.ssafy.backend.domain.board.dto.PostInfo;
-import gwangju.ssafy.backend.domain.board.dto.SearchPostRequest;
-import gwangju.ssafy.backend.domain.board.entity.Post;
-import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
-import gwangju.ssafy.backend.domain.board.repository.PostRepository;
-import gwangju.ssafy.backend.domain.board.service.PostService;
+import gwangju.ssafy.backend.domain.post.dto.CreatePostRequest;
+import gwangju.ssafy.backend.domain.post.dto.DeletePostRequest;
+import gwangju.ssafy.backend.domain.post.dto.EditPostRequest;
+import gwangju.ssafy.backend.domain.post.dto.PostInfo;
+import gwangju.ssafy.backend.domain.post.dto.SearchPostRequest;
+import gwangju.ssafy.backend.domain.post.entity.Post;
+import gwangju.ssafy.backend.domain.post.entity.enums.PostCategory;
+import gwangju.ssafy.backend.domain.post.repository.PostRepository;
+import gwangju.ssafy.backend.domain.post.service.PostService;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -67,6 +67,7 @@ public class PostServiceImpl implements PostService {
 		return post.getId();
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<PostInfo> searchPost(SearchPostRequest request) {
 		getGroupMember(request.getGroupId(), request.getUserId());

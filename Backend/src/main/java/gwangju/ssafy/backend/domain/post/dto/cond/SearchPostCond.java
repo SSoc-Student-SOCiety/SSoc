@@ -1,6 +1,6 @@
-package gwangju.ssafy.backend.domain.board.dto.cond;
+package gwangju.ssafy.backend.domain.post.dto.cond;
 
-import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
+import gwangju.ssafy.backend.domain.post.entity.enums.PostCategory;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

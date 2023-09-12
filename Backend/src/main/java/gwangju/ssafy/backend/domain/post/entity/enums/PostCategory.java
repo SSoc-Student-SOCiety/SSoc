@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.domain.board.entity.enums;
+package gwangju.ssafy.backend.domain.post.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

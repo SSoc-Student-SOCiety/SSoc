@@ -1,6 +1,6 @@
-package gwangju.ssafy.backend.domain.board.entity;
+package gwangju.ssafy.backend.domain.post.entity;
 
-import gwangju.ssafy.backend.domain.board.entity.enums.PostCategory;
+import gwangju.ssafy.backend.domain.post.entity.enums.PostCategory;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.global.common.entity.BaseEntity;

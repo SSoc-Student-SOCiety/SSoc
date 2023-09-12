@@ -1,6 +1,5 @@
-package gwangju.ssafy.backend.domain.board.dto;
+package gwangju.ssafy.backend.domain.post.dto;
 
-import gwangju.ssafy.backend.domain.board.entity.Post;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -14,21 +13,18 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class PostInfo {
+public class CommentInfo {
 
-	private Long postId;
-	private Long groupId;
-	private String title;
+	private Long commentId;
+	private Long userId;
 	private String nickname;
 	private LocalDate createdAt;
 	private String content;
 
-	public PostInfo(Long postId, Long groupId, String title, String nickname,
-		LocalDateTime createdAt,
+	public CommentInfo(Long commentId, Long userId, String nickname, LocalDateTime createdAt,
 		String content) {
-		this.postId = postId;
-		this.groupId = groupId;
-		this.title = title;
+		this.commentId = commentId;
+		this.userId = userId;
 		this.nickname = nickname;
 		this.createdAt = LocalDate.of(createdAt.getYear(), createdAt.getMonth(),
 			createdAt.getDayOfMonth());
