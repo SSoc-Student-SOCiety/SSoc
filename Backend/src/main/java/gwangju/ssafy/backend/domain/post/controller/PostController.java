@@ -40,24 +40,36 @@ public class PostController {
 	}
 
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	@PutMapping("/{id}")
-	public ResponseEntity<Message<Long>> editPost(@RequestBody EditPostRequest request,
-		@PathVariable("id") Long id) {
-		request.setPostId(id);
+	@PutMapping("/{postId}")
+	public ResponseEntity<Message<Long>> editPost(
+		@AuthenticationPrincipal LoginActiveUserDto login,
+		@RequestBody EditPostRequest request,
+		@PathVariable Long postId
+	) {
+		request.setUserId(login.getId());
+		request.setPostId(postId);
 		return ResponseEntity.ok().body(Message.success(postService.editPost(request)));
 	}
 
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Message<Long>> deletePost(@RequestBody DeletePostRequest request,
-		@PathVariable("id") Long id) {
-		request.setPostId(id);
+	@DeleteMapping("/{postId}")
+	public ResponseEntity<Message<Long>> deletePost(
+		@AuthenticationPrincipal LoginActiveUserDto login,
+		@RequestBody DeletePostRequest request,
+		@PathVariable Long postId
+	) {
+		request.setUserId(login.getId());
+		request.setPostId(postId);
 		return ResponseEntity.ok().body(Message.success(postService.deletePost(request)));
 	}
 
 	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	@GetMapping
-	public ResponseEntity<Message<List<PostInfo>>> searchPost(@RequestBody SearchPostRequest request) {
+	public ResponseEntity<Message<List<PostInfo>>> searchPost(
+		@AuthenticationPrincipal LoginActiveUserDto login,
+		@RequestBody SearchPostRequest request
+	) {
+		request.setUserId(login.getId());
 		return ResponseEntity.ok().body(Message.success(postService.searchPost(request)));
 	}
 
