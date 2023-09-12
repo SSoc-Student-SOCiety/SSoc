@@ -5,7 +5,7 @@ import * as Color from '../../components/Colors/colors'
 const ContentDetailTitle = (props) => {
   const content = props.content
   return (
-    <View style={{ flexDirection: 'column', marginTop: 5, marginHorizontal: 10, padding: 10, borderRadius: 5, borderWidth: 0.2, borderBottomWidth: 2, borderColor: Color.BLUE }}>
+    <View style={{ flexDirection: 'column', marginTop: 5, marginHorizontal: 10, padding: 10, borderRadius: 5, borderWidth: 0.2, borderBottomWidth: 2, borderColor: Color.GRAY }}>
       <View>
         <Text style={{ fontSize: 22, fontWeight: 'bold' }}>{content.title}</Text>
       </View>
