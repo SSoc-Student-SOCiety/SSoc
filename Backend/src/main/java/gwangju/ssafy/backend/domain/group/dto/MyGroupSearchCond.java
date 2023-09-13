@@ -18,13 +18,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MyGroupSearchCond {
 
-	private String word;
+	private Long lastGroupId;
+	private String keyword;
 	private GroupCategory category;
 	private Long userId;
 
 	@NotNull
 	@Min(1)
 	@Max(100)
-	private Long limit;
-	private long pageNumber;
+	private long pageSize;
 }
