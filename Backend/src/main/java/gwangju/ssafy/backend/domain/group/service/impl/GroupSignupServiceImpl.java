@@ -6,6 +6,7 @@ import gwangju.ssafy.backend.domain.group.dto.GetGroupSignupInfo;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.GroupSignup;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.domain.group.exception.GroupException;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.group.repository.GroupSignupRepository;
 import gwangju.ssafy.backend.domain.group.service.GroupSignupService;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_EXISTS_USER;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -47,7 +50,7 @@ public class GroupSignupServiceImpl implements GroupSignupService {
     @Override
     public GroupSignupInfo rejectSignup(DeleteGroupSignInfoRequest request) {
         GroupSignup groupSignup = groupSignupRepository.findById(request.getGroupSignUpId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 가입 신청내역"));
+                .orElseThrow(() -> new GroupException(NOT_EXISTS_USER));
         groupSignupRepository.delete(groupSignup);
         GroupSignupInfo groupSignupInfo = new GroupSignupInfo();
         groupSignupInfo.convert(groupSignup);
@@ -59,7 +62,7 @@ public class GroupSignupServiceImpl implements GroupSignupService {
     @Override
     public GroupSignupInfo ApproveGroupSignUp(GetGroupSignupInfo request) {
         GroupSignup groupSignup = groupSignupRepository.findById(request.getGroupSignUpId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 가입 신청내역"));
+                .orElseThrow(() -> new GroupException(NOT_EXISTS_USER));
         groupSignup.signupApprove();    // 해당 가입신청 가입 처리 (update)
 
         GroupMember groupMember = GroupMember.builder()

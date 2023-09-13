@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GroupSignupInfo {
-    private Long groupSingupId;
+    private Long groupSignupId;
     private Long groupId;
     private String userEmail;
     private String userName;
@@ -22,7 +22,7 @@ public class GroupSignupInfo {
     private boolean signupStatus;
 
     public void convert(GroupSignup groupSignup) {
-        this.groupSingupId = groupSignup.getId();
+        this.groupSignupId = groupSignup.getId();
         this.groupId = groupSignup.getGroup().getId();
         this.userEmail = groupSignup.getUser().getUserEmail();
         this.userName = groupSignup.getUser().getUserName();
