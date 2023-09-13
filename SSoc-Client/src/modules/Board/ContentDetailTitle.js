@@ -17,11 +17,10 @@ const ContentDetailTitle = (props) => {
           />
         </View>
         <View style={{ flex: 1, marginLeft: 6, flexDirection: 'column', justifyContent: 'space-evenly' }}>
-          <Text style={{ color: Color.GRAY, fontWeight: 'bold', marginVertical: 4, fontSize: 16, fontWeight: 'bold' }}>{content.anonymous_flag == 1 ? '익명' : content.userNick}</Text>
+          <Text style={{ color: Color.GRAY, fontWeight: 'bold', marginVertical: 4, fontSize: 16, fontWeight: 'bold' }}>{content.nickname}</Text>
           <View style={{ flexDirection: 'row', marginVertical: 4 }}>
-            <Text style={{ color: Color.GRAY }}>{content.createDate + ' '}</Text>
-            <Text style={{ color: Color.GRAY }}>{content.modifyDate != '' ? '(' + content.modifyDate + ')  ' : null}</Text>
-            <Text style={{ color: Color.GRAY }}>조회: {content.views}</Text>
+            <Text style={{ color: Color.GRAY }}>{content.createdAt + ' '}</Text>
+            {/* <Text style={{ color: Color.GRAY }}>조회: {content.views}</Text> */}
           </View>
         </View>
       </View>

@@ -13,6 +13,16 @@ export default getAPIHost = () => {
 }
 const url = getAPIHost()
 
+export const makeQueryStringForGet = (baseUrl, queryParams) => {
+  const queryString = Object.keys(queryParams)
+    .filter((key) => queryParams[key] !== undefined)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+    .join('&')
+
+  const fullUrl = `${baseUrl}?${queryString}`
+  return fullUrl
+}
+
 // UserFetch
 ///////////////////
 export const getAuthDataFetch = async (accessToken, refreshToken) => {
@@ -161,19 +171,45 @@ export const getChangeAllFetch = async (userEmail, userNowPassword, userChangePa
 
 // BoardFetch
 ///////////////////
-export const getContentListFetch = async (groupId, keyword, category, lastPostId) => {
-  const baseUrl = 'https://example.com/api/posts' // API 엔드포인트 URL
-  const url = new URL(baseUrl)
-  url.searchParams.append('groupId', groupId)
-  url.searchParams.append('filter.keyword', keyword || '') // 생략 가능
-  url.searchParams.append('filter.category', category || '') // 생략 가능
-  url.searchParams.append('filter.lastPostId', lastPostId || '') // 생략 가능
-  url.searchParams.append('filter.pageSize', '10') // 고정값
-  return await fetch(url.toString(), {
+export const getContentListFetch = async (accessToken, refreshToken, groupId, keyword, category, lastPostId) => {
+  const baseUrl = `${url}/posts`
+  const queryParams = {
+    groupId: groupId,
+    pageSize: 10,
+    'filter.keyword': keyword,
+    category: category,
+    'filter.lastPostId': lastPostId,
+  }
+
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+
+  return await fetch(fullUrl, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
     },
+  })
+}
+
+export const getWriteContentFetch = async (accessToken, refreshToken, postId, title, content, category, isAnonymous) => {
+  const baseUrl = `${url}/posts/${postId}`
+
+  return await fetch(baseUrl, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      title: title,
+      content: content,
+      category: category,
+      isAnonymous: isAnonymous,
+    }),
   })
 }

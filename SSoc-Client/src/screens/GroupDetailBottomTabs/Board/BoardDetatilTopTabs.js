@@ -1,7 +1,7 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { View } from 'react-native'
 import { StackHeader } from '../../../modules/StackHeader'
-import { BoardContentScreen } from './BoardContentScreen'
+import { BoardAllContentScreen, BoardNoticeContentScreen, BoardSuggestContentScreen, BoardFreeContentScreen } from './BoardContentScreen'
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -34,9 +34,6 @@ export const BoardDetailTopTabs = (props) => {
     },
   ]
 
-  // TO-DO
-  // FlatList로 할지 map으로 할지 좀 더 고민해봐야할 듯
-  // 무한스크롤 구현 필요
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <StackHeader title="게시판"></StackHeader>
@@ -45,20 +42,26 @@ export const BoardDetailTopTabs = (props) => {
           headerShown: false,
         })}
       >
-        {boardList.map((item) => {
-          return (
-            <Tab.Screen
-              name={item.boardName}
-              children={() => (
-                <BoardContentScreen
-                  key={item.category}
-                  groupMemberRole={groupMemberRole}
-                  board={item}
-                />
-              )}
-            ></Tab.Screen>
-          )
-        })}
+        <Tab.Screen
+          name={boardList[0].boardName}
+          component={BoardAllContentScreen}
+          initialParams={{ board: boardList[0], groupMemberRole: groupMemberRole }}
+        />
+        <Tab.Screen
+          name={boardList[1].boardName}
+          component={BoardNoticeContentScreen}
+          initialParams={{ board: boardList[1], groupMemberRole: groupMemberRole }}
+        />
+        <Tab.Screen
+          name={boardList[2].boardName}
+          component={BoardFreeContentScreen}
+          initialParams={{ board: boardList[2], groupMemberRole: groupMemberRole }}
+        />
+        <Tab.Screen
+          name={boardList[3].boardName}
+          component={BoardSuggestContentScreen}
+          initialParams={{ board: boardList[3], groupMemberRole: groupMemberRole }}
+        />
       </Tab.Navigator>
     </View>
   )
