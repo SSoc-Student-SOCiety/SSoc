@@ -19,7 +19,7 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -29,7 +29,7 @@ const mockResponse = {
             "userEmail": "donggeun@yonsei.co.kr",
             "userName": "동근",
             "userNickname": "동근이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -39,7 +39,7 @@ const mockResponse = {
             "userEmail": "hanju@yonsei.co.kr",
             "userName": "한주",
             "userNickname": "한주 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -49,7 +49,7 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -59,7 +59,7 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -69,7 +69,7 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -79,7 +79,7 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -89,7 +89,7 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -99,7 +99,7 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
@@ -109,13 +109,12 @@ const mockResponse = {
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
             "userNickname": "도훈이 테스트",
-            "userImgUrl": null,
+            "userImgUrl": "https://images.pexels.com/photos/11897873/pexels-photo-11897873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "role": "USER",
             "signupStatus": false
         },
     ]
 }
-
 
 export const MemberManageScreen = ()=>{
     const [requests, setRequests] = useState(mockResponse["dataBody"]); 
@@ -136,7 +135,7 @@ export const MemberManageScreen = ()=>{
                 return(
                     <View>
                     <Divider/>
-                    <View style ={{marginHorizontal:5, flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}> 
+                    <View style ={{marginHorizontal:15, flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}> 
                         <View style={{marginVertical:4 }} flexDirection={"row"}>
                                 <View style={{alignItems:"center", justifyContent:"center"}}>
                                     <ProfileImage size={60} url={item.userImgUrl} />
