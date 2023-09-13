@@ -18,18 +18,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GroupSearchCond {
 
-	private String word;
+	private Long lastGroupId;
+	private String keyword;
 	private GroupCategory category;
 
-
-	/*  반환 size - 필수
-	 * */
 	@NotNull
 	@Min(1)
 	@Max(100)
-	private Long limit;
-
-	/*  페이지 번호 - option - default 0
-	 * */
-	private long pageNumber;
+	private Long pageSize;
 }

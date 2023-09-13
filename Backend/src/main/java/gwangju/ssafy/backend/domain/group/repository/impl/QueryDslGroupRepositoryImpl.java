@@ -16,6 +16,7 @@ import gwangju.ssafy.backend.domain.group.repository.QueryDslGroupRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 @RequiredArgsConstructor
 @Repository
@@ -27,17 +28,20 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 	public List<GroupSimpleInfo> findAllBySearchCond(GroupSearchCond cond) {
 		return jpaQueryFactory
 			.select(Projections.fields(GroupSimpleInfo.class,
-					group.id.as("groupId"),
+				group.id.as("groupId"),
 				group.name.as("name"),
 				group.aboutUs.as("aboutUs"),
 				school.name.as("school"),
 				group.thumbnail.as("thumbnail")
-				))
+			))
 			.from(group)
 			.innerJoin(group.school, school)
-			.where(searchGroupCond(cond))
-			.limit(cond.getLimit())
-			.offset(cond.getPageNumber() * cond.getLimit())
+			.where(ltGroupId(cond.getLastGroupId()),
+				group.isActive.isTrue(),
+				searchKeyword(cond.getKeyword()),
+				filterGroupCategory(cond.getCategory()))
+			.orderBy(group.id.desc())
+			.limit(cond.getPageSize())
 			.fetch();
 	}
 
@@ -54,10 +58,18 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 			.from(groupMember)
 			.innerJoin(groupMember.group, group)
 			.innerJoin(group.school, school)
-			.where(searchMyGroupCond(cond))
-			.limit(cond.getLimit())
-			.offset(cond.getPageNumber() * cond.getLimit())
+			.where(
+				ltGroupId(cond.getLastGroupId()),
+				groupMember.user.id.eq(cond.getUserId()),
+				group.isActive.isTrue(),
+				filterGroupCategory(cond.getCategory()),
+				searchKeyword(cond.getKeyword()))
+			.limit(cond.getPageSize())
 			.fetch();
+	}
+
+	private BooleanExpression ltGroupId(Long groupId) {
+		return groupId == null ? null : group.id.lt(groupId);
 	}
 
 	private BooleanExpression filterGroupCategory(GroupCategory category) {
@@ -65,35 +77,17 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 			: group.category.eq(category);
 	}
 
-	private BooleanExpression searchName(String name) {
-		return name == null ? null
-			: group.name.contains(name);
-	}
+	private BooleanBuilder searchKeyword(String keyword) {
+		BooleanBuilder builder = new BooleanBuilder();
 
-	private BooleanExpression searchAboutUs(String aboutUs) {
-		return aboutUs == null ? null
-			: group.aboutUs.contains(aboutUs);
-	}
+		if (keyword != null && !keyword.isEmpty()) {
+			builder.and(
+				group.name.contains(keyword)
+					.or(group.aboutUs.contains(keyword))
+					.or(school.name.contains(keyword)));
+		}
 
-	private BooleanExpression searchSchool(String schoolName) {
-		return school == null ? null
-			: school.name.contains(schoolName);
-	}
-
-
-	private BooleanBuilder searchGroupCond(GroupSearchCond cond) {
-		return new BooleanBuilder()
-			.and(group.isActive.eq(true))
-			.and(filterGroupCategory(cond.getCategory()))
-			.and(searchName(cond.getWord()).or(searchAboutUs(cond.getWord())).or(searchSchool(cond.getWord())));
-	}
-
-	private BooleanBuilder searchMyGroupCond(MyGroupSearchCond cond) {
-		return new BooleanBuilder()
-			.and(groupMember.user.id.eq(cond.getUserId()))
-			.and(group.isActive.eq(true))
-			.and(filterGroupCategory(cond.getCategory()))
-			.and(searchName(cond.getWord()).or(searchAboutUs(cond.getWord())).or(searchSchool(cond.getWord())));
+		return builder;
 	}
 
 }
