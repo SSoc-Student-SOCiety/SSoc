@@ -59,6 +59,7 @@ public class JwtServiceImpl implements JwtService {
     // refresh 토큰을 통한 accessToken 재발급
     @Override
     public TokenDto refreshToken(@NonNull String refreshToken) {
+
         Claims claims = jwtParser.parseToken(refreshToken, jwtUtils.getEncodedKey());
 
         String savedToken = refreshRepository.find(claims.get(KEY_EMAIL, String.class))
@@ -80,9 +81,13 @@ public class JwtServiceImpl implements JwtService {
     // access 토큰 파싱
     @Override
     public TokenUserInfoDto parseAccessToken(@NonNull String accessToken) {
-        return TokenUserInfoDto.from(
-                jwtParser.parseToken(accessToken, jwtUtils.getEncodedKey())
-        );
+        Claims claims = jwtParser.parseToken(accessToken, jwtUtils.getEncodedKey());
+
+        if(claims == null) {
+            return null;
+        }
+
+        return TokenUserInfoDto.from(claims);
     }
 
     // redisTemplate을 통해 refresh 토큰 삭제(블랙리스트 추가)

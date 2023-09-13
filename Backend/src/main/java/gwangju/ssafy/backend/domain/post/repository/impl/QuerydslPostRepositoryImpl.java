@@ -1,12 +1,16 @@
 package gwangju.ssafy.backend.domain.post.repository.impl;
 
+import static com.querydsl.core.types.ExpressionUtils.count;
+import static gwangju.ssafy.backend.domain.post.entity.QComment.comment;
 import static gwangju.ssafy.backend.domain.post.entity.QPost.post;
 import static gwangju.ssafy.backend.domain.user.entity.QUser.user;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gwangju.ssafy.backend.domain.post.dto.PostInfo;
 import gwangju.ssafy.backend.domain.post.dto.cond.SearchPostCond;
@@ -24,7 +28,7 @@ public class QuerydslPostRepositoryImpl implements QuerydslPostRepository {
 
 	@Override
 	public List<PostInfo> findAllInGroupByCond(Long groupId, SearchPostCond cond) {
-		return 	jpaQueryFactory
+		return jpaQueryFactory
 			.select(Projections.constructor(PostInfo.class,
 				post.id.as("postId"),
 				Expressions.asNumber(groupId).as("groupId"),
@@ -33,7 +37,14 @@ public class QuerydslPostRepositoryImpl implements QuerydslPostRepository {
 					.then("익명")
 					.otherwise(user.userNickname).as("nickname"),
 				post.createdAt,
-				post.content
+				post.content,
+				ExpressionUtils.as(
+					JPAExpressions.select(count(comment.id))
+						.from(comment)
+						.where(comment.post.id.eq(post.id)),
+					"studentCount"),
+				user.userImageUrl.as("profileImg"),
+				user.id.as("userId")
 			))
 			.from(post)
 			.innerJoin(post.user, user)
