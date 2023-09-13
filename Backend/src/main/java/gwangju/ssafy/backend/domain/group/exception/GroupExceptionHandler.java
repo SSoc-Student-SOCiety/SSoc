@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GroupExceptionHandler {
 
 	@ExceptionHandler(GroupException.class)
-	public ResponseEntity<Message> postExceptionHandler(GroupException e) {
+	public ResponseEntity<Message> groupExceptionHandler(GroupException e) {
 		log.error("{} is occured", e.getErrorCode());
 		return ResponseEntity.status(e.getErrorCode().getHttpStatus())
 			.body(Message.fail(e.getErrorCode().name(), e.getErrorCode().getErrorMessage()));

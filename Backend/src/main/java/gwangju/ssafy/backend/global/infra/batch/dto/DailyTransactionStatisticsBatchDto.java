@@ -1,6 +1,6 @@
 package gwangju.ssafy.backend.global.infra.batch.dto;
 
-import gwangju.ssafy.backend.domain.transaction.entity.DailyTransactionStatistics;
+import gwangju.ssafy.backend.domain.account.entity.DailyTransactionStatistics;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
