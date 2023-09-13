@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface GroupSignupRepository extends JpaRepository<GroupSignup, Long> {
-    List<GroupSignup> findAllBySignupStatus(boolean status);
+    List<GroupSignup> findAllBySignupStatusAndGroupId(boolean status, Long groupId);
 }

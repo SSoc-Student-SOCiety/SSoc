@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.domain.group.service;
 
+import gwangju.ssafy.backend.domain.group.dto.DeleteGroupMemberInfo;
 import gwangju.ssafy.backend.domain.group.dto.GetGroupMemberInfo;
 import gwangju.ssafy.backend.domain.group.dto.GetMemberRoleRequest;
 import gwangju.ssafy.backend.domain.group.dto.GetMemberRoleResponse;
@@ -14,5 +15,7 @@ public interface GroupMemberService {
 	GetMemberRoleResponse getMemberRole(GetMemberRoleRequest request);
 
 	List<GetGroupMemberInfo> getMemberList(Long userId, Long groupId);
+
+	DeleteGroupMemberInfo deleteGroupMember(Long groupId, Long userId);
 
 }

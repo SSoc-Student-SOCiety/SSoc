@@ -20,9 +20,10 @@ public class GroupSignupController {
 
     // 해당 그룹 가입 신청 대기자들 조회
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    @GetMapping("/list")
-    public ResponseEntity<Message<List<GroupSignupInfo>>> searchAllGroupSignup() {
-        List<GroupSignupInfo> groupSignupInfoList = groupSignupService.searchAllGroupSignup();
+    @GetMapping("/list/{groupId}")
+    public ResponseEntity<Message<List<GroupSignupInfo>>> searchAllGroupSignup(
+            @PathVariable("groupId") Long groupId) {
+        List<GroupSignupInfo> groupSignupInfoList = groupSignupService.searchAllGroupSignup(groupId);
         return ResponseEntity.ok().body(Message.success(groupSignupInfoList));
     }
 
