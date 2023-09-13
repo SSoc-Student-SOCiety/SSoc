@@ -14,6 +14,7 @@ const mockResponse = {
     },
     "dataBody": [
         {
+            "groupSignupId": 1,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -23,6 +24,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 2,
             "groupId": 1,
             "userEmail": "donggeun@yonsei.co.kr",
             "userName": "동근",
@@ -32,6 +34,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 3,
             "groupId": 1,
             "userEmail": "hanju@yonsei.co.kr",
             "userName": "한주",
@@ -41,6 +44,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 4,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -50,6 +54,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 5,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -59,6 +64,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 6,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -68,6 +74,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 7,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -77,6 +84,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 8,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -86,6 +94,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 9,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -95,6 +104,7 @@ const mockResponse = {
             "signupStatus": false
         },
         {
+            "groupSignupId": 10,
             "groupId": 1,
             "userEmail": "dohun@inha.co.kr",
             "userName": "도훈",
@@ -109,12 +119,12 @@ const mockResponse = {
 export const RequestManageScreen = ()=>{
     const [requests, setRequests] = useState(mockResponse["dataBody"]); 
 
-    const onPressAccept = useCallback(()=>{
-        console.log("수락");
+    const onPressAccept = useCallback((groupSignupId, groupId)=>{
+        console.log("수락", groupSignupId);
     })
 
-    const onPressRejcet = useCallback(()=>{
-        console.log("거절"); 
+    const onPressRejcet = useCallback((groupSignupId, groupId)=>{
+        console.log("거절", groupSignupId); 
     })
 
     return(
@@ -139,13 +149,13 @@ export const RequestManageScreen = ()=>{
                                 </View> 
                             </View>
                             <View style={{flexDirection:"row"}}>
-                                <TouchableOpacity onPress={onPressAccept}>
+                                <TouchableOpacity onPress={()=>onPressAccept(item.groupSignupId, item.groupId)}>
                                     <View style={{backgroundColor:Color.LIGHT_BLUE, width:60, height:30, borderRadius:10, justifyContent:"center", alignItems:"center", marginHorizontal: 5}}>
                                         <Typography fontSize={15} color={Color.WHITE}> 수락 </Typography>
                                     </View>
                                 </TouchableOpacity>
                                 
-                                <TouchableOpacity onPress={onPressRejcet}>
+                                <TouchableOpacity onPress={()=>onPressRejcet(item.groupSignupId, item.groupId)}>
                                     <View style={{backgroundColor:Color.LIGHT_RED, width:60, height:30, borderRadius:10, justifyContent:"center", alignItems:"center", marginHorizontal: 5}}>
                                         <Typography fontSize={15} color={Color.WHITE}> 거절 </Typography>
                                     </View>
