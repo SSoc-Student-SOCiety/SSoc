@@ -1,9 +1,11 @@
 package gwangju.ssafy.backend.global.component.jwt.security;
 
 import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
+import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
 import gwangju.ssafy.backend.global.exception.ErrorCode;
 import gwangju.ssafy.backend.global.exception.TokenException;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -58,9 +60,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public void authenticate(HttpServletRequest request, String token) {
         if(StringUtils.hasText(token)) {
-            LoginActiveUserDto loginActiveUserDto = LoginActiveUserDto.from(jwtService.parseAccessToken(token));
-            log.info(loginActiveUserDto.getUserEmail());
-            saveLoginUserInSecurityContext(loginActiveUserDto);
+            log.info(request.getHeader(AUTHORIZATION_HEADER).toString());
+            TokenUserInfoDto tokenUserInfoDto = jwtService.parseAccessToken(token);
+            try {
+                LoginActiveUserDto loginActiveUserDto = LoginActiveUserDto.from(tokenUserInfoDto);
+                log.info(loginActiveUserDto.getUserEmail());
+                saveLoginUserInSecurityContext(loginActiveUserDto);
+            }
+            catch(RuntimeException e){
+                throw new TokenException(ErrorCode.INVALID_TOKEN, e);
+            }
+
+//            if(tokenUserInfoDto != null) {
+//                LoginActiveUserDto loginActiveUserDto = LoginActiveUserDto.from(tokenUserInfoDto);
+//                log.info(loginActiveUserDto.getUserEmail());
+//                saveLoginUserInSecurityContext(loginActiveUserDto);
+//            }
+//            else {
+//
+//            }
+
 //            SecurityContextHolder.clearContext();
         }
     }
