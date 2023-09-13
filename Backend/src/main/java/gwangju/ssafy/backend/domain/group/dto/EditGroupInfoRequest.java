@@ -17,7 +17,6 @@ public class EditGroupInfoRequest {
 	private Long userId;
 	private Long groupId;
 	private String name;
-	private String category;
 	private String aboutUs;
 	private String introduce;
 	private String thumbnail;

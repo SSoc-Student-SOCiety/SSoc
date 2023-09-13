@@ -1,5 +1,10 @@
 package gwangju.ssafy.backend.domain.group.service.impl;
 
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_EXISTS_GROUP;
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_EXISTS_SCHOOL;
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MANAGER;
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MEMBER;
+
 import gwangju.ssafy.backend.domain.group.dto.CreateGroupRequest;
 import gwangju.ssafy.backend.domain.group.dto.EditGroupInfoRequest;
 import gwangju.ssafy.backend.domain.group.dto.GetGroupInfoDetailRequest;
@@ -11,6 +16,7 @@ import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.School;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.domain.group.exception.GroupException;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
 import gwangju.ssafy.backend.domain.group.repository.SchoolRepository;
@@ -36,7 +42,7 @@ class GroupServiceImpl implements GroupService {
 	public void createGroup(CreateGroupRequest request) {
 
 		School school = schoolRepository.findById(request.getSchoolId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 학교"));
+			.orElseThrow(() -> new GroupException(NOT_EXISTS_SCHOOL));
 
 		Group group = Group.builder()
 			.school(school)
@@ -55,22 +61,22 @@ class GroupServiceImpl implements GroupService {
 	@Override
 	public void inactiveGroup(Long groupId) {
 		Group group = groupRepository.findById(groupId)
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
+			.orElseThrow(() -> new GroupException(NOT_EXISTS_GROUP));
 
 		group.inactivate();
 	}
 
 	@Override
 	public void editGroupInfo(EditGroupInfoRequest request) {
+		Group group = groupRepository.findByIdAndIsActiveIsTrue(request.getGroupId())
+			.orElseThrow(() -> new GroupException(NOT_EXISTS_GROUP));
+
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
-			request.getUserId()).orElseThrow(() -> new RuntimeException("존재하지 않는 그룹원"));
+			request.getUserId()).orElseThrow(() -> new GroupException(NOT_GROUP_MEMBER));
 
 		if (member.getRole() != GroupMemberRole.MANAGER) {
-			throw new RuntimeException("권한이 없는 그룹원");
+			throw new GroupException(NOT_GROUP_MANAGER);
 		}
-
-		Group group = groupRepository.findByIdAndIsActiveIsTrue(member.getGroup().getId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
 
 		group.editInfo(request.getName(), request.getAboutUs(),
 			request.getIntroduce(), request.getThumbnail());
@@ -93,7 +99,7 @@ class GroupServiceImpl implements GroupService {
 	public GroupDetailInfo getGroupDetail(GetGroupInfoDetailRequest request) {
 		// 그룹 존재 여부 확인
 		Group group = groupRepository.findByIdAndIsActiveIsTrue(request.getGroupId())
-			.orElseThrow(() -> new RuntimeException("해당 그룹이 없음"));
+			.orElseThrow(() -> new GroupException(NOT_EXISTS_GROUP));
 
 		// 그룹원 수 카운트
 		Long cnt = groupMemberRepository.countByGroup_Id(request.getGroupId());
