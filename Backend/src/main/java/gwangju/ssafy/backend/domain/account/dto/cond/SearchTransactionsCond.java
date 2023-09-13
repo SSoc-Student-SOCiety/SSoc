@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.domain.account.dto;
+package gwangju.ssafy.backend.domain.account.dto.cond;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
@@ -14,21 +14,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Getter
 @Setter
-public class GetTransactionsRequest {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class SearchTransactionsCond {
 
-	private Long userId;
-	private Long groupId;
-	private String accountNumber;
+	private Long lastTransactionId;
+
 	@NotNull
 	@Min(1)
 	@Max(100)
-	private Long limit;
-	private long pageNumber;
+	private Long pageSize;
 
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd")

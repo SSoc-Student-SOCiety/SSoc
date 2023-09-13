@@ -2,11 +2,13 @@ package gwangju.ssafy.backend.domain.account.repository.impl;
 
 import static gwangju.ssafy.backend.domain.account.entity.QGroupAccount.groupAccount;
 import static gwangju.ssafy.backend.domain.account.entity.QTransaction.transaction;
+import static gwangju.ssafy.backend.domain.post.entity.QPost.post;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gwangju.ssafy.backend.domain.account.dto.TransactionInfo;
+import gwangju.ssafy.backend.domain.account.dto.cond.SearchTransactionsCond;
 import gwangju.ssafy.backend.domain.account.repository.QueryDslTransactionRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,8 +23,7 @@ public class QueryDslTransactionRepositoryImpl implements QueryDslTransactionRep
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<TransactionInfo> findAllByGroupAccountId(Long accountId, Long limit, Long pageNum,
-		LocalDate start, LocalDate end) {
+	public List<TransactionInfo> findAllByGroupAccountId(Long accountId, SearchTransactionsCond cond) {
 
 		return jpaQueryFactory.select(Projections.fields(TransactionInfo.class,
 				transaction.id.as("transactionId"),
@@ -39,11 +40,17 @@ public class QueryDslTransactionRepositoryImpl implements QueryDslTransactionRep
 			))
 			.from(transaction)
 			.innerJoin(transaction.groupAccount, groupAccount)
-			.where(groupAccount.id.eq(accountId), filterStartDate(start), filterEndDate(end))
-			.orderBy(transaction.date.desc())
-			.limit(limit)
-			.offset(pageNum * limit)
+			.where(ltTransactionId(cond.getLastTransactionId()),
+				groupAccount.id.eq(accountId),
+				filterStartDate(cond.getStartDate()),
+				filterEndDate(cond.getEndDate()))
+			.orderBy(transaction.id.desc())
+			.limit(cond.getPageSize())
 			.fetch();
+	}
+
+	private BooleanExpression ltTransactionId(Long transactionId) {
+		return transactionId == null ? null : transaction.id.lt(transactionId);
 	}
 
 	private BooleanExpression filterStartDate(LocalDate start) {

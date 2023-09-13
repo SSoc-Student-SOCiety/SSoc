@@ -1,5 +1,7 @@
 package gwangju.ssafy.backend.domain.account.service.impl;
 
+import gwangju.ssafy.backend.domain.account.exception.AccountError;
+import gwangju.ssafy.backend.domain.account.exception.AccountException;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.account.dto.DailyStatisticsInfo;
@@ -54,15 +56,14 @@ public class TransactionStatisticsServiceImpl implements TransactionStatisticsSe
 
 	private void validateUserForAccount(Long userId, Long groupAccountId) {
 		GroupAccount account = groupAccountRepository.findById(groupAccountId)
-			.orElseThrow(() -> new RuntimeException("그룹 계좌 존재 X"));
+			.orElseThrow(() -> new AccountException(AccountError.NOT_EXISTS_ACCOUNT));
 
 		if (!account.isActive()) {
-			throw new RuntimeException("계좌 비활성화 상태");
+			throw new AccountException(AccountError.NOT_LINKED_ACCOUNT);
 		}
 
-		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(
-				account.getGroup().getId(), userId)
-			.orElseThrow(() -> new RuntimeException("그룹원 X"));
+		groupMemberRepository.findByGroupIdAndUserId(account.getGroup().getId(), userId)
+			.orElseThrow(() -> new AccountException(AccountError.NOT_GROUP_MEMBER));
 	}
 
 

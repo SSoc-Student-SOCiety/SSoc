@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long>,TransactionBatchRepository, QueryDslTransactionRepository {
 
-	int countByGroupAccount_Id(Long groupAccountId);
+	Long countByGroupAccount_Id(Long groupAccountId);
 
 }

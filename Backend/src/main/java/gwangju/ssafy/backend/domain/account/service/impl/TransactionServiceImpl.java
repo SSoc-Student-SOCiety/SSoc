@@ -1,10 +1,12 @@
 package gwangju.ssafy.backend.domain.account.service.impl;
 
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.*;
+
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.account.dto.EditTransactionNoteRequest;
-import gwangju.ssafy.backend.domain.account.dto.GetTransactionsRequest;
+import gwangju.ssafy.backend.domain.account.dto.SearchTransactionsRequest;
 import gwangju.ssafy.backend.domain.account.dto.TransactionInfo;
 import gwangju.ssafy.backend.domain.account.entity.GroupAccount;
 import gwangju.ssafy.backend.domain.account.entity.Transaction;
@@ -30,19 +32,18 @@ public class TransactionServiceImpl implements TransactionService {
 	public Long editNote(EditTransactionNoteRequest request) {
 
 		Transaction transaction = transactionRepository.findById(request.getTransactionId())
-			.orElseThrow(() ->  new AccountException() );
+			.orElseThrow(() -> new AccountException(NOT_EXISTS_TRANSACTION));
 
-		// 그룹 계좌 확인
 		GroupAccount account = groupAccountRepository.findById(request.getGroupAccountId())
-			.orElseThrow((() -> new RuntimeException("존재하지 않는 그룹계좌")));
+			.orElseThrow((() -> new AccountException(NOT_EXISTS_ACCOUNT)));
 
 		// 권한 확인
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(
 				account.getGroup().getId(), request.getUserId())
-			.orElseThrow(() -> new RuntimeException("그룹 멤버가 아님"));
+			.orElseThrow(() -> new AccountException(NOT_GROUP_MEMBER));
 
 		if (!GroupMemberRole.MANAGER.equals(member.getRole())) {
-			throw new RuntimeException("그룹 매니저가 아님");
+			throw new AccountException(NOT_GROUP_MANAGER);
 		}
 
 		transaction.changeNote(request.getNote());
@@ -52,20 +53,20 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<TransactionInfo> getTransactions(GetTransactionsRequest request) {
+	public List<TransactionInfo> getTransactions(SearchTransactionsRequest request) {
 
-		GroupAccount account = groupAccountRepository.findByGroupIdAndNumber(request.getGroupId(),
-				request.getAccountNumber())
-			.orElseThrow(() -> new RuntimeException("없는 계좌"));
+		GroupAccount account = groupAccountRepository.findById(request.getAccountId())
+			.orElseThrow(() -> new AccountException(NOT_EXISTS_ACCOUNT));
 
 		if (!account.isActive()) {
-			throw new RuntimeException("비활성화된 계좌");
+			throw new AccountException(NOT_LINKED_ACCOUNT);
 		}
 
-		groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(), request.getUserId())
-			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+		groupMemberRepository.findByGroupIdAndUserId(account.getGroup().getId(),
+				request.getUserId())
+			.orElseThrow(() -> new AccountException(NOT_GROUP_MEMBER));
 
-		return transactionRepository.findAllByGroupAccountId(account.getId(), request.getLimit(),
-			request.getPageNumber(), request.getStartDate(), request.getEndDate());
+		return transactionRepository.
+			findAllByGroupAccountId(request.getAccountId(), request.getFilter());
 	}
 }

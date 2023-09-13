@@ -42,13 +42,13 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 
 			List<ShinhanTransactionInfo.Transaction> transactions = info.getTransactions();
 
-			int cnt = transactionRepository.countByGroupAccount_Id(groupAccount.getId());
+			long cnt = transactionRepository.countByGroupAccount_Id(groupAccount.getId());
 			log.info("===== 기존 거래내역 개수 : {} =====", cnt);
 
-			long diff = info.getTransactionCnt() - cnt;
+			int diff = (int)(info.getTransactionCnt() - cnt);
 			log.info("===== 새로 저장할 내역 개수 : {} =====", diff);
 
-			for (int i = 0; i < diff; i++) {
+			for (int i = diff - 1; i >= 0; i--) {
 				ShinhanTransactionInfo.Transaction transaction = transactions.get(i);
 
 				Transaction result = Transaction.builder()
