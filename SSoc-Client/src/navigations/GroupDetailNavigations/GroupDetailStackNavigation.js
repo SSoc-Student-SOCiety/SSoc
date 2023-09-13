@@ -60,26 +60,6 @@ export const GroupDetailStackNavigation = ({ route }) => {
         component={MemberManageScreen}
         options={{ tabName: tabName }}
       />
-      <Stack.Screen 
-        name ="AddScheduleScreen"
-        component ={AddScheduleScreen}
-        options={{tabName: tabName}}
-      />
-      <Stack.Screen 
-        name ="AddReceiptScreen"
-        component ={AddReceiptScreen}
-        options={{tabName: tabName}}
-      />
-      <Stack.Screen 
-        name ="BookingManageScreen"
-        component ={BookingManageScreen}
-        options={{tabName: tabName}}
-      />
-      <Stack.Screen 
-        name ="MemberManageScreen"
-        component ={MemberManageTopTabs}
-        options={{tabName: tabName}}
-      />
     </Stack.Navigator>
   )
 }
