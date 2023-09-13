@@ -1,48 +1,39 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { View } from 'react-native'
 import { StackHeader } from '../../../modules/StackHeader'
-import { BoardContentScreen } from './BoardContentScreen'
+import { BoardAllContentScreen, BoardNoticeContentScreen, BoardSuggestContentScreen, BoardFreeContentScreen } from './BoardContentScreen'
 
 const Tab = createMaterialTopTabNavigator()
 
-export const BoardDetailTopTabs = () => {
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: null,
-    },
-    dataBody: [
-      {
-        groupId: '1',
-        boardId: '1',
-        boardName: '전체글',
-        category: 'TOTAL',
-      },
-      {
-        groupId: '1',
-        boardId: '2',
-        boardName: '공지게시판',
-        category: 'ALERT',
-      },
-      {
-        groupId: '1',
-        boardId: '3',
-        boardName: '자유게시판',
-        category: 'FREE',
-      },
-      {
-        groupId: '1',
-        boardId: '4',
-        boardName: '건의함',
-        category: '건의',
-      },
-    ],
-  }
+export const BoardDetailTopTabs = (props) => {
+  const groupId = props.groupId
+  const groupMemberRole = props.groupMemberRole
+  console.log('BoardDetailTopTabs.js (groupId) : ', groupId)
+  console.log('BoardDetailTopTabs.js (groupMemberRole) : ', groupMemberRole)
 
-  // TO-DO
-  // FlatList로 할지 map으로 할지 좀 더 고민해봐야할 듯
-  // 무한스크롤 구현 필요
+  const boardList = [
+    {
+      groupId: groupId,
+      boardName: '전체글',
+      category: '',
+    },
+    {
+      groupId: groupId,
+      boardName: '공지게시판',
+      category: 'NOTICE',
+    },
+    {
+      groupId: groupId,
+      boardName: '자유게시판',
+      category: 'FREE',
+    },
+    {
+      groupId: groupId,
+      boardName: '건의함',
+      category: 'SUGGEST',
+    },
+  ]
+
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <StackHeader title="게시판"></StackHeader>
@@ -51,19 +42,26 @@ export const BoardDetailTopTabs = () => {
           headerShown: false,
         })}
       >
-        {tempData.dataBody.map((item) => {
-          return (
-            <Tab.Screen
-              name={item.boardName}
-              children={() => (
-                <BoardContentScreen
-                  key={item.boardId}
-                  board={item}
-                />
-              )}
-            ></Tab.Screen>
-          )
-        })}
+        <Tab.Screen
+          name={boardList[0].boardName}
+          component={BoardAllContentScreen}
+          initialParams={{ board: boardList[0], groupMemberRole: groupMemberRole }}
+        />
+        <Tab.Screen
+          name={boardList[1].boardName}
+          component={BoardNoticeContentScreen}
+          initialParams={{ board: boardList[1], groupMemberRole: groupMemberRole }}
+        />
+        <Tab.Screen
+          name={boardList[2].boardName}
+          component={BoardFreeContentScreen}
+          initialParams={{ board: boardList[2], groupMemberRole: groupMemberRole }}
+        />
+        <Tab.Screen
+          name={boardList[3].boardName}
+          component={BoardSuggestContentScreen}
+          initialParams={{ board: boardList[3], groupMemberRole: groupMemberRole }}
+        />
       </Tab.Navigator>
     </View>
   )

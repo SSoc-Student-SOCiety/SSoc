@@ -14,7 +14,8 @@ export const GroupDetailStackNavigation = ({ route }) => {
   // TO-DO
   // 이전 GroupDetialScreen내에서 가져온 groupId를 GroupDetailTab의 route내부에서 계속해 끌고 올 듯 하다. + 그룹 매니저인지도 가져올 듯 합니다.
   // props로 다 연결해서 가져와주는 작업 필요
-  // 우선 임시값 1로 주고 작업
+  // 아니면 그룹 정보 자체를 보내서 확인해도 됨. 정보 너무 많이 끌고 오면 별로일까봐 우선 board에서 가지고올 정보만 끌고 와봤습니다..
+  // 우선 임시값 1, 'MANAGER'로 주고 작업
   const groupId = '1'
   const groupMemberRole = 'MANAGER'
 
@@ -26,6 +27,7 @@ export const GroupDetailStackNavigation = ({ route }) => {
     >
       <Stack.Screen
         name="GroupDetailBottomTab"
+        initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
         component={GroupDetailBottomTabNavigation}
         options={{ tabName: tabName }}
       />
@@ -33,33 +35,51 @@ export const GroupDetailStackNavigation = ({ route }) => {
       <Stack.Screen
         name="BoardDetailScreen"
         component={BoardDetailScreen}
-        options={{ tabName: tabName }}
       />
       <Stack.Screen
         name="ContentDetailScreen"
         component={ContentDetailScreen}
+      />
+      <Stack.Screen
+        name="AddScheduleScreen"
+        component={AddScheduleScreen}
+        options={{ tabName: tabName }}
+      />
+      <Stack.Screen
+        name="AddReceiptScreen"
+        component={AddReceiptScreen}
+        options={{ tabName: tabName }}
+      />
+      <Stack.Screen
+        name="BookingManageScreen"
+        component={BookingManageScreen}
+        options={{ tabName: tabName }}
+      />
+      <Stack.Screen
+        name="MemberManageScreen"
+        component={MemberManageScreen}
         options={{ tabName: tabName }}
       />
       <Stack.Screen 
         name ="AddScheduleScreen"
         component ={AddScheduleScreen}
         options={{tabName: tabName}}
-        />
-        <Stack.Screen 
+      />
+      <Stack.Screen 
         name ="AddReceiptScreen"
         component ={AddReceiptScreen}
         options={{tabName: tabName}}
-        />
-        <Stack.Screen 
+      />
+      <Stack.Screen 
         name ="BookingManageScreen"
         component ={BookingManageScreen}
         options={{tabName: tabName}}
-        />
-        <Stack.Screen 
+      />
+      <Stack.Screen 
         name ="MemberManageScreen"
         component ={MemberManageTopTabs}
         options={{tabName: tabName}}
-        />
+      />
     </Stack.Navigator>
   )
 }

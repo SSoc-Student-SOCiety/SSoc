@@ -13,6 +13,18 @@ export default getAPIHost = () => {
 }
 const url = getAPIHost()
 
+export const makeQueryStringForGet = (baseUrl, queryParams) => {
+  const queryString = Object.keys(queryParams)
+    .filter((key) => queryParams[key] !== undefined)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+    .join('&')
+
+  const fullUrl = `${baseUrl}?${queryString}`
+  return fullUrl
+}
+
+// UserFetch
+///////////////////
 export const getAuthDataFetch = async (accessToken, refreshToken) => {
   return await fetch(url + '/user/start', {
     method: 'POST',
@@ -154,5 +166,123 @@ export const getChangeAllFetch = async (userEmail, userNowPassword, userChangePa
       userNickName: userNickName,
       userImage: userImage,
     }),
+  })
+}
+
+// BoardFetch
+///////////////////
+export const getContentListFetch = async (accessToken, refreshToken, groupId, keyword, category, lastPostId) => {
+  const baseUrl = `${url}/posts`
+  const queryParams = {
+    groupId: groupId,
+    'filter.pageSize': 10,
+    'filter.keyword': keyword,
+    'filter.category': category,
+    'filter.lastPostId': lastPostId,
+  }
+
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+
+  console.log(fullUrl)
+  return await fetch(fullUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+export const getWriteContentFetch = async (accessToken, refreshToken, postId, title, content, category, isAnonymous) => {
+  const baseUrl = `${url}/posts/${postId}`
+
+  return await fetch(baseUrl, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      title: title,
+      content: content,
+      category: category,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
+export const getWritePostFetch = async (accessToken, refreshToken, groupId, title, content, category, isAnonymous) => {
+  return await fetch(url + '/posts', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      groupId: groupId,
+      title: title,
+      content: content,
+      category: category,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
+export const getContentDeleteFetch = async (accessToken, refreshToken, postId) => {
+  return await fetch(`${url}/posts/${postId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// GroupFetch
+///////////////////
+export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, keyword, category) => {
+  const baseUrl = `${url}/groups`
+  const queryParams = {
+    lastGroupId: lastGroupId, // 생략 가능
+    keyword: keyword, // 생략 가능
+    category: category, // 생략 가능
+    pageSize: 5,
+  }
+
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+
+  console.log(fullUrl)
+  return await fetch(fullUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+export const getGroupDetailFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}`
+
+  // console.log(baseUrl)
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
   })
 }

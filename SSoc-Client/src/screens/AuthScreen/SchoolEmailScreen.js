@@ -16,9 +16,7 @@ const SchoolEmailScreen = (props) => {
   const navigation = useNavigation()
   const [userId, setUserId] = useState('')
   const [schoolEmail, setSchoolEmail] = useState('')
-  const [userEmail, setUserEmail] = useState('')
   const [school, setSchool] = useState('')
-
   const [checkEmailData, setCheckEmailData] = useState(null)
 
   const schoolList = {
@@ -27,10 +25,10 @@ const SchoolEmailScreen = (props) => {
   }
 
   const onPressRegister = () => {
-    if (school.length == 0 || userId.length < 2) {
+    if (school.length == 0 || userId.length == 0) {
       Alert.alert('학교와 이메일을 정확히 기입해주세요.')
     } else {
-      setUserEmail(userId + '@' + schoolEmail)
+      userEmail = userId + '@' + schoolEmail
       getEmailCheckData(userEmail)
     }
   }
@@ -39,10 +37,11 @@ const SchoolEmailScreen = (props) => {
     navigation.reset({ routes: [{ name: 'Login' }] })
   }
 
-  const getEmailCheckData = async (userEmail) => {
+  const getEmailCheckData = async () => {
     try {
       const response = await getEmailCheckFetch(userEmail)
       const data = await response.json()
+      console.log(data)
       await setCheckEmailData(data)
     } catch (e) {
       console.log(e)
@@ -58,7 +57,7 @@ const SchoolEmailScreen = (props) => {
       }
       setCheckEmailData(null)
     }
-  }, [userEmail, checkEmailData])
+  }, [checkEmailData])
 
   return (
     <View
