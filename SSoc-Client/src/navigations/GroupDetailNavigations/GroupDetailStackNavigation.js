@@ -6,7 +6,7 @@ import { AddScheduleScreen } from '../../screens/GroupDetailBottomTabs/Manage/Ad
 import { AddReceiptScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddReceiptScreen'
 import { BookingManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/BookingManageScreen'
 import { MemberManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/MemberManageScreen'
-
+import { BookingItemDetailScreen } from '../../screens/GroupDetailBottomTabs/Booking/BookingItemDetailScreen'
 const Stack = createNativeStackNavigator()
 export const GroupDetailStackNavigation = ({ route }) => {
   const { tabName } = route.params
@@ -57,6 +57,11 @@ export const GroupDetailStackNavigation = ({ route }) => {
         <Stack.Screen 
         name ="MemberManageScreen"
         component ={MemberManageScreen}
+        options={{tabName: tabName}}
+        />
+        <Stack.Screen
+        name="BookingItemDetialScreen"
+        component = {BookingItemDetailScreen}
         options={{tabName: tabName}}
         />
     </Stack.Navigator>

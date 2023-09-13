@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import { BoardDetailScreen } from '../../screens/GroupDetailBottomTabs/Board/BoardDetailScreen'
-import { BookingScreen } from '../../screens/GroupDetailBottomTabs/Booking/BookingScreen'
+import { BookingTopTabs } from '../../screens/GroupDetailBottomTabs/Booking/BookingTopTabs'
 import { ScheduleScreen } from '../../screens/GroupDetailBottomTabs/Schedule/ScheduleScreen'
 import { SettlementsTopTabs } from '../../screens/GroupDetailBottomTabs/Settlement/SettlementsTopTabs'
 import { TabIcon } from '../../components/Icons/TabIcon'
@@ -51,7 +51,7 @@ export const GroupDetailBottomTabNavigation = () => {
       ></Tabs.Screen>
       <Tabs.Screen
         name="물품 예약"
-        component={BookingScreen}
+        component={BookingTopTabs}
       ></Tabs.Screen>
     </Tabs.Navigator>
   )
