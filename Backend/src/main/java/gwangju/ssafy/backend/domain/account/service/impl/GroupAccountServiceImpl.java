@@ -1,16 +1,26 @@
 package gwangju.ssafy.backend.domain.account.service.impl;
 
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.ALREADY_REGISTERED_ACCOUNT;
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.ALREADY_SENDED_AUTHCODE;
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_EXISTS_ACCOUNT;
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_EXISTS_AUTHCODE;
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_EXISTS_GROUP;
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_GROUP_MANAGER;
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_GROUP_MEMBER;
+import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_MATCHED_AUTHCODE;
+
+import gwangju.ssafy.backend.domain.account.dto.RegisterGroupAccountRequest;
+import gwangju.ssafy.backend.domain.account.dto.SendAuthCodeRequest;
+import gwangju.ssafy.backend.domain.account.dto.UnregisterGroupAccountRequest;
+import gwangju.ssafy.backend.domain.account.entity.GroupAccount;
+import gwangju.ssafy.backend.domain.account.exception.AccountException;
+import gwangju.ssafy.backend.domain.account.repository.GroupAccountRepository;
+import gwangju.ssafy.backend.domain.account.service.GroupAccountService;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
-import gwangju.ssafy.backend.domain.account.dto.RegisterGroupAccountRequest;
-import gwangju.ssafy.backend.domain.account.dto.SendAuthCodeRequest;
-import gwangju.ssafy.backend.domain.account.dto.UnregisterGroupAccountRequest;
-import gwangju.ssafy.backend.domain.account.entity.GroupAccount;
-import gwangju.ssafy.backend.domain.account.repository.GroupAccountRepository;
-import gwangju.ssafy.backend.domain.account.service.GroupAccountService;
 import gwangju.ssafy.backend.global.common.entity.vo.Bank;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankService;
 import gwangju.ssafy.backend.global.utils.AuthCodeGenerator;
@@ -44,10 +54,10 @@ class GroupAccountServiceImpl implements GroupAccountService {
 			request.getAccountNumber());
 
 		// 요청 계좌가 이미 등록된 계좌라면
-		if(optionalGroupAccount.isPresent()){
+		if (optionalGroupAccount.isPresent()) {
 			GroupAccount groupAccount = optionalGroupAccount.get();
 			if (groupAccount.isActive()) {
-				throw new RuntimeException("이미 등록된 계좌");
+				throw new AccountException(ALREADY_REGISTERED_ACCOUNT);
 			}
 		}
 
@@ -55,13 +65,15 @@ class GroupAccountServiceImpl implements GroupAccountService {
 		String authCode = AuthCodeGenerator.generate();
 
 		// Redis에 이미 인증 코드가 있는지 확인
-		if (!getAuthCodeInRedis(KEY_PREFIX + request.getGroupId()).isEmpty()) {
-			throw new RuntimeException("이미 인증코드가 발송되어 있음");
+		if (!getAuthCodeInRedis(
+			KEY_PREFIX + request.getAccountNumber() + "::" + request.getGroupId()).isEmpty()) {
+			throw new AccountException(ALREADY_SENDED_AUTHCODE);
 		}
 
 		// Redis에 인증 코드 저장
 		redisTemplate.opsForValue()
-			.set(KEY_PREFIX + request.getGroupId(), authCode, Duration.ofMinutes(3));
+			.set(KEY_PREFIX + request.getAccountNumber() + "::"+ request.getGroupId(), authCode,
+				Duration.ofMinutes(3));
 
 		// 신한 1원 이체 API로 해당 계좌에 인증 코드 발송
 		shinhanBankService.transferAuth(request.getBankCode(), request.getAccountNumber(),
@@ -76,29 +88,29 @@ class GroupAccountServiceImpl implements GroupAccountService {
 			request.getGroupId(),
 			request.getAccountNumber());
 
-		if(optionalGroupAccount.isPresent()){
+		if (optionalGroupAccount.isPresent()) {
 			GroupAccount groupAccount = optionalGroupAccount.get();
 			if (groupAccount.isActive()) {
-				throw new RuntimeException("이미 등록된 계좌");
-			}else {
+				throw new AccountException(ALREADY_REGISTERED_ACCOUNT);
+			} else {
 				groupAccount.activate();
 				return;
 			}
 		}
 
-		String key = KEY_PREFIX + request.getGroupId();
-
+		String key = KEY_PREFIX + request.getAccountNumber() + "::"+ request.getGroupId();
+		System.out.println("what is this " + key);
 		// 인증 코드 검증
 		String authCode = getAuthCodeInRedis(key)
-			.orElseThrow(() -> new RuntimeException("해당 인증 코드가 없음"));
+			.orElseThrow(() -> new AccountException(NOT_EXISTS_AUTHCODE));
 
 		if (!request.getAuthCode().equals(authCode)) {
-			throw new RuntimeException("인증 코드가 일치하지 않음");
+			throw new AccountException(NOT_MATCHED_AUTHCODE);
 		}
 
 		// GroupAccount 등록
 		Group group = groupRepository.findById(request.getGroupId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
+			.orElseThrow(() -> new AccountException(NOT_EXISTS_GROUP));
 
 		GroupAccount account = GroupAccount.builder()
 			.group(group)
@@ -117,10 +129,10 @@ class GroupAccountServiceImpl implements GroupAccountService {
 	private void validateAuthority(Long groupId, Long userId) {
 
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId, userId)
-			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+			.orElseThrow(() -> new AccountException(NOT_GROUP_MEMBER));
 
 		if (!member.getRole().equals(GroupMemberRole.MANAGER)) {
-			throw new RuntimeException("그룹 관리자가 아님");
+			throw new AccountException(NOT_GROUP_MANAGER);
 		}
 	}
 
@@ -130,12 +142,10 @@ class GroupAccountServiceImpl implements GroupAccountService {
 
 	@Override
 	public void unregisterGroupAccount(UnregisterGroupAccountRequest request) {
-		validateAuthority(request.getGroupId(), request.getUserId());
+		GroupAccount groupAccount = groupAccountRepository.findById(request.getAccountId())
+			.orElseThrow(() -> new AccountException(NOT_EXISTS_ACCOUNT));
 
-		GroupAccount groupAccount = groupAccountRepository.findByGroupIdAndNumber(
-				request.getGroupId(),
-				request.getAccountNumber())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 계좌"));
+		validateAuthority(groupAccount.getGroup().getId(), request.getUserId());
 
 		groupAccount.deactivate();
 	}

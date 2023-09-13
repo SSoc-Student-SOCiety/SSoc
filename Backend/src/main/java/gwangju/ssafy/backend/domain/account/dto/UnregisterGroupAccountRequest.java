@@ -13,8 +13,7 @@ import lombok.Setter;
 @Setter
 public class UnregisterGroupAccountRequest {
 
-	private Long groupId;
 	private Long userId;
-	private String accountNumber;
+	private Long accountId;
 
 }
