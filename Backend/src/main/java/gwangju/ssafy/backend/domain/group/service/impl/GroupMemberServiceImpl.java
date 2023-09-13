@@ -5,6 +5,8 @@ import gwangju.ssafy.backend.domain.group.dto.GetMemberRoleResponse;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.domain.group.exception.GroupError;
+import gwangju.ssafy.backend.domain.group.exception.GroupException;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
 import gwangju.ssafy.backend.domain.group.service.GroupMemberService;
@@ -28,9 +30,9 @@ class GroupMemberServiceImpl implements GroupMemberService {
 	public void addMemberInGroup(Long groupId, Long userId, GroupMemberRole role) {
 
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 회원"));
+			.orElseThrow(() -> new GroupException(GroupError.NOT_EXISTS_USER));
 		Group group = groupRepository.findByIdAndIsActiveIsTrue(groupId)
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 그룹"));
+			.orElseThrow(() -> new GroupException(GroupError.NOT_EXISTS_GROUP));
 
 		groupMemberRepository.save(GroupMember.builder()
 			.group(group)
@@ -45,7 +47,7 @@ class GroupMemberServiceImpl implements GroupMemberService {
 
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
 				request.getUserId())
-			.orElseThrow(() -> new RuntimeException("그룹원이 아님"));
+			.orElseThrow(() -> new GroupException(GroupError.NOT_GROUP_MEMBER));
 
 		return GetMemberRoleResponse.of(member);
 	}
