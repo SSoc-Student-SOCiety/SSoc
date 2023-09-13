@@ -29,6 +29,7 @@ public class GroupController {
 
 	private final GroupService groupService;
 
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	@PutMapping("/{groupId}")
 	public ResponseEntity<Message> editGroupInfo(
 		@AuthenticationPrincipal LoginActiveUserDto login,
