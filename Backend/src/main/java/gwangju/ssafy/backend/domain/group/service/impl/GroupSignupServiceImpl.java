@@ -33,9 +33,9 @@ public class GroupSignupServiceImpl implements GroupSignupService {
 
     // 해당 그룹에 가입 신청한 회원들 전체 조회
     @Override
-    public List<GroupSignupInfo> searchAllGroupSignup() {
-        // 가입 요청 대기중인 사람들만 추출 (BysignupStatus)
-        List<GroupSignup> groupSignupList = groupSignupRepository.findAllBySignupStatus(false);
+    public List<GroupSignupInfo> searchAllGroupSignup(Long groupId) {
+        // 해당 그룹에 가입 요청 대기중인 사람들만 추출 (BysignupStatus)
+        List<GroupSignup> groupSignupList = groupSignupRepository.findAllBySignupStatusAndGroupId(false, groupId);
         List<GroupSignupInfo> groupSignupInfoList = new ArrayList<>();
         for (GroupSignup groupSignup : groupSignupList) {
             GroupSignupInfo groupSignupInfo = new GroupSignupInfo();

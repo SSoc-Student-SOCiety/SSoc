@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GroupSignupService {
     // 그룹 가입에서 해당 그룹에 가입 신청 대기중인 리스트 가져오기
-    List<GroupSignupInfo> searchAllGroupSignup();
+    List<GroupSignupInfo> searchAllGroupSignup(Long groupId);
 
     // 그룹에서 해당 유저 가입 거절
     GroupSignupInfo rejectSignup(DeleteGroupSignInfoRequest request);

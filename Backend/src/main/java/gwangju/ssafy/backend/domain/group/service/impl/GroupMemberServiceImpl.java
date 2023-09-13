@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.domain.group.service.impl;
 
+import gwangju.ssafy.backend.domain.group.dto.DeleteGroupMemberInfo;
 import gwangju.ssafy.backend.domain.group.dto.GetGroupMemberInfo;
 import gwangju.ssafy.backend.domain.group.dto.GetMemberRoleRequest;
 import gwangju.ssafy.backend.domain.group.dto.GetMemberRoleResponse;
@@ -70,6 +71,25 @@ class GroupMemberServiceImpl implements GroupMemberService {
 		}
 
 		return groupMemberInfoList;
+	}
+
+	// 그룹장이 해당 그룹원 삭제
+	@Override
+	public DeleteGroupMemberInfo deleteGroupMember(Long groupId, Long userId) {
+		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId,
+						userId)
+				.orElseThrow(() -> new GroupException(GroupError.NOT_GROUP_MEMBER));
+		groupMemberRepository.deleteById(member.getId());
+		return DeleteGroupMemberInfo.builder()
+				.groupMemberId(member.getId())
+				.groupId(member.getGroup().getId())
+				.groupName(member.getGroup().getName())
+				.userId(member.getUser().getId())
+				.userEmail(member.getUser().getUserEmail())
+				.userName(member.getUser().getUserName())
+				.userNickName(member.getUser().getUserNickname())
+				.role(member.getRole())
+				.build();
 	}
 
 
