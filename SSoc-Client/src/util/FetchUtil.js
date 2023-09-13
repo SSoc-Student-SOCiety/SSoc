@@ -238,3 +238,18 @@ export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, 
     },
   })
 }
+
+export const getGroupDetailFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}`
+
+  // console.log(baseUrl)
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}

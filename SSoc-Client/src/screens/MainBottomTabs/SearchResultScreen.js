@@ -3,16 +3,56 @@ import { ScrollView, View, StyleSheet, FlatList } from 'react-native'
 import { MainHeader } from '../../modules/MainHeader'
 import { SingleLineInput } from '../../components/Input/SingleLineInput'
 import * as Color from '../../components/Colors/colors'
-import { Icon } from '../../components/Icons/Icons'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Button } from '../../components/Basic/Button'
 import { SearchResult } from '../../modules/SearchResult'
 import { TouchableOpacity } from 'react-native'
-import { Spacer } from '../../components/Basic/Spacer'
 import { SearchOptionCategoryScroll } from '../../modules/SearchOptionCategoryScroll'
-import { Divider } from '../../components/Basic/Divider'
 import { SearchButton } from '../../modules/SearchButton'
+import { getGroupListFetch } from '../../util/FetchUtil'
+import { getTokens } from '../../util/TokenUtil'
 export const SearchResultScreen = () => {
+  const [data, setData] = useState([])
+  const [lastGroupId, setLastGroupId] = useState('')
+
+  const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
+
+  const getGroupListData = async () => {
+    try {
+      const response = await getGroupListFetch(accessToken, refreshToken, lastGroupId, '', '')
+      const newData = await response.json()
+      console.log(newData)
+      return tempData
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+
+  const loadData = async () => {
+    const newData = await getGroupListData()
+    console.log(newData)
+    if (newData.dataHeader.successCode == 0) {
+      if (newData.dataBody.length > 0) {
+        setLastGroupId(newData.dataBody[newData.dataBody.length - 1].groupId.toString())
+        setData((prevData) => [...prevData, ...newData.dataBody])
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!isTokenGet) {
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
+      loadData()
+    }
+  }, [])
+
+  const handleEndReached = () => {
+    loadData()
+  }
+
   return (
     <View
       style={{ flex: 1 }}
@@ -50,11 +90,10 @@ export const SearchResultScreen = () => {
         </View>
       </View>
 
-      {/* to-do 무한 스크롤 구현하기 */}
       <FlatList
         style={styles.commonItem}
         contentContainerStyle={{ paddingBottom: 30 }}
-        data={IMAGE_LIST}
+        data={data}
         renderItem={({ item }) => {
           return (
             <Button>
@@ -62,6 +101,8 @@ export const SearchResultScreen = () => {
             </Button>
           )
         }}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
       />
     </View>
   )
@@ -73,37 +114,52 @@ var styles = StyleSheet.create({
   commonItem: { paddingTop: 30, paddingHorizontal: 20 },
 })
 
-const IMAGE_LIST = [
-  {
-    groupId: 1,
-    name: 'TestName1',
-    aboutUs: '제36대 총학생회',
-    school: '전남대',
-    thumbnail: 'https://picsum.photos/600',
-    memberCnt: 1,
+const tempData = {
+  dataHeader: {
+    successCode: 0,
+    resultCode: null,
+    resultMessage: null,
   },
-  {
-    groupId: 2,
-    name: 'TestName2',
-    aboutUs: '제37대 총학생회',
-    school: '서울대',
-    thumbnail: 'https://picsum.photos/500',
-    memberCnt: 124,
-  },
-  {
-    groupId: 3,
-    name: 'TestName3',
-    aboutUs: '제38대 총학생회',
-    school: '신한대',
-    thumbnail: 'https://picsum.photos/700',
-    memberCnt: 55,
-  },
-  {
-    groupId: 4,
-    name: 'TestName4',
-    aboutUs: '제39대 총학생회',
-    school: '싸피대',
-    thumbnail: 'https://picsum.photos/400',
-    memberCnt: 3,
-  },
-]
+  dataBody: [
+    {
+      groupId: 1,
+      name: 'TestName1',
+      aboutUs: '제36대 총학생회',
+      school: '전남대',
+      thumbnail: 'https://picsum.photos/600',
+      memberCnt: 1,
+    },
+    {
+      groupId: 2,
+      name: 'TestName2',
+      aboutUs: '제37대 총학생회',
+      school: '서울대',
+      thumbnail: 'https://picsum.photos/500',
+      memberCnt: 124,
+    },
+    {
+      groupId: 3,
+      name: 'TestName3',
+      aboutUs: '제38대 총학생회',
+      school: '신한대',
+      thumbnail: 'https://picsum.photos/700',
+      memberCnt: 55,
+    },
+    {
+      groupId: 4,
+      name: 'TestName4',
+      aboutUs: '제39대 총학생회',
+      school: '싸피대',
+      thumbnail: 'https://picsum.photos/400',
+      memberCnt: 3,
+    },
+    {
+      groupId: 5,
+      name: 'TestName5',
+      aboutUs: '제40대 총학생회',
+      school: '싸피대',
+      thumbnail: 'https://picsum.photos/400',
+      memberCnt: 3,
+    },
+  ],
+}

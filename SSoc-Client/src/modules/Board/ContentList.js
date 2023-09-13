@@ -105,8 +105,6 @@ const ContentList = (props) => {
         setLastPostId(newData.dataBody[newData.dataBody.length - 1].postId.toString())
         setData((prevData) => [...prevData, ...newData.dataBody])
       }
-    } else {
-      Alert.alert(newData.dataHeader.resultMessage, navigation.goBack())
     }
   }
 

@@ -23,7 +23,10 @@ export const MainScreen = () => {
       const response = await getGroupListFetch(accessToken, refreshToken, '', '', '')
       const data = await response.json()
       console.log('MainScreen.js (getGroupListFetch): ', data)
-      await setGroupListData(data)
+      if (data.dataHeader.successCode == 0) {
+        // await setGroupListData(data.dataBody)
+        await setGroupListData(cardsData)
+      }
     } catch (e) {
       console.log(e)
     }
