@@ -57,7 +57,7 @@ export const GroupDetailScreen = ({ route }) => {
       const data = await response.json()
       // console.log(data)
       // await setGroupDetailData(data.dataBody)
-      await setGroupDetailData(tempData.dataBody)
+      await setGroupDetailData(data.dataBody)
     } catch (e) {
       console.log(e)
     }

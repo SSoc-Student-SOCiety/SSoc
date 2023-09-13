@@ -175,14 +175,15 @@ export const getContentListFetch = async (accessToken, refreshToken, groupId, ke
   const baseUrl = `${url}/posts`
   const queryParams = {
     groupId: groupId,
-    pageSize: 10,
+    'filter.pageSize': 10,
     'filter.keyword': keyword,
-    category: category,
+    'filter.category': category,
     'filter.lastPostId': lastPostId,
   }
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
 
+  console.log(fullUrl)
   return await fetch(fullUrl, {
     method: 'GET',
     headers: {
@@ -214,7 +215,39 @@ export const getWriteContentFetch = async (accessToken, refreshToken, postId, ti
   })
 }
 
-// mainFetch
+export const getWritePostFetch = async (accessToken, refreshToken, groupId, title, content, category, isAnonymous) => {
+  return await fetch(url + '/posts', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      groupId: groupId,
+      title: title,
+      content: content,
+      category: category,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
+export const getContentDeleteFetch = async (accessToken, refreshToken, postId) => {
+  return await fetch(`${url}/posts/${postId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// GroupFetch
 ///////////////////
 export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, keyword, category) => {
   const baseUrl = `${url}/groups`

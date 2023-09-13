@@ -24,8 +24,8 @@ export const MainScreen = () => {
       const data = await response.json()
       console.log('MainScreen.js (getGroupListFetch): ', data)
       if (data.dataHeader.successCode == 0) {
-        // await setGroupListData(data.dataBody)
-        await setGroupListData(cardsData)
+        await setGroupListData(data.dataBody)
+        // await setGroupListData(cardsData)
       }
     } catch (e) {
       console.log(e)
@@ -40,74 +40,75 @@ export const MainScreen = () => {
     }
   }, [isTokenGet])
 
-  return (
-    <View style={styles.container}>
-      <MainHeader
-        name={'김싸피'}
-        url={'https://picsum.photos/600'}
-      />
-      <Logo />
-      <MainSearchBar />
+  if (groupListData != null)
+    return (
+      <View style={styles.container}>
+        <MainHeader
+          name={'김싸피'}
+          url={'https://picsum.photos/600'}
+        />
+        <Logo />
+        <MainSearchBar />
 
-      <View style={styles.cardContainer}>
-        <Typography
-          fontSize={16}
-          color={Color.GRAY}
-        >
-          {' '}
-          * 최근 만들어진 학생회/동아리
-        </Typography>
-        <Spacer space={10} />
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {cardsData.map((card, index) => (
-            <Card
-              key={index}
-              {...card}
-            />
-          ))}
-        </ScrollView>
+        <View style={styles.cardContainer}>
+          <Typography
+            fontSize={16}
+            color={Color.GRAY}
+          >
+            {' '}
+            * 최근 만들어진 학생회/동아리
+          </Typography>
+          <Spacer space={10} />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {groupListData.map((card, index) => (
+              <Card
+                key={index}
+                {...card}
+              />
+            ))}
+          </ScrollView>
+        </View>
       </View>
-    </View>
-  )
+    )
 }
 
-const cardsData = [
-  {
-    groupId: 1,
-    name: 'TestName1',
-    aboutUs: '제36대 총학생회',
-    school: '전남대',
-    thumbnail: 'https://picsum.photos/600',
-    memberCnt: 1,
-  },
-  {
-    groupId: 2,
-    name: 'TestName2',
-    aboutUs: '제37대 총학생회',
-    school: '서울대',
-    thumbnail: 'https://picsum.photos/500',
-    memberCnt: 124,
-  },
-  {
-    groupId: 3,
-    name: 'TestName3',
-    aboutUs: '제38대 총학생회',
-    school: '신한대',
-    thumbnail: 'https://picsum.photos/700',
-    memberCnt: 55,
-  },
-  {
-    groupId: 4,
-    name: 'TestName4',
-    aboutUs: '제39대 총학생회',
-    school: '싸피대',
-    thumbnail: 'https://picsum.photos/400',
-    memberCnt: 3,
-  },
-]
+// const cardsData = [
+//   {
+//     groupId: 1,
+//     name: 'TestName1',
+//     aboutUs: '제36대 총학생회',
+//     school: '전남대',
+//     thumbnail: 'https://picsum.photos/600',
+//     memberCnt: 1,
+//   },
+//   {
+//     groupId: 2,
+//     name: 'TestName2',
+//     aboutUs: '제37대 총학생회',
+//     school: '서울대',
+//     thumbnail: 'https://picsum.photos/500',
+//     memberCnt: 124,
+//   },
+//   {
+//     groupId: 3,
+//     name: 'TestName3',
+//     aboutUs: '제38대 총학생회',
+//     school: '신한대',
+//     thumbnail: 'https://picsum.photos/700',
+//     memberCnt: 55,
+//   },
+//   {
+//     groupId: 4,
+//     name: 'TestName4',
+//     aboutUs: '제39대 총학생회',
+//     school: '싸피대',
+//     thumbnail: 'https://picsum.photos/400',
+//     memberCnt: 3,
+//   },
+// ]
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },

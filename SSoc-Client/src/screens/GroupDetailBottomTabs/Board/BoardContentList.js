@@ -10,7 +10,6 @@ export const BoardContentList = (props) => {
   const [writeNewContent, setWriteNewContent] = useState(false)
   const board = props.board
   const groupMemberRole = props.groupMemberRole
-  console.log(board)
 
   console.log('BoardContentScreen.js (props)', props)
 
