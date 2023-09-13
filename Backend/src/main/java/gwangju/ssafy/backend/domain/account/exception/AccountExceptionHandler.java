@@ -1,4 +1,4 @@
-package gwangju.ssafy.backend.domain.schedule.exception;
+package gwangju.ssafy.backend.domain.account.exception;
 
 import gwangju.ssafy.backend.global.common.dto.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-public class ScheduleExceptionHandler {
+public class AccountExceptionHandler {
 
-	@ExceptionHandler(ScheduleException.class)
-	public ResponseEntity<Message> scheduleExceptionHandler(ScheduleException e) {
+	@ExceptionHandler(AccountException.class)
+	public ResponseEntity<Message> accountExceptionHandler(AccountException e) {
 		log.error("{} is occured", e.getErrorCode());
 		return ResponseEntity.status(e.getErrorCode().getHttpStatus())
 			.body(Message.fail(e.getErrorCode().name(), e.getErrorCode().getErrorMessage()));

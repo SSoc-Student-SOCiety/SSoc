@@ -1,7 +1,7 @@
 package gwangju.ssafy.backend.global.infra.batch.jobs;
 
-import gwangju.ssafy.backend.domain.transaction.entity.Transaction;
-import gwangju.ssafy.backend.domain.transaction.repository.TransactionBatchRepository;
+import gwangju.ssafy.backend.domain.account.entity.Transaction;
+import gwangju.ssafy.backend.domain.account.repository.TransactionBatchRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

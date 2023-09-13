@@ -1,10 +1,10 @@
 package gwangju.ssafy.backend.global.infra.batch.jobs;
 
-import static gwangju.ssafy.backend.domain.transaction.entity.QTransaction.transaction;
+import static gwangju.ssafy.backend.domain.account.entity.QTransaction.transaction;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import gwangju.ssafy.backend.domain.transaction.entity.DailyTransactionStatistics;
+import gwangju.ssafy.backend.domain.account.entity.DailyTransactionStatistics;
 import gwangju.ssafy.backend.global.infra.batch.dto.DailyTransactionStatisticsBatchDto;
 import gwangju.ssafy.backend.global.infra.batch.library.querydsl.reader.QuerydslNoOffsetIdPagingItemReader;
 import gwangju.ssafy.backend.global.infra.batch.library.querydsl.reader.expression.Expression;
