@@ -5,6 +5,8 @@ import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationFilt
 import gwangju.ssafy.backend.global.exception.ErrorCode;
 import gwangju.ssafy.backend.global.exception.TokenException;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.DecodingException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +28,16 @@ public class JwtParser {
         Claims claims = null;
 
         try {
+            log.info(token);
+            log.info(sercretKey.toString());
             claims = Jwts.parserBuilder()
                     .setSigningKey(sercretKey)
                     .build()
                     .parseClaimsJws(token).getBody();
-            log.info(token);
+            log.info(claims.toString());
 
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | UnsupportedJwtException |
-                 IllegalArgumentException e) {
+                 IllegalArgumentException | DecodingException e) {
 //            log.info("잘못된 JWT 서명입니다. (유효하지 않은 인증 토큰입니다)");
             throw new TokenException(ErrorCode.INVALID_TOKEN, e);
         } catch (ExpiredJwtException e) {
@@ -61,4 +65,5 @@ public class JwtParser {
         // AccessToken 만료 안된 경우
         return claims;
     }
+
 }
