@@ -20,14 +20,14 @@ export const SearchResult = (props)=>{
                 <View style={{marginVertical:4 }} flexDirection={"row"}>
                     <View style={{alignItems:"center", justifyContent:"center"}}>
                         
-                        <ProfileImage size={60} url={props.item.url} />
+                        <ProfileImage size={60} url={props.item.thumbnail} />
                     </View>
                     <View>  
                         <Typography fontSize={15}>{props.item.name}</Typography>
                         <Typography fontSize={12}>{props.item.school}</Typography>
-                        <Typography fontSize={10} color={Color.GRAY}>{props.item.subName}</Typography>
+                        <Typography fontSize={10} color={Color.GRAY}>{props.item.aboutUs}</Typography>
                         <Spacer space={14}/>
-                        <Typography fontSize={9} color={Color.GRAY}>{props.item.val}{props.item.unit} ago</Typography>
+                        <Typography fontSize={9} color={Color.GRAY}>가입자 수: {props.item.memberCnt}명</Typography>
                         <Spacer space={14}/>
                     </View> 
                     </View>

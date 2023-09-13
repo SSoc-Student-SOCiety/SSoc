@@ -1,5 +1,6 @@
+import { useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
-import { TouchableOpacity, View, Text, FlatList, ScrollView } from 'react-native'
+import { TouchableOpacity, View, Text, FlatList, ScrollView, Alert } from 'react-native'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { useRecoilState } from 'recoil'
 import { getContentListFetch } from '../../util/FetchUtil'
@@ -8,6 +9,7 @@ import { getTokens } from '../../util/TokenUtil'
 import { ContentCard } from './ContentCard'
 
 const ContentList = (props) => {
+  const navigation = useNavigation()
   const board = props.board
   const groupMemberRole = props.groupMemberRole
   const [user, setUser] = useRecoilState(UserInfoState)
@@ -88,7 +90,7 @@ const ContentList = (props) => {
       const response = await getContentListFetch(accessToken, refreshToken, board.groupId, '', board.category, lastPostId)
       const newData = await response.json()
       console.log(newData)
-      return tempData
+      return newData
     } catch (e) {
       console.log(e)
       return []
@@ -103,6 +105,8 @@ const ContentList = (props) => {
         setLastPostId(newData.dataBody[newData.dataBody.length - 1].postId.toString())
         setData((prevData) => [...prevData, ...newData.dataBody])
       }
+    } else {
+      Alert.alert(newData.dataHeader.resultMessage, navigation.goBack())
     }
   }
 
