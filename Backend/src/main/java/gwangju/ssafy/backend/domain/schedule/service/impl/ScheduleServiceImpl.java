@@ -9,6 +9,8 @@ import gwangju.ssafy.backend.domain.schedule.dto.EditScheduleRequest;
 import gwangju.ssafy.backend.domain.schedule.dto.ScheduleInfo;
 import gwangju.ssafy.backend.domain.schedule.dto.SearchScheduleRequest;
 import gwangju.ssafy.backend.domain.schedule.entity.Schedule;
+import gwangju.ssafy.backend.domain.schedule.exception.ScheduleError;
+import gwangju.ssafy.backend.domain.schedule.exception.ScheduleException;
 import gwangju.ssafy.backend.domain.schedule.repository.ScheduleRepository;
 import gwangju.ssafy.backend.domain.schedule.service.ScheduleService;
 import java.time.LocalDate;
@@ -27,18 +29,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public Long createSchedule(CreateScheduleRequest request) {
-		GroupMember manager = validateManager(request.getGroupId(),
+		GroupMember member = getMember(request.getGroupId(),
 			request.getUserId());
 
-		return scheduleRepository.save(request.toEntity(manager.getGroup())).getId();
+		validateManager(member);
+
+		return scheduleRepository.save(request.toEntity(member.getGroup())).getId();
 	}
 
 	@Override
 	public Long editSchedule(EditScheduleRequest request) {
-		Schedule schedule = scheduleRepository.findById(request.getScheduleId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 일정"));
+		Schedule schedule = getSchedule(request.getScheduleId());
 
-		validateManager(schedule.getGroup().getId(), request.getUserId());
+		validateManager(getMember(schedule.getGroup().getId(), request.getUserId()));
 
 		schedule.edit(request.getTitle(), request.getContent(), request.getCategory(),
 			request.getStartedAt());
@@ -48,10 +51,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	@Override
 	public Long deleteSchedule(DeleteScheduleRequest request) {
-		Schedule schedule = scheduleRepository.findById(request.getScheduleId())
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 일정"));
+		Schedule schedule = getSchedule(request.getScheduleId());
 
-		validateManager(schedule.getGroup().getId(), request.getUserId());
+		validateManager(getMember(schedule.getGroup().getId(), request.getUserId()));
 
 		scheduleRepository.delete(schedule);
 
@@ -61,9 +63,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<ScheduleInfo> searchSchedule(SearchScheduleRequest request) {
-		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
-				request.getUserId())
-			.orElseThrow(() -> new RuntimeException(" 그룹원 X"));
+		GroupMember member = getMember(request.getGroupId(), request.getUserId());
 
 		LocalDate base = request.getDate();
 		LocalDate start = request.getDate().minusDays(15);
@@ -75,16 +75,20 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return result.stream().map(ScheduleInfo::of).toList();
 	}
 
-	private GroupMember validateManager(Long groupId, Long userId) {
-		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId,
-				userId)
-			.orElseThrow(() -> new RuntimeException("그룹원 X"));
+	private Schedule getSchedule(Long scheduleId) {
+		return scheduleRepository.findById(scheduleId)
+			.orElseThrow(() -> new ScheduleException(ScheduleError.NOT_EXISTS_SCHEDULE));
+	}
 
+	private GroupMember getMember(Long groupId, Long userId) {
+		return groupMemberRepository.findByGroupIdAndUserId(groupId, userId)
+			.orElseThrow(() -> new ScheduleException(ScheduleError.NOT_GROUP_MEMBER));
+	}
+
+	private static void validateManager(GroupMember member) {
 		if (member.getRole() != GroupMemberRole.MANAGER) {
-			throw new RuntimeException("그룹 매니저 X");
+			throw new ScheduleException(ScheduleError.NOT_GROUP_MANAGER);
 		}
-
-		return member;
 	}
 
 }
