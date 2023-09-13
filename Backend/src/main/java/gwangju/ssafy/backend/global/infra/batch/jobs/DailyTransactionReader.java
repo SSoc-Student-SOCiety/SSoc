@@ -2,10 +2,10 @@ package gwangju.ssafy.backend.global.infra.batch.jobs;
 
 import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankService;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransactionInfo;
-import gwangju.ssafy.backend.domain.transaction.entity.GroupAccount;
-import gwangju.ssafy.backend.domain.transaction.entity.Transaction;
-import gwangju.ssafy.backend.domain.transaction.repository.GroupAccountRepository;
-import gwangju.ssafy.backend.domain.transaction.repository.TransactionRepository;
+import gwangju.ssafy.backend.domain.account.entity.GroupAccount;
+import gwangju.ssafy.backend.domain.account.entity.Transaction;
+import gwangju.ssafy.backend.domain.account.repository.GroupAccountRepository;
+import gwangju.ssafy.backend.domain.account.repository.TransactionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
