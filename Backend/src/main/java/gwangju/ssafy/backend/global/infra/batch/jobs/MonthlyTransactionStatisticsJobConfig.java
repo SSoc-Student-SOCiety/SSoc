@@ -1,6 +1,6 @@
 package gwangju.ssafy.backend.global.infra.batch.jobs;
 
-import static gwangju.ssafy.backend.domain.transaction.entity.QDailyTransactionStatistics.dailyTransactionStatistics;
+import static gwangju.ssafy.backend.domain.account.entity.QDailyTransactionStatistics.dailyTransactionStatistics;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;

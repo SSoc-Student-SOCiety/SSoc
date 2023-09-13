@@ -2,10 +2,10 @@ package gwangju.ssafy.backend.global.infra.batch.jobs;
 
 import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankService;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.ShinhanTransactionInfo;
-import gwangju.ssafy.backend.domain.transaction.entity.GroupAccount;
-import gwangju.ssafy.backend.domain.transaction.entity.Transaction;
-import gwangju.ssafy.backend.domain.transaction.repository.GroupAccountRepository;
-import gwangju.ssafy.backend.domain.transaction.repository.TransactionRepository;
+import gwangju.ssafy.backend.domain.account.entity.GroupAccount;
+import gwangju.ssafy.backend.domain.account.entity.Transaction;
+import gwangju.ssafy.backend.domain.account.repository.GroupAccountRepository;
+import gwangju.ssafy.backend.domain.account.repository.TransactionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,13 +42,13 @@ public class DailyTransactionReader implements ItemReader<List<Transaction>> {
 
 			List<ShinhanTransactionInfo.Transaction> transactions = info.getTransactions();
 
-			int cnt = transactionRepository.countByGroupAccount_Id(groupAccount.getId());
+			long cnt = transactionRepository.countByGroupAccount_Id(groupAccount.getId());
 			log.info("===== 기존 거래내역 개수 : {} =====", cnt);
 
-			long diff = info.getTransactionCnt() - cnt;
+			int diff = (int)(info.getTransactionCnt() - cnt);
 			log.info("===== 새로 저장할 내역 개수 : {} =====", diff);
 
-			for (int i = 0; i < diff; i++) {
+			for (int i = diff - 1; i >= 0; i--) {
 				ShinhanTransactionInfo.Transaction transaction = transactions.get(i);
 
 				Transaction result = Transaction.builder()

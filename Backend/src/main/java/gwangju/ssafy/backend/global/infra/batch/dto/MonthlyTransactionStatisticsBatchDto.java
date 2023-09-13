@@ -1,6 +1,6 @@
 package gwangju.ssafy.backend.global.infra.batch.dto;
 
-import gwangju.ssafy.backend.domain.transaction.entity.MonthlyTransactionStatistics;
+import gwangju.ssafy.backend.domain.account.entity.MonthlyTransactionStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
