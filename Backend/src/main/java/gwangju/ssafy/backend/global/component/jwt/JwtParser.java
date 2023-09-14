@@ -45,6 +45,11 @@ public class JwtParser {
 //            log.info("만료된 JWT 토큰입니다.");
             String refreshToken = request.getHeader(JwtAuthenticationFilter.REFRESH_HEADER);
             log.info(refreshToken);
+            // 쌍따옴표 붙여서 나오는 부분 제거
+            if(refreshToken != null) {
+                refreshToken = refreshToken.replaceAll("\"", "");
+            }
+
             if (StringUtils.hasText(refreshToken) && refreshToken.startsWith((JwtAuthenticationFilter.BEARER_PREFIX))) {
                 refreshToken = refreshToken.substring(7);
                 try {
