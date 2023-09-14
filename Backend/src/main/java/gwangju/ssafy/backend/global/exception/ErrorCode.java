@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 인증 토큰입니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "AccessToken과 RefreshToken이 둘다 만료되었습니다."),
     ACCESS_EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "RefreshToken은 살아있지만 AccessToekn이 만료되었습니다."),
+    CERTIFICATION_NOT_TOKEN(HttpStatus.UNAUTHORIZED, "자격 증명이 되어 있지 않은 토큰입니다."),
     NOT_SEND_EMAIL(HttpStatus.BAD_REQUEST, "설정 오류로 인해 이메일을 보낼 수 없습니다."),
     SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러 입니다.");
 
