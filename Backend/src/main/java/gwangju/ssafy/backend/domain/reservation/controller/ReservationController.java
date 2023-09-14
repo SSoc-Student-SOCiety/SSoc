@@ -2,14 +2,13 @@ package gwangju.ssafy.backend.domain.reservation.controller;
 
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.service.ReservationService;
+import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +29,18 @@ public class ReservationController {
             return ResponseEntity.ok().body(Message.success(reservationSimpleInfoList, "0", "아무 시간이나 예약 가능합니다."));
         }
         return ResponseEntity.ok().body(Message.success(reservationSimpleInfoList, "1", "예약 된 해당 시간 확인 바랍니다."));
+    }
+
+
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PostMapping("/detail/{productId}/{date}/{time}/ok")
+    public ResponseEntity<Message<ReservationSimpleInfo>> setReserVation(
+            @PathVariable("productId") Long productId,
+            @AuthenticationPrincipal LoginActiveUserDto login,
+            @PathVariable("date") String date,
+            @PathVariable("time") int time
+    ) {
+            ReservationSimpleInfo reservationSimpleInfo = reservationService.setReservation(productId, login.getId(), date, time);
+            return ResponseEntity.ok().body(Message.success(reservationSimpleInfo));
     }
 }
