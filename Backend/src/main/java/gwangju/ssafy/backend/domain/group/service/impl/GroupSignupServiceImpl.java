@@ -38,10 +38,13 @@ public class GroupSignupServiceImpl implements GroupSignupService {
         List<GroupSignup> groupSignupList = groupSignupRepository.findAllBySignupStatusAndGroupId(false, groupId);
         List<GroupSignupInfo> groupSignupInfoList = new ArrayList<>();
         for (GroupSignup groupSignup : groupSignupList) {
-            GroupSignupInfo groupSignupInfo = new GroupSignupInfo();
-            groupSignupInfo.convert(groupSignup);
-            log.info(groupSignupInfo.getUserName());
-            groupSignupInfoList.add(groupSignupInfo);
+            // 비활성화 아닌(false) 유저들인 경우
+            if(!groupSignup.getUser().isDeActivateCheck()) {
+                GroupSignupInfo groupSignupInfo = new GroupSignupInfo();
+                groupSignupInfo.convert(groupSignup);
+                log.info(groupSignupInfo.getUserName());
+                groupSignupInfoList.add(groupSignupInfo);
+            }
         }
         return groupSignupInfoList;
     }

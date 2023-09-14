@@ -118,53 +118,54 @@ export const getLogoutFetch = async (accessToken, refreshToken) => {
   })
 }
 
-export const getChangNickNameFetch = async (userEmail, userNowPassword, userChangePassword, userNickName, userImage) => {
+export const getChangNickNameFetch = async (accessToken, refreshToken, userEmail, userNickName) => {
   return await fetch(url + '/user/update/nickname', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
     },
     body: JSON.stringify({
       userEmail: userEmail,
-      userNowPassword: userNowPassword,
-      userChangePassword: userChangePassword,
       userNickName: userNickName,
-      userImage: userImage,
     }),
   })
 }
 
-export const getChangePasswordFetch = async (userEmail, userNowPassword, userChangePassword, userNickName, userImage) => {
+export const getChangePasswordFetch = async (accessToken, refreshToken, userEmail, userNowPassword, userChangePassword) => {
   return await fetch(url + '/user/update/password', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
     },
     body: JSON.stringify({
       userEmail: userEmail,
       userNowPassword: userNowPassword,
       userChangePassword: userChangePassword,
-      userNickName: userNickName,
-      userImage: userImage,
     }),
   })
 }
 
-export const getChangeAllFetch = async (userEmail, userNowPassword, userChangePassword, userNickName, userImage) => {
+export const getChangeAllFetch = async (accessToken, refreshToken, userEmail, userNowPassword, userChangePassword, userNickName, userImageUrl) => {
   return await fetch(url + '/user/update/nickname/password', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
     },
     body: JSON.stringify({
       userEmail: userEmail,
       userNowPassword: userNowPassword,
       userChangePassword: userChangePassword,
       userNickName: userNickName,
-      userImage: userImage,
+      userImage: userImageUrl,
     }),
   })
 }

@@ -23,12 +23,15 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")  // 테이블명 user일 시 생성 안됨!(오류)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "unique_users", columnNames = {"email"})
+}, name = "users")  // 테이블명 user일 시 생성 안됨!(오류)
 public class User extends BaseEntity {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    // 유저 아이디 (기본키)
+
 
     @Column(name = "email")
     private String userEmail;   // 유저 이메일
@@ -49,6 +52,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;   // 유저 권한
 
+    @Column(name = "deactivate_check")
+    private boolean deActivateCheck;    // 회원 탈퇴시 비활성화 여부 체크하기 위한 컬럼
+
     // 유저 패스워드 세팅 (암호화해서 넘겨줌) (회원정보 수정 - 패스워드)
     public void updatePassword(String userPassword) {
         this.userPassword = userPassword;
@@ -62,6 +68,15 @@ public class User extends BaseEntity {
     // 유저 프로필 이미지만 세팅 (회원정보 수정 - 닉네임)
     public void updateUserImage(String userImage) {
         this.userImageUrl = userImage;
+    }
+
+    // 유저 비활성화 (회원 탈퇴시 사용)
+    public void deActivation() {
+        this.deActivateCheck = true;
+    }
+
+    public void emailDisable(Long userId) {
+        this.userEmail = Long.toString(userId);
     }
 
 }

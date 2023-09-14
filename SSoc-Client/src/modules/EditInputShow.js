@@ -5,36 +5,49 @@ import SettingInfoInput from './SettingInfoInput'
 import * as Color from '../components/Colors/colors'
 import { useState, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { UserInfoState } from '../util/RecoilUtil/Atoms'
+import { goMainPageState, UserInfoState } from '../util/RecoilUtil/Atoms'
 import { Typography } from '../components/Basic/Typography'
 import { SingleLineInput } from '../components/Input/SingleLineInput'
-import { getChangePasswordFetch, getChangNickNameFetch } from '../util/FetchUtil'
+import { getChangeAllFetch, getChangePasswordFetch, getChangNickNameFetch } from '../util/FetchUtil'
+import { getTokens, setTokens } from '../util/TokenUtil'
 
 const EditInputShow = (props) => {
   const [user, setUser] = useRecoilState(UserInfoState)
-  const [inputUserNick, setInputUserNick] = useState('')
+  const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
+
+  const userNick = props.userInfo.userNickname // 전 닉네임_readOnly
+  const userEmail = props.userInfo.userEmail // 내 이메일_readOnly
+  const userImageUrl = props.userInfo.userImageUrl // 내 이미지_readOnly
+
+  const [inputUserNick, setInputUserNick] = useState(userNick)
   const [inputUserCurPw, setInputUserCurPw] = useState('')
   const [inputUserNewPw, setInputUserNewPw] = useState('')
-  const [changeNickNameData, setChangeNickNameData] = useState(null)
-  const [changePasswordData, setChangePasswordData] = useState(null)
-  const [changeAllData, setChangeAllData] = useState(null)
-  const userNick = props.userInfo.userNickName
-  const userEmail = props.userInfo.userEmail
 
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: null,
-    },
-    dataBody: null,
-  }
+  const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
 
   const getChangeNickNameData = async () => {
     try {
-      const response = await getChangNickNameFetch(userEmail, '', '', inputUserNick, '')
+      const response = await getChangNickNameFetch(accessToken, refreshToken, userEmail, inputUserNick)
       const data = await response.json()
-      await setChangeNickNameData(tempData)
+      if (data.dataHeader != undefined) {
+        if (data.dataHeader.successCode == 0 && data.dataHeader.resultCode == null) {
+          // 성공
+          setUser({ ...user, userNickname: inputUserNick })
+          Alert.alert('닉네임이 변경되었습니다.')
+        } else if (data.dataHeader.successCode == 0 && data.dataHeader.resultCode == 1) {
+          // 토큰 재발급
+          setTokens(data.dataBody.token.accessToken, data.dataBody.token.refreshToken)
+          Alert.alert('닉네임 변경에 실패했습니다.', '다시 시도해주세요.')
+        } else {
+          // 토큰 만료
+          Alert.alert('닉네임 변경에 실패했습니다.', '로그인 시간 만료')
+          setGoMainPage(false)
+        }
+      } else {
+        Alert.alert('닉네임 변경에 실패했습니다.', '서버 통신 에러')
+      }
     } catch (e) {
       console.log(e)
     }
@@ -42,9 +55,32 @@ const EditInputShow = (props) => {
 
   const getChangePasswordData = async () => {
     try {
-      const response = await getChangePasswordFetch(userEmail, inputUserCurPw, inputUserNewPw, '', '')
+      const response = await getChangePasswordFetch(accessToken, refreshToken, userEmail, inputUserCurPw, inputUserNewPw)
       const data = await response.json()
-      await setChangePasswordData(tempData)
+      if (data.dataHeader != undefined) {
+        if (data.dataHeader.successCode == 0) {
+          if (data.dataHeader.resultCode == null) {
+            // 성공
+            setInputUserCurPw('')
+            setInputUserNewPw('')
+            Alert.alert('비밀번호 변경에 성공했습니다.')
+          } else if (data.dataHeader.resultCode == 1) {
+            // 토큰 재발급
+            setTokens(data.dataBody.token.accessToken, data.dataBody.token.refreshToken)
+            Alert.alert('비밀번호 변경에 실패했습니다.', '다시 시도해주세요.')
+          }
+        } else {
+          if (data.dataHeader.resultCode == null) {
+            // 비밀 번호 같은 경우 혹은 현재 비밀번호가 틀린 경우
+            Alert.alert(data.dataHeader.resultMessage)
+          } else if (data.dataHeader.resultCode == 2) {
+            // 토큰 두 개 다 만료
+            Alert.alert('비밀번호 변경에 실패했습니다.', '로그인 시간 만료', setGoMainPage(false))
+          }
+        }
+      } else {
+        Alert.alert('비밀번호 변경에 실패했습니다.', '서버 통신 에러')
+      }
     } catch (e) {
       console.log(e)
     }
@@ -52,9 +88,19 @@ const EditInputShow = (props) => {
 
   const getChangeAllData = async () => {
     try {
-      const response = await getChangePasswordFetch(userEmail, inputUserCurPw, inputUserNewPw, inputUserNick, '')
+      const response = await getChangeAllFetch(accessToken, refreshToken, userEmail, inputUserCurPw, inputUserNewPw, inputUserNick, userImageUrl)
       const data = await response.json()
-      await setChangeAllData(tempData)
+      if (data.dataHeader != undefined) {
+        if (data.dataHeader.successCode == 0) {
+          setUser({ ...user, userNickname: inputUserNick })
+          props.editCanclePress(false)
+          Alert.alert('회원정보 변경에 성공했습니다.')
+        } else {
+          Alert.alert(data.dataHeader.resultMessage)
+        }
+      } else {
+        Alert.alert('회원정보 변경에 실패했습니다.', '서버 통신 에러')
+      }
     } catch (e) {
       console.log(e)
     }
@@ -81,9 +127,7 @@ const EditInputShow = (props) => {
   }
 
   const pressSaveAll = () => {
-    if (userNick == inputUserNick) {
-      Alert.alert('변경사항이 존재하지 않습니다.')
-    } else if (inputUserNick.length == 0) {
+    if (inputUserNick.length == 0) {
       Alert.alert('바꿀 닉네임을 입력해주세요.')
     } else if (inputUserCurPw.length < 8) {
       Alert.alert('현재 비밀번호의 길이가 너무 짧습니다.', '비밀번호 길이: 8자 이상')
@@ -95,37 +139,10 @@ const EditInputShow = (props) => {
   }
 
   useEffect(() => {
-    if (changeNickNameData != null) {
-      if (changeNickNameData.dataHeader.successCode == 0) {
-        setUser({ ...user, userNickName: inputUserNick })
-        Alert.alert('변경사항이 저장되었습니다.')
-      } else {
-        Alert.alert('알수 없는 에러가 발생하였습니다.', '다시 시도해주세요.')
-      }
-      setChangeNickNameData(null)
+    if (!isTokenGet) {
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
     }
-
-    if (changePasswordData != null) {
-      if (changePasswordData.dataHeader.successCode == 0) {
-        Alert.alert('변경사항이 저장되었습니다.')
-      } else {
-        Alert.alert(changePasswordData.dataHeader.resultMessage)
-      }
-      setChangePasswordData(null)
-      props.editCanclePress()
-    }
-
-    if (changeAllData != null) {
-      if (changeAllData.dataHeader.successCode == 0) {
-        setUser({ ...user, userNickName: inputUserNick })
-        Alert.alert('변경사항이 모두 저장되었습니다.')
-      } else {
-        Alert.alert(changeAllData.dataHeader.resultMessage)
-      }
-      setChangeAllData(null)
-      props.editCanclePress()
-    }
-  }, [changeNickNameData, changePasswordData, changeAllData])
+  }, [isTokenGet])
 
   return (
     <View>
@@ -133,7 +150,8 @@ const EditInputShow = (props) => {
       <View>
         <SettingInfoInput
           editContent="닉네임"
-          placeholder={props.userInfo.userNickName}
+          placeholder={userNick}
+          value={inputUserNick}
           onPress={pressSaveNick}
           onChangeText={(text) => {
             setInputUserNick(text)
@@ -145,10 +163,11 @@ const EditInputShow = (props) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             <View style={{ backgroundColor: Color.LIGHT_GRAY, borderRadius: 4, width: '70%' }}>
               <SingleLineInput
+                value={inputUserCurPw}
+                secureTextEntry={true}
                 onChangeText={(text) => {
                   setInputUserCurPw(text)
                 }}
-                secureTextEntry={true}
               />
             </View>
             <View style={{ width: '30%' }}></View>
@@ -156,6 +175,7 @@ const EditInputShow = (props) => {
         </View>
         <SettingInfoInput
           editContent="새로운 비밀번호"
+          value={inputUserNewPw}
           secureTextEntry={true}
           onPress={pressSavePw}
           onChangeText={(text) => {

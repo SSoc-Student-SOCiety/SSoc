@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> {
 
-	Optional<GroupMember> findByGroupIdAndUserId(Long groupId, Long userId);
+	Optional<GroupMember> findByGroupIdAndUserId(Long groupId, Long loginMemberId);
 
 	Long countByGroup_Id(Long groupId);
 

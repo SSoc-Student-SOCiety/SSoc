@@ -113,7 +113,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                     response.getWriter().write(objectMapper.writeValueAsString(Message.success(userLoginResponseDto, "1", errorCode.getErrorMessage())));
                 }
                 else {
-                    response.getWriter().write(objectMapper.writeValueAsString(Message.fail(null, errorCode.getErrorMessage())));
+                    response.getWriter().write(objectMapper.writeValueAsString(Message.fail("2", errorCode.getErrorMessage())));
                 }
             }
         } catch (IOException e) {
