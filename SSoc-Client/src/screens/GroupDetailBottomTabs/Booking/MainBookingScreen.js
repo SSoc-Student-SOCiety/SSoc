@@ -67,7 +67,6 @@ export const MainBookingScreen = () => {
 
   const renderItem = ({ item, index }) => {
     if (index % 2 === 0 && index + 1 < mockResponse.dataBody.length) {
-      console.log(index);
 
       return renderRow(
         mockResponse.dataBody[index],
@@ -126,11 +125,11 @@ const EmptyCard = () => {
 const ItemCard = ({ item }) => {
   const navigation = useNavigation();
 
-  const onPressGoDetail = useCallback(() => {
-    navigation.navigate("BookingItemDetialScreen");
+  const onPressGoDetail = useCallback((item) => {
+    navigation.navigate("BookingItemDetialScreen", {item: item});
   });
   return (
-    <TouchableOpacity onPress={onPressGoDetail}>
+    <TouchableOpacity onPress={()=>onPressGoDetail(item)}>
       <View style={styles.card}>
         <View
           style={{

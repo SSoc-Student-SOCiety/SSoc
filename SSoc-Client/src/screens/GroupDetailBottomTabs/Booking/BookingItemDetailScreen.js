@@ -7,7 +7,10 @@ import React, { useEffect, useState } from "react";
 import { Typography } from "../../../components/Basic/Typography";
 import { Divider } from "../../../components/Basic/Divider";
 import { Spacer } from "../../../components/Basic/Spacer";
+import { useRoute } from "@react-navigation/native";
+import { Image } from "react-native";
 export const BookingItemDetailScreen = () => {
+  const route = useRoute();
   const currentDate = new Date(); // 현재 날짜 가져오기
   const year = currentDate.getFullYear();
   const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // 월을 2자리 숫자로 포맷팅
@@ -27,16 +30,18 @@ export const BookingItemDetailScreen = () => {
     const listData = mockResponse.dataBody[selectedDate] || [];
 
     return (
-      <FlatList
+      <View style={{alignItems:"center", justifyContent:"center"}}> 
+        <FlatList
         data={listData}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
+      </View>
+      
     );
   };
 
   const renderItem = ({ item }) => {
-    console.log(item);
     return (
       item.available ?(
         <TouchableOpacity>
@@ -47,7 +52,7 @@ export const BookingItemDetailScreen = () => {
               </Typography>
             </View>
             <View style={{marginHorizontal:15}}>
-              <Typography color={Color.WHITE}>예약가능</Typography>
+              <Typography color={Color.WHITE}>예약 가능</Typography>
             </View>
           </View>
         </TouchableOpacity>
@@ -70,8 +75,19 @@ export const BookingItemDetailScreen = () => {
 
   return (
     <View style={{ backgroundColor: Color.WHITE, flex:1 }}>
-      <StackHeader title={"예약아이템 상세"} />
-      <View style={{flex:1}}>
+      <StackHeader title="예약하기" />
+      <View style={{flex:1, margin:25, flexDirection:"row",borderRadius:18, boderWidth:1, borderColor: Color.GRAY}}> 
+        <Image
+              source={{ uri: route.params.item.imgUrl }} // 외부 이미지 URL 설정
+              style={{ width: 100, height: 130, borderRadius: 15 }}
+        />
+        <View style={{margin:10}}>
+          <Typography fontSize={20}>{route.params.item.name}</Typography>
+          <Spacer space={3}/>
+          <Typography>{route.params.item.description}</Typography>
+        </View>
+      </View>
+
         <Calendar
           onDayPress={(day) => {
             setSelected(day.dateString);
@@ -86,14 +102,18 @@ export const BookingItemDetailScreen = () => {
             },
           }}
         />
-      </View>
+
       
       {/* selected 상태가 변경될 때마다 List 컴포넌트를 렌더링 */}
-      <Spacer space={3}/>
-      <Divider/>
-      <Spacer space={3}/>
-      <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+      <View style={{flex:4, alignContent:"center", justifyContent:"center"}}>
+        <Spacer space={10}/>
+        <Divider/>
+        <Spacer space={10}/>
         <List selectedDate={selected} />
+      </View>
+      
+      <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+        
       </View>
       
     </View>
