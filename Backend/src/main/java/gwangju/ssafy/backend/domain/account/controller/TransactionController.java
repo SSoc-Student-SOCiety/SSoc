@@ -57,13 +57,15 @@ public class TransactionController {
 			.body(Message.success(transactionService.getTransactions(request)));
 	}
 
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
 	@GetMapping("/download")
 	public void downloadTransactionsExcel(
+		@AuthenticationPrincipal LoginActiveUserDto login,
 		HttpServletResponse response,
 		@PathVariable Long accountId
 	) throws IOException {
 		SimpleExcelFile excel =
-			transactionService.getTransactionsAsExcel(accountId, 1L);
+			transactionService.getTransactionsAsExcel(accountId, login.getId());
 
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
 		response.setHeader("Content-Disposition",
