@@ -6,8 +6,13 @@ import gwangju.ssafy.backend.domain.account.dto.TransactionInfo;
 import gwangju.ssafy.backend.domain.account.service.TransactionService;
 import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
 import gwangju.ssafy.backend.global.common.dto.Message;
+import gwangju.ssafy.backend.global.component.excel.SimpleExcelFile;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,7 +53,25 @@ public class TransactionController {
 	) {
 		request.setUserId(login.getId());
 		request.setAccountId(accountId);
-		return ResponseEntity.ok().body(Message.success(transactionService.getTransactions(request)));
+		return ResponseEntity.ok()
+			.body(Message.success(transactionService.getTransactions(request)));
+	}
+
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	@GetMapping("/download")
+	public void downloadTransactionsExcel(
+		@AuthenticationPrincipal LoginActiveUserDto login,
+		HttpServletResponse response,
+		@PathVariable Long accountId
+	) throws IOException {
+		SimpleExcelFile excel =
+			transactionService.getTransactionsAsExcel(accountId, login.getId());
+
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
+		response.setHeader("Content-Disposition",
+			"attachment;filename=" + URLEncoder.encode("거래내역", "UTF-8") + ".xlsx");
+		excel.writeFile(response.getOutputStream());
+
 	}
 
 }

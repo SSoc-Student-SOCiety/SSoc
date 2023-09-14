@@ -14,8 +14,11 @@ import gwangju.ssafy.backend.domain.account.exception.AccountException;
 import gwangju.ssafy.backend.domain.account.repository.GroupAccountRepository;
 import gwangju.ssafy.backend.domain.account.repository.TransactionRepository;
 import gwangju.ssafy.backend.domain.account.service.TransactionService;
+import gwangju.ssafy.backend.global.component.excel.SimpleExcelFile;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +70,26 @@ public class TransactionServiceImpl implements TransactionService {
 			.orElseThrow(() -> new AccountException(NOT_GROUP_MEMBER));
 
 		return transactionRepository.
-			findAllByGroupAccountId(request.getAccountId(), request.getFilter());
+			searchAllByGroupAccountId(request.getAccountId(), request.getFilter());
+	}
+
+
+	@Override
+	public SimpleExcelFile getTransactionsAsExcel(Long accountId, Long userId) {
+
+		GroupAccount account = groupAccountRepository.findById(accountId)
+			.orElseThrow(() -> new AccountException(NOT_EXISTS_ACCOUNT));
+
+		if (!account.isActive()) {
+			throw new AccountException(NOT_LINKED_ACCOUNT);
+		}
+
+		groupMemberRepository.findByGroupIdAndUserId(account.getGroup().getId(),
+				userId)
+			.orElseThrow(() -> new AccountException(NOT_GROUP_MEMBER));
+
+		return new SimpleExcelFile<>(
+			transactionRepository.searchAllByGroupAccountId(accountId),
+			TransactionInfo.class);
 	}
 }
