@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.global.exception;
 
+import gwangju.ssafy.backend.domain.user.exception.UserException;
 import gwangju.ssafy.backend.global.common.dto.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +21,6 @@ public class GlobalException {
         log.error("{} is occured", e.getMessage());
         return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
     }
-
-    @ExceptionHandler(UserException.class)
-    public ResponseEntity<Message> userException(UserException e) {
-        log.error("{} is occured", e.getMessage());
-        return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
-    }
-
-    @ExceptionHandler(ExcelException.class)
-    public ResponseEntity<Message> excelException(ExcelException e) {
-        log.error("{} is occured", e.getMessage());
-        return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
-    }
-
 
 
 }

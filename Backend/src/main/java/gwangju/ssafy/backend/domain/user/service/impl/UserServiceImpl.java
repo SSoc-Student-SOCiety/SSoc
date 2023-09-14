@@ -1,17 +1,20 @@
-package gwangju.ssafy.backend.domain.user.service;
+package gwangju.ssafy.backend.domain.user.service.impl;
 
 import gwangju.ssafy.backend.domain.user.dto.*;
 import gwangju.ssafy.backend.domain.user.entity.User;
+import gwangju.ssafy.backend.domain.user.exception.UserError;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
+import gwangju.ssafy.backend.domain.user.service.UserService;
 import gwangju.ssafy.backend.global.common.dto.*;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
-import gwangju.ssafy.backend.global.exception.ErrorCode;
-import gwangju.ssafy.backend.global.exception.UserException;
+import gwangju.ssafy.backend.global.component.jwt.repository.RefreshRepository;
+import gwangju.ssafy.backend.domain.user.exception.UserException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,8 @@ class UserServiceImpl implements UserService {
     private final JavaMailSender emailSender;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final RefreshRepository refreshRepository;
 
 
 
@@ -47,7 +52,7 @@ class UserServiceImpl implements UserService {
     @Override
     public void existsUserByUserEmail(String userEmail) {
         if(userRepository.existsUserByUserEmail(userEmail)) {
-            throw new UserException(ErrorCode.EXIST_USER_EMAIL);
+            throw new UserException(UserError.EXIST_USER_EMAIL);
         }
     }
 
@@ -56,7 +61,7 @@ class UserServiceImpl implements UserService {
     @Override
     public void signUpUser(UserSignUpRequestDto userRequestDto) {
         if(userRepository.existsUserByUserEmail(userRequestDto.getUserEmail())) {
-            throw new UserException(ErrorCode.EXIST_USER_EMAIL);
+            throw new UserException(UserError.EXIST_USER_EMAIL);
         }
         userRequestDto.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword())); // 패스워드 암호화 작업
         userRepository.save(userRequestDto.toEntity());
@@ -68,12 +73,12 @@ class UserServiceImpl implements UserService {
 
         // 해당 이메일을 가진 유저 찾을 수 없을 경우 UserException 발생
         User user = userRepository.findByUserEmail(userLoginRequestDto.getUserEmail()).orElseThrow(() ->
-                new UserException(ErrorCode.NOT_FOUND_USER));
+                new UserException(UserError.NOT_FOUND_USER));
         String realPassword = user.getUserPassword();
 
 
         if(!passwordEncoder.matches(userLoginRequestDto.getUserPassword(), realPassword)) {
-            throw new UserException(ErrorCode.NOT_MATCH_PASSWORD);
+            throw new UserException(UserError.NOT_MATCH_PASSWORD);
         }
         return TokenUserInfoDto.builder()
                 .id(user.getId())
@@ -84,11 +89,22 @@ class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public void logoutUser(String userEmail) {
+        try {
+            refreshRepository.delete(userEmail);
+        }
+        catch(Exception e) {
+            throw new UserException(UserError.ALREADY_USER_LOGOUT);
+        }
+    }
+
+
     // 회원정보에서 닉네임만 수정
     @Override
     public TokenUserInfoDto updateNickName(UserUpdateDto userUpdateDto) {
         User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).orElseThrow(() ->
-                new UserException(ErrorCode.NOT_FOUND_USER));
+                new UserException(UserError.NOT_FOUND_USER));
         // 해당 엔티티 접근해서 유저 닉네임 업데이트
         user.updateUserNickname(userUpdateDto.getUserNickName());
         return TokenUserInfoDto.update(user);
@@ -98,7 +114,7 @@ class UserServiceImpl implements UserService {
     @Override
     public TokenUserInfoDto updateImage(UserUpdateDto userUpdateDto) {
         User user = userRepository.findByUserEmail(userUpdateDto.getUserEmail()).orElseThrow(() ->
-                new UserException(ErrorCode.NOT_FOUND_USER));
+                new UserException(UserError.NOT_FOUND_USER));
         user.updateUserImage(userUpdateDto.getUserImage());
         return TokenUserInfoDto.update(user);
     }
@@ -110,12 +126,12 @@ class UserServiceImpl implements UserService {
         String realPassword = user.getUserPassword();   // 해당 유저 db에서 검색해서 현재 저장된 패스워드 받아옴
         // 입력받은 현재 패스워드와 DB내에 저장된 패스워드가 같지 않은 경우 (현재 비밀번호를 잘못 입력하였습니다)
         if(!passwordEncoder.matches(userUpdateDto.getUserNowPassword(), realPassword)) {
-            throw new UserException(ErrorCode.NOT_MATCH_PASSWORD);
+            throw new UserException(UserError.NOT_MATCH_PASSWORD);
         }
 
         // 입력받은 유저의 변경할 비밀번호가 DB내에 저장된 패스워드와 같은 경우 (현재 비밀번호가 변경하려는 비밀번호와 같습니다)
         if(passwordEncoder.matches(userUpdateDto.getUserChangePassword(), realPassword)) {
-            throw new UserException(ErrorCode.CURRENT_CHANGE_MATCH_PASSWORD);
+            throw new UserException(UserError.CURRENT_CHANGE_MATCH_PASSWORD);
         }
 
         user.updatePassword(passwordEncoder.encode(userUpdateDto.getUserChangePassword()));
@@ -126,28 +142,23 @@ class UserServiceImpl implements UserService {
     @Override
     public void tempPassword(UserDto userDto, MailCodeDto mailCodeDto) {
         User user = userRepository.findByUserEmail(userDto.getUserEmail()).orElseThrow(() ->
-                new UserException(ErrorCode.NOT_FOUND_USER));
+                new UserException(UserError.NOT_FOUND_USER));
         user.updatePassword(passwordEncoder.encode(mailCodeDto.getEmailCode()));
     }
 
-    // 유저 이메일을 통해 회원정보 불러오기
-//    @Override
-//    public TokenUserInfoDto userInformationFind(String userEmail) {
-//        User user = userRepository.findByUserEmail(userEmail).orElseThrow(() ->
-//                new UserException(ErrorCode.NOT_FOUND_USER));
-//        return TokenUserInfoDto.builder()
-//                .id(user.getId())
-//                .userEmail(user.getUserEmail())
-//                .userName(user.getUserName())
-//                .userNickname(user.getUserNickname())
-//                .userImageUrl(user.getUserImageUrl())
-//                .build();
-//    }
 
     // 유저 아이디를 통한 회원정보 삭제
     @Override
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        try {
+            User user = userRepository.findById(id).orElseThrow(() ->
+                    new UserException(UserError.NOT_FOUND_USER));
+            userRepository.delete(user);    // DB내에 해당 유저 삭제한 뒤
+            refreshRepository.delete(user.getUserEmail());  // redis에 저장된 해당 유저 token값 삭제 처리(로그아웃)
+        }
+        catch(Exception e) {
+            throw new UserException(UserError.NOT_EXIST_USER, e);
+        }
     }
 
 }

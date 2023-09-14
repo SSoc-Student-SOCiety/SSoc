@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static gwangju.ssafy.backend.global.exception.ErrorCode.CERTIFICATION_NOT_TOKEN;
+import static gwangju.ssafy.backend.global.exception.GlobalError.CERTIFICATION_NOT_TOKEN;
 
 /**
  * 자격 증명 없이 접근시, 401 응답을 보여줌
