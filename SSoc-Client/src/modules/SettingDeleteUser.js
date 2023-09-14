@@ -6,12 +6,19 @@ import SettingBtn from './SettingButton'
 import { Spacer } from '../components/Basic/Spacer'
 import { useRecoilState } from 'recoil'
 import { goMainPageState, UserInfoState } from '../util/RecoilUtil/Atoms'
-import { removeTokens } from '../util/TokenUtil'
+import { getTokens, removeTokens } from '../util/TokenUtil'
+import { getDeleteUserFetch } from '../util/FetchUtil'
 
 const SettingDeleteUser = () => {
   const [isTokenRemove, setIsTokenRemove] = useState(false)
+
+  const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
+
   const [user, setUser] = useRecoilState(UserInfoState)
   const [goMainPage, setGoMainPage] = useRecoilState(goMainPageState)
+
   const onPressDel = () => {
     Alert.alert(
       '계정을 삭제하시겠습니까?',
@@ -21,8 +28,7 @@ const SettingDeleteUser = () => {
         {
           text: '삭제',
           onPress: () => {
-            removeTokens()
-            setIsTokenRemove(true)
+            getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
           },
           style: 'destructive',
         },
@@ -33,12 +39,28 @@ const SettingDeleteUser = () => {
     )
   }
 
-  useEffect(() => {
-    if (isTokenRemove == true) {
-      setUser(null)
-      setGoMainPage(false)
+  const getDeleteUserData = async () => {
+    try {
+      const response = await getDeleteUserFetch(accessToken, refreshToken)
+      const data = await response.json()
+      console.log(data)
+      if (data.dataHeader.successCode == 0) {
+        removeTokens()
+        setGoMainPage(false)
+        setUser(null)
+      } else {
+        Alert.alert('회원탈퇴에 실패했습니다.', '알 수 없는 에러.')
+      }
+    } catch (e) {
+      console.log(e)
     }
-  }, [isTokenRemove])
+  }
+
+  useEffect(() => {
+    if (isTokenGet) {
+      getDeleteUserData()
+    }
+  }, [isTokenGet])
 
   return (
     <View>

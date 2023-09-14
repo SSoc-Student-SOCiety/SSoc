@@ -13,6 +13,8 @@ const CommentCard = (props) => {
   const user = useRecoilValue(UserInfoState)
   const setShowComment = props.setShowComment
 
+  const postId = props.postId
+
   const [accessToken, setAccessToken] = useState(null)
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
@@ -21,7 +23,6 @@ const CommentCard = (props) => {
     try {
       const response = await getCommentDeleteFetch(accessToken, refreshToken, postId, comment.commentId)
       const newData = await response.json()
-      console.log(newData)
       if (newData.dataHeader.successCode == 0) {
         Alert.alert('댓글이 삭제되었습니다.', setShowComment(false))
       } else {
@@ -71,10 +72,13 @@ const CommentCard = (props) => {
                 </View>
               </TouchableOpacity>
             </View>
-          ) : null}
+          ) : (
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}></View>
+          )}
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
             <TouchableOpacity
               onPress={() => {
+                props.setComment(comment)
                 props.setAnswerCommentModal(true)
               }}
             >

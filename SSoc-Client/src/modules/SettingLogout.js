@@ -10,7 +10,6 @@ import { removeTokens, getTokens } from '../util/TokenUtil'
 import { getLogoutFetch } from '../util/FetchUtil'
 
 const SettingLogout = () => {
-  const [isTokenRemove, setIsTokenRemove] = useState(false)
   const [accessToken, setAccessToken] = useState(null)
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
@@ -44,7 +43,12 @@ const SettingLogout = () => {
       const response = await getLogoutFetch(accessToken, refreshToken)
       const data = await response.json()
       console.log(data)
-      await setLogoutData(data)
+      if (data.dataHeader.successCode == 0) {
+        removeTokens()
+        setGoMainPage(false)
+      } else {
+        Alert.alert('로그아웃에 실패했습니다.', '알 수 없는 에러.')
+      }
     } catch (e) {
       console.log(e)
     }
@@ -53,22 +57,8 @@ const SettingLogout = () => {
   useEffect(() => {
     if (isTokenGet) {
       getLogoutData()
-      setIsTokenGet(false)
     }
-    if (logoutData != null) {
-      console.log(logoutData)
-      if (logoutData.dataHeader.successCode == 0) {
-        removeTokens()
-        setUserInfo(null)
-        setIsTokenRemove(true)
-      }
-      setLogoutData(null)
-    }
-    if (isTokenRemove) {
-      setGoMainPage(false)
-      setIsTokenRemove(false)
-    }
-  }, [isTokenRemove, logoutData, isTokenGet])
+  }, [isTokenGet])
 
   return (
     <View>

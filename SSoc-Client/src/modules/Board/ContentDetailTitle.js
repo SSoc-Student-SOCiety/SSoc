@@ -19,8 +19,6 @@ const ContentDetailTitle = (props) => {
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
 
-  console.log(props)
-
   const getContentDeleteData = async () => {
     try {
       const response = await getContentDeleteFetch(accessToken, refreshToken, content.postId)
