@@ -77,7 +77,6 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public TokenUserInfoDto parseAccessToken(@NonNull String accessToken) {
         Claims claims = jwtParser.parseToken(accessToken, jwtUtils.getEncodedKey());
-
         if(claims == null) {
             return null;
         }

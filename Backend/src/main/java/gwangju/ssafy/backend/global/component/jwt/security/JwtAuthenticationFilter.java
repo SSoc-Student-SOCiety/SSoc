@@ -58,15 +58,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     public void authenticate(HttpServletRequest request, String token) {
+        TokenUserInfoDto tokenUserInfoDto = null;
         if(StringUtils.hasText(token)) {
             log.info(request.getHeader(AUTHORIZATION_HEADER).toString());
-            TokenUserInfoDto tokenUserInfoDto = jwtService.parseAccessToken(token);
+            tokenUserInfoDto = jwtService.parseAccessToken(token);
             try {
                 LoginActiveUserDto loginActiveUserDto = LoginActiveUserDto.from(tokenUserInfoDto);
-                log.info(loginActiveUserDto.getUserEmail());
                 saveLoginUserInSecurityContext(loginActiveUserDto);
             }
             catch(RuntimeException e){
+                SecurityContextHolder.clearContext();
+                log.info("INVALID_TOKEN");
                 throw new TokenException(GlobalError.INVALID_TOKEN, e);
             }
 

@@ -16,6 +16,6 @@ public interface GroupMemberService {
 
 	List<GetGroupMemberInfo> getMemberList(Long userId, Long groupId);
 
-	DeleteGroupMemberInfo deleteGroupMember(Long groupId, Long userId);
+	DeleteGroupMemberInfo deleteGroupMember(Long groupId, Long userId, Long loginMemberId);
 
 }
