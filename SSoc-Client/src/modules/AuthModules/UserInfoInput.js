@@ -56,7 +56,7 @@ const UserInfoInput = (props) => {
       <AuthInput
         fontSize={16}
         title="이메일 인증번호"
-        placeholder={props.emailCode}
+        // placeholder={props.emailCode}
         onChangeText={(text) => {
           setEmailCode(text)
         }}

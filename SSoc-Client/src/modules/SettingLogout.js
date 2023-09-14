@@ -42,7 +42,6 @@ const SettingLogout = () => {
     try {
       const response = await getLogoutFetch(accessToken, refreshToken)
       const data = await response.json()
-      console.log(data)
       if (data.dataHeader.successCode == 0) {
         removeTokens()
         setGoMainPage(false)

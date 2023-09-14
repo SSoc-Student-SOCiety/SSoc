@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, Text, Alert, TouchableOpacity } from 'react-native'
+import { View, Text, Alert, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Button } from '../../components/Basic/Button'
 import { Spacer } from '../../components/Basic/Spacer'
 import { Typography } from '../../components/Basic/Typography'
@@ -10,9 +10,11 @@ const SchoolEmailInput = (props) => {
   const userEmail = props.userEmail
   const [emailAuthCodeData, setEmailAuthCodeData] = useState(null)
   const [waitTime, setWaitTime] = useState(false)
+  const [loader, setLoader] = useState(false)
 
   const onPressCheckEmail = () => {
     if (waitTime == false) {
+      setLoader(true)
       getEmailAuthCodeData()
       setWaitTime(true)
     } else {
@@ -24,7 +26,7 @@ const SchoolEmailInput = (props) => {
     try {
       const response = await getEmailAuthCodeFetch(userEmail)
       const data = await response.json()
-      console.log(data)
+      console.log('인증코드: ', data.dataBody.emailCode)
       await setEmailAuthCodeData(data)
     } catch (e) {
       console.log(e)
@@ -36,8 +38,7 @@ const SchoolEmailInput = (props) => {
       setTimeout(() => {
         setWaitTime(false)
       }, 180000)
-      // TO-DO(수린)
-      // 이메일 인증코드 발송 시 오래 걸림 = LOADER를 하나 만들까 생각 중
+      setLoader(false)
       if (emailAuthCodeData.dataHeader.successCode == 0) {
         Alert.alert('이메일 인증코드가 발송되었습니다.', '이메일을 확인해주세요.')
         props.onPressCheck()
@@ -91,12 +92,14 @@ const SchoolEmailInput = (props) => {
                   flexDirection: 'row',
                 }}
               >
-                <Typography
-                  fontSize={14}
-                  color={Color.WHITE}
-                >
-                  메일인증
-                </Typography>
+                {loader ? (
+                  <ActivityIndicator
+                    color={Color.WHITE}
+                    size="small"
+                  />
+                ) : (
+                  <Text style={{ color: Color.WHITE }}>메일인증</Text>
+                )}
               </View>
             </TouchableOpacity>
           </Button>

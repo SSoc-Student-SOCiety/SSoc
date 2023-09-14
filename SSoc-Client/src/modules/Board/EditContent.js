@@ -26,9 +26,7 @@ const EditContent = (props) => {
         Alert.alert('제목과 내용을 필수로 입력해주세요.')
         return
       }
-      // TO-DO(수린)
-      // 게시판 카테고리 오는 거 확인 후 바꿔서 넣기
-      const response = await getEditContentFetch(accessToken, refreshToken, content.postId, inputTitle, inputContent, 'SUGGEST', isChecked)
+      const response = await getEditContentFetch(accessToken, refreshToken, content.postId, inputTitle, inputContent, content.category, isChecked)
       const data = await response.json()
       if (data != null) {
         if (data.dataHeader.successCode == 0) {
