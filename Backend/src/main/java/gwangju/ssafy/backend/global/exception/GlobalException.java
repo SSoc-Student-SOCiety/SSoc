@@ -27,7 +27,11 @@ public class GlobalException {
         return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
     }
 
-
+    @ExceptionHandler(ExcelException.class)
+    public ResponseEntity<Message> excelException(ExcelException e) {
+        log.error("{} is occured", e.getMessage());
+        return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
+    }
 
 
 
