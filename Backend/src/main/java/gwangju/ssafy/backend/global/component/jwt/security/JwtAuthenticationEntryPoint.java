@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static gwangju.ssafy.backend.global.exception.ErrorCode.INVALID_TOKEN;
+import static gwangju.ssafy.backend.global.exception.ErrorCode.CERTIFICATION_NOT_TOKEN;
 
 /**
  * 자격 증명 없이 접근시, 401 응답을 보여줌
@@ -31,11 +31,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         setResponse(response);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        response.getWriter().write(objectMapper.writeValueAsString(Message.fail(null, INVALID_TOKEN.getErrorMessage())));
+        response.getWriter().write(objectMapper.writeValueAsString(Message.fail(null, CERTIFICATION_NOT_TOKEN.getErrorMessage())));
     }
 
     private void setResponse(HttpServletResponse response) {
-        response.setStatus(INVALID_TOKEN.getHttpStatus().value());
+        response.setStatus(CERTIFICATION_NOT_TOKEN.getHttpStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("utf-8");
     }
