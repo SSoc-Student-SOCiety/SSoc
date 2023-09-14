@@ -3,12 +3,13 @@ import { StackHeader } from "../../../modules/StackHeader";
 import * as Color from "../../../components/Colors/colors";
 import { Calendar } from "react-native-calendars";
 import { Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Typography } from "../../../components/Basic/Typography";
 import { Divider } from "../../../components/Basic/Divider";
 import { Spacer } from "../../../components/Basic/Spacer";
 import { useRoute } from "@react-navigation/native";
 import { Image } from "react-native";
+import { ReservationRequestModal } from "../../../components/Modal/ReservationRequestModal";
 export const BookingItemDetailScreen = () => {
   const route = useRoute();
   const currentDate = new Date(); // 현재 날짜 가져오기
@@ -19,6 +20,10 @@ export const BookingItemDetailScreen = () => {
 
   const [timeList, setTimeList] = useState(mockResponse.dataBody[today]);
   const [selected, setSelected] = useState(today);
+  const [product, setProduct] = useState(route.params.item); 
+  const [selectedTime, setSelectedTime] = useState();  
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 데이터를 설정합니다.
@@ -41,10 +46,19 @@ export const BookingItemDetailScreen = () => {
     );
   };
 
-  const renderItem = ({ item }) => {
+  const onPressRequest = useCallback((item)=>{
+    console.log(item); 
+    console.log(selected);
+    console.log(product); 
+    setSelectedTime(item.time);
+    setIsModalVisible(true); 
+  })
+
+  const renderItem = ({ item}) => {
+    
     return (
       item.available ?(
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>onPressRequest(item)}>
           <View style={{backgroundColor:Color.LIGHT_BLUE, width: 320, height:40, justifyContent:"space-between", alignItems:"center", margin:5, flexDirection:"row", borderRadius:12}}>
             <View style={{margin:10}}>
               <Typography fontSize={15} color={Color.WHITE}> 
@@ -74,6 +88,7 @@ export const BookingItemDetailScreen = () => {
   };
 
   return (
+    <>
     <View style={{ backgroundColor: Color.WHITE, flex:1 }}>
       <StackHeader title="예약하기" />
       <View style={{flex:1, margin:25, flexDirection:"row",borderRadius:18, boderWidth:1, borderColor: Color.GRAY}}> 
@@ -109,7 +124,7 @@ export const BookingItemDetailScreen = () => {
         <Spacer space={10}/>
         <Divider/>
         <Spacer space={10}/>
-        <List selectedDate={selected} />
+        <List selectedDate={selected} product={route.params.item}/>
       </View>
       
       <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
@@ -117,6 +132,8 @@ export const BookingItemDetailScreen = () => {
       </View>
       
     </View>
+    <ReservationRequestModal isModalVisible={isModalVisible} selectedItemId={product.productId} selectedItemName={product.name} setIsModalVisible={setIsModalVisible} selectedDate={selected} selectedTime={selectedTime}/>
+    </>
   );
 };
 //실제예약일을 2023-09-14의 형태로 입력을 넘겨줌
