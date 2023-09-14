@@ -19,12 +19,13 @@ export const SearchResultScreen = () => {
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const getGroupListData = async () => {
     try {
       const response = await getGroupListFetch(accessToken, refreshToken, lastGroupId, '', '')
       const newData = await response.json()
-      console.log(newData)
-      return tempData
+      return newData
     } catch (e) {
       console.log(e)
       return []
@@ -32,25 +33,32 @@ export const SearchResultScreen = () => {
   }
 
   const loadData = async () => {
+    if (isLoading) {
+      return
+    }
+    setIsLoading(true)
     const newData = await getGroupListData()
-    console.log(newData)
     if (newData.dataHeader.successCode == 0) {
       if (newData.dataBody.length > 0) {
-        setLastGroupId(newData.dataBody[newData.dataBody.length - 1].groupId.toString())
+        setLastGroupId(newData.dataBody[newData.dataBody.length - 1].groupId)
         setData((prevData) => [...prevData, ...newData.dataBody])
       }
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
     if (!isTokenGet) {
       getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
+    } else {
       loadData()
     }
-  }, [])
+  }, [isTokenGet])
 
   const handleEndReached = () => {
-    loadData()
+    if (lastGroupId !== '') {
+      loadData()
+    }
   }
 
   return (
@@ -113,53 +121,3 @@ var styles = StyleSheet.create({
   searchBar: { paddingTop: 30, paddingHorizontal: 20, backgroundColor: Color.GRAY },
   commonItem: { paddingTop: 30, paddingHorizontal: 20 },
 })
-
-const tempData = {
-  dataHeader: {
-    successCode: 0,
-    resultCode: null,
-    resultMessage: null,
-  },
-  dataBody: [
-    {
-      groupId: 1,
-      name: 'TestName1',
-      aboutUs: '제36대 총학생회',
-      school: '전남대',
-      thumbnail: 'https://picsum.photos/600',
-      memberCnt: 1,
-    },
-    {
-      groupId: 2,
-      name: 'TestName2',
-      aboutUs: '제37대 총학생회',
-      school: '서울대',
-      thumbnail: 'https://picsum.photos/500',
-      memberCnt: 124,
-    },
-    {
-      groupId: 3,
-      name: 'TestName3',
-      aboutUs: '제38대 총학생회',
-      school: '신한대',
-      thumbnail: 'https://picsum.photos/700',
-      memberCnt: 55,
-    },
-    {
-      groupId: 4,
-      name: 'TestName4',
-      aboutUs: '제39대 총학생회',
-      school: '싸피대',
-      thumbnail: 'https://picsum.photos/400',
-      memberCnt: 3,
-    },
-    {
-      groupId: 5,
-      name: 'TestName5',
-      aboutUs: '제40대 총학생회',
-      school: '싸피대',
-      thumbnail: 'https://picsum.photos/400',
-      memberCnt: 3,
-    },
-  ],
-}

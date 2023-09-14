@@ -423,6 +423,31 @@ export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, 
   }
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+  console.log(fullUrl)
+
+  return await fetch(fullUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+export const getMyGroupListFetch = async (accessToken, refreshToken, lastGroupId, keyword, category) => {
+  const baseUrl = `${url}/groups/my-groups`
+  const queryParams = {
+    lastGroupId: lastGroupId, // 생략 가능
+    keyword: keyword, // 생략 가능
+    category: category, // 생략 가능
+    pageSize: 5,
+  }
+
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+
+  console.log(fullUrl)
 
   return await fetch(fullUrl, {
     method: 'GET',
