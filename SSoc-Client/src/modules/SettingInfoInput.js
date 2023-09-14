@@ -11,6 +11,7 @@ const SettingInfoInput = (props) => {
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
         <View style={{ backgroundColor: Color.LIGHT_GRAY, borderRadius: 4, width: '70%' }}>
           <SingleLineInput
+            value={props.value}
             placeholder={props.placeholder}
             onChangeText={props.onChangeText}
             secureTextEntry={props.secureTextEntry}
