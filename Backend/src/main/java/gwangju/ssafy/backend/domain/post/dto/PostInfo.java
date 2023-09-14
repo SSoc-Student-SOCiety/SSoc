@@ -1,5 +1,7 @@
 package gwangju.ssafy.backend.domain.post.dto;
 
+import gwangju.ssafy.backend.domain.post.entity.Post;
+import gwangju.ssafy.backend.domain.post.entity.enums.PostCategory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -25,10 +27,11 @@ public class PostInfo {
 	private Long commentCnt;
 	private String profileImg;
 	private Long userId;
+	private PostCategory category;
 
 	public PostInfo(Long postId, Long groupId, String title, String nickname,
 		LocalDateTime createdAt,
-		String content, Long commentCnt, String profileImg, Long userId) {
+		String content, Long commentCnt, String profileImg, Long userId, PostCategory category) {
 		this.postId = postId;
 		this.groupId = groupId;
 		this.title = title;
@@ -39,5 +42,6 @@ public class PostInfo {
 		this.commentCnt = commentCnt;
 		this.profileImg = profileImg;
 		this.userId = userId;
+		this.category = category;
 	}
 }

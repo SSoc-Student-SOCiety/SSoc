@@ -45,7 +45,8 @@ public class QuerydslPostRepositoryImpl implements QuerydslPostRepository {
 							comment.isDeleted.isFalse()),
 					"studentCount"),
 				user.userImageUrl.as("profileImg"),
-				user.id.as("userId")
+				user.id.as("userId"),
+				post.category
 			))
 			.from(post)
 			.innerJoin(post.user, user)
