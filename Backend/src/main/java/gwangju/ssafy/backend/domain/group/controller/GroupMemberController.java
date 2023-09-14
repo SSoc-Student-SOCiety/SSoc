@@ -50,8 +50,9 @@ public class GroupMemberController {
 	@DeleteMapping("/member/delete/{userId}")
 	public ResponseEntity<Message<DeleteGroupMemberInfo>> deleteGroupMember(
 			@PathVariable("groupId") Long groupId,
-			@PathVariable("userId") Long userId) {
-		DeleteGroupMemberInfo deleteGroupMemberInfo = groupMemberService.deleteGroupMember(groupId, userId);
+			@PathVariable("userId") Long userId,
+			@AuthenticationPrincipal LoginActiveUserDto login) {
+		DeleteGroupMemberInfo deleteGroupMemberInfo = groupMemberService.deleteGroupMember(groupId, userId, login.getId());
 		return ResponseEntity.ok().body(Message.success(deleteGroupMemberInfo));
 	}
 

@@ -22,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MANAGER;
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MEMBER;
+
 
 @RequiredArgsConstructor
 @Transactional
@@ -61,13 +64,25 @@ class GroupMemberServiceImpl implements GroupMemberService {
 	// 로그인한 유저(그룹장)의 해당 그룹원 리스트 조회 (그룹장은 제외하고 나와야함)
 	@Transactional(readOnly = true)
 	@Override
-	public List<GetGroupMemberInfo> getMemberList(Long userId, Long groupId) {
-		List<GroupMember> groupMemberList = groupMemberRepository.findAllByGroupIdAndUserId(groupId, userId);
+	public List<GetGroupMemberInfo> getMemberList(Long loginMemberId, Long groupId) {
+		GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+				.orElseThrow(() -> new GroupException((NOT_GROUP_MEMBER)));
+
+		// 해당 로그인한 유저가 그룹장이 아닌 경우
+		if (groupMember.getRole() != GroupMemberRole.MANAGER) {
+			throw new GroupException(NOT_GROUP_MANAGER);
+		}
+
+		// 로그인한 유저을 제외한 나머지 그룹원 리스트 조회
+		List<GroupMember> groupMemberList = groupMemberRepository.findAllByGroupIdAndUserId(groupId, loginMemberId);
 		List<GetGroupMemberInfo> groupMemberInfoList = new ArrayList<>();
 		for(GroupMember tempGroupMember: groupMemberList) {
-			GetGroupMemberInfo groupMemberInfo = new GetGroupMemberInfo();
-			groupMemberInfo.convert(tempGroupMember);
-			groupMemberInfoList.add(groupMemberInfo);
+			// 비활성화 아닌(false) 유저들만 그룹원 리스트에 넣어주기
+			if(!tempGroupMember.getUser().isDeActivateCheck()) {
+				GetGroupMemberInfo groupMemberInfo = new GetGroupMemberInfo();
+				groupMemberInfo.convert(tempGroupMember);
+				groupMemberInfoList.add(groupMemberInfo);
+			}
 		}
 
 		return groupMemberInfoList;
@@ -75,20 +90,30 @@ class GroupMemberServiceImpl implements GroupMemberService {
 
 	// 그룹장이 해당 그룹원 삭제
 	@Override
-	public DeleteGroupMemberInfo deleteGroupMember(Long groupId, Long userId) {
-		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupId,
+	public DeleteGroupMemberInfo deleteGroupMember(Long groupId, Long userId, Long loginMemberId) {
+		// 그룹장 조회한 뒤
+		GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+				.orElseThrow(() -> new GroupException((NOT_GROUP_MEMBER)));
+
+		// 그룹장이 아닌 경우
+		if (groupMember.getRole() != GroupMemberRole.MANAGER) {
+			throw new GroupException(NOT_GROUP_MANAGER);
+		}
+
+		// 해당 삭제할 유저 뽑아내기
+		GroupMember deleteMember = groupMemberRepository.findByGroupIdAndUserId(groupId,
 						userId)
 				.orElseThrow(() -> new GroupException(GroupError.NOT_GROUP_MEMBER));
-		groupMemberRepository.deleteById(member.getId());
+		groupMemberRepository.deleteById(deleteMember.getId());
 		return DeleteGroupMemberInfo.builder()
-				.groupMemberId(member.getId())
-				.groupId(member.getGroup().getId())
-				.groupName(member.getGroup().getName())
-				.userId(member.getUser().getId())
-				.userEmail(member.getUser().getUserEmail())
-				.userName(member.getUser().getUserName())
-				.userNickName(member.getUser().getUserNickname())
-				.role(member.getRole())
+				.groupMemberId(deleteMember.getId())
+				.groupId(deleteMember.getGroup().getId())
+				.groupName(deleteMember.getGroup().getName())
+				.userId(deleteMember.getUser().getId())
+				.userEmail(deleteMember.getUser().getUserEmail())
+				.userName(deleteMember.getUser().getUserName())
+				.userNickName(deleteMember.getUser().getUserNickname())
+				.role(deleteMember.getRole())
 				.build();
 	}
 

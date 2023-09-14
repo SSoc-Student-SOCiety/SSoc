@@ -147,13 +147,17 @@ class UserServiceImpl implements UserService {
     }
 
 
-    // 유저 아이디를 통한 회원정보 삭제
+    // 유저 아이디를 통한 회원정보 삭제 -> 비활성화
     @Override
     public void deleteUser(Long id) {
         try {
             User user = userRepository.findById(id).orElseThrow(() ->
                     new UserException(UserError.NOT_FOUND_USER));
-            userRepository.delete(user);    // DB내에 해당 유저 삭제한 뒤
+                                            // DB내에 그룹 테이블에서 해당 이메일 의미없는 값 넣어주기
+
+            user.deActivation();    // 해당 유저 비활성화 처리
+            user.emailDisable(id);  // 해당 유저 이메일 의미없는 값 넣게끔 처리
+//            userRepository.delete(user);    // DB내에 유제 테이블에서 해당 유저 삭제 -> 다른 테이블이랑 연관관계때문에 삭제하면 안됨
             refreshRepository.delete(user.getUserEmail());  // redis에 저장된 해당 유저 token값 삭제 처리(로그아웃)
         }
         catch(Exception e) {
