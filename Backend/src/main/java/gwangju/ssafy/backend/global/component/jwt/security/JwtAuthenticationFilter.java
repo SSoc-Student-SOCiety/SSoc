@@ -3,9 +3,8 @@ package gwangju.ssafy.backend.global.component.jwt.security;
 import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
-import gwangju.ssafy.backend.global.exception.ErrorCode;
+import gwangju.ssafy.backend.global.exception.GlobalError;
 import gwangju.ssafy.backend.global.exception.TokenException;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -68,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 saveLoginUserInSecurityContext(loginActiveUserDto);
             }
             catch(RuntimeException e){
-                throw new TokenException(ErrorCode.INVALID_TOKEN, e);
+                throw new TokenException(GlobalError.INVALID_TOKEN, e);
             }
 
 //            if(tokenUserInfoDto != null) {

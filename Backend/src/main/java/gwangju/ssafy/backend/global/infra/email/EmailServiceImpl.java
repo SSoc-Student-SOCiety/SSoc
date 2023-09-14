@@ -2,7 +2,7 @@ package gwangju.ssafy.backend.global.infra.email;
 
 import gwangju.ssafy.backend.global.common.dto.MailCodeDto;
 import gwangju.ssafy.backend.global.exception.EmailException;
-import gwangju.ssafy.backend.global.exception.ErrorCode;
+import gwangju.ssafy.backend.global.exception.GlobalError;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -71,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
             emailSender.send(message);
         }
         catch(MailException e) {
-            throw new EmailException(ErrorCode.NOT_SEND_EMAIL);
+            throw new EmailException(GlobalError.NOT_SEND_EMAIL);
         }
 
         return MailCodeDto.builder().userEmail(to).emailCode(ePw).build();

@@ -23,7 +23,7 @@ public class QueryDslTransactionRepositoryImpl implements QueryDslTransactionRep
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<TransactionInfo> findAllByGroupAccountId(Long accountId, SearchTransactionsCond cond) {
+	public List<TransactionInfo> searchAllByGroupAccountId(Long accountId, SearchTransactionsCond cond) {
 
 		return jpaQueryFactory.select(Projections.fields(TransactionInfo.class,
 				transaction.id.as("transactionId"),
@@ -46,6 +46,28 @@ public class QueryDslTransactionRepositoryImpl implements QueryDslTransactionRep
 				filterEndDate(cond.getEndDate()))
 			.orderBy(transaction.id.desc())
 			.limit(cond.getPageSize())
+			.fetch();
+	}
+
+	@Override
+	public List<TransactionInfo> searchAllByGroupAccountId(Long accountId) {
+		return jpaQueryFactory.select(Projections.fields(TransactionInfo.class,
+				transaction.id.as("transactionId"),
+				groupAccount.id.as("groupAccountId"),
+				transaction.date.as("date"),
+				transaction.briefs.as("briefs"),
+				transaction.withdrawal.as("withdrawal"),
+				transaction.deposit.as("deposit"),
+				transaction.detail.as("detail"),
+				transaction.balance.as("balance"),
+				transaction.category.as("category"),
+				transaction.branch.as("branch"),
+				transaction.note.as("note")
+			))
+			.from(transaction)
+			.innerJoin(transaction.groupAccount, groupAccount)
+			.where(groupAccount.id.eq(accountId))
+			.orderBy(transaction.id.desc())
 			.fetch();
 	}
 
