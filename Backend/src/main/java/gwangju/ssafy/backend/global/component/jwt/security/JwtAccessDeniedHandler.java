@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static gwangju.ssafy.backend.global.exception.ErrorCode.NOT_AUTHORITY_USER_API;
+import static gwangju.ssafy.backend.global.exception.GlobalError.NOT_AUTHORITY_USER_API;
 
 /**
  * 권한 없이 접근시, 403 응답을 보여줌

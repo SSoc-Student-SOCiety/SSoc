@@ -2,17 +2,11 @@ package gwangju.ssafy.backend.global.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gwangju.ssafy.backend.domain.user.dto.UserLoginResponseDto;
-import gwangju.ssafy.backend.domain.user.service.UserService;
 import gwangju.ssafy.backend.global.common.dto.Message;
-import gwangju.ssafy.backend.global.component.jwt.JwtUtils;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationFilter;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,14 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
-import static gwangju.ssafy.backend.global.component.jwt.JwtUtils.*;
 
 @Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
@@ -48,7 +38,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         }
     }
 
-    private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode, HttpServletRequest request) {
+    private void setErrorResponse(HttpServletResponse response, GlobalError errorCode, HttpServletRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
         log.info(errorCode.getErrorMessage());
         response.setStatus(errorCode.getHttpStatus().value());
@@ -76,6 +66,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                     jwtService.deleteRefreshToken(tokenUserInfoDto.getUserEmail());
                     response.getWriter().write(objectMapper.writeValueAsString(Message.success()));
                 }
+                // redis에 삭제 오류난 경우 (즉, redis에 해당 유저의 refresh 토큰값 없음) -> 그냥 로그아웃 성공처리
                 catch(Exception e) {
                     response.getWriter().write(objectMapper.writeValueAsString(Message.success()));
                 }
@@ -85,10 +76,35 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                 log.info(errorCode.toString());
                 // AccessToken 만료되고 RefreshToken은 살아있는 경우
                 if(errorCode.toString().equals("ACCESS_EXPIRED_TOKEN")) {
-                    // refresh 토큰을 이용하여 Access, Refresh 토큰 재발급
-                    TokenDto tokenDto = jwtService.refreshToken(refreshToken);
-                    // refresh 토큰을 이용하여 토큰 복호화 작업
-                    TokenUserInfoDto tokenUserInfoDto = jwtService.decryptionRefreshToken(refreshToken);
+                    TokenDto tokenDto = null;
+                    try {
+                        // refresh 토큰을 이용하여 Access, Refresh 토큰 재발급
+                        tokenDto = jwtService.refreshToken(refreshToken);
+                    }
+                    // 토큰 재발급했는데 오류 발생한 경우 (즉, 받아온 Refresh 토큰이 redis에 저장되어 있지 않거나(즉, 만료되어 삭제)
+                    // 또는 redis에 저장된 Refresh 토큰과 파싱해서 받아온 Refresh 토큰에서 유효성 검사에서 맞지 않은 경우
+                    catch(TokenException e) {
+                        response.getWriter().write(objectMapper.writeValueAsString(Message.fail(null, errorCode.getErrorMessage())));
+                    }
+
+                    TokenUserInfoDto tokenUserInfoDto = null;
+                    try {
+                        // 생성한 Refresh 토큰을 이용하여 토큰 복호화 작업
+                        tokenUserInfoDto = jwtService.decryptionRefreshToken(tokenDto.getRefreshToken());
+                    }
+                    // 토큰 복호화 시 오류 발생하면
+                    catch(Exception e) {
+                        response.getWriter().write(objectMapper.writeValueAsString(Message.fail(null, errorCode.getErrorMessage())));
+                    }
+
+//                    try {
+//                        // refresh 토큰을 이용하여 토큰 복호화 작업
+//                        tokenUserInfoDto = jwtService.decryptionRefreshToken(refreshToken);
+//                    }
+//                    // 토큰 복호화 시 오류 발생하면
+//                    catch(Exception e) {
+//                        response.getWriter().write(objectMapper.writeValueAsString(Message.fail(null, errorCode.getErrorMessage())));
+//                    }
 
                     UserLoginResponseDto userLoginResponseDto = UserLoginResponseDto.builder()
                             .userInfo(tokenUserInfoDto)

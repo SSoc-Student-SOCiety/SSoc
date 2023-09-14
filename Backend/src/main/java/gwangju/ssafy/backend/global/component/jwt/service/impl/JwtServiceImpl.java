@@ -1,27 +1,22 @@
-package gwangju.ssafy.backend.global.component.jwt.service;
+package gwangju.ssafy.backend.global.component.jwt.service.impl;
 
-import gwangju.ssafy.backend.domain.user.dto.UserDto;
-import gwangju.ssafy.backend.domain.user.dto.UserLoginResponseDto;
-import gwangju.ssafy.backend.domain.user.service.UserService;
+import gwangju.ssafy.backend.domain.user.exception.UserException;
 import gwangju.ssafy.backend.global.component.jwt.JwtIssuer;
 import gwangju.ssafy.backend.global.component.jwt.JwtParser;
 import gwangju.ssafy.backend.global.component.jwt.JwtUtils;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.repository.RefreshRepository;
-import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationFilter;
-import gwangju.ssafy.backend.global.exception.ErrorCode;
+import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
+import gwangju.ssafy.backend.global.exception.GlobalError;
+import gwangju.ssafy.backend.global.exception.GlobalException;
 import gwangju.ssafy.backend.global.exception.TokenException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -63,7 +58,7 @@ public class JwtServiceImpl implements JwtService {
         Claims claims = jwtParser.parseToken(refreshToken, jwtUtils.getEncodedKey());
 
         String savedToken = refreshRepository.find(claims.get(KEY_EMAIL, String.class))
-                .orElseThrow(() -> new RuntimeException("토큰 재발급 오류 발생"));
+                .orElseThrow(() -> new TokenException(GlobalError.REDIS_NOT_TOKEN));
 
         log.info(savedToken);
         validateRefreshTokens(refreshToken, savedToken);
@@ -74,7 +69,7 @@ public class JwtServiceImpl implements JwtService {
     // refresh 토큰 유효성 검사
     private void validateRefreshTokens(String refreshToken, String savedToken) {
         if(!refreshToken.equals(savedToken)) {
-            throw new RuntimeException("refresh 토큰이 같지 않습니다. 오류 발생");
+            throw new TokenException(GlobalError.NOT_VALIDATE_TOKEN);
         }
     }
 
