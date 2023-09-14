@@ -26,8 +26,6 @@ const CommentModal = (props) => {
   const [editComment, setEditComment] = useState(false)
   const [comment, setComment] = useState(null)
 
-  const user = useRecoilValue(UserInfoState)
-
   const [accessToken, setAccessToken] = useState(null)
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
@@ -37,7 +35,6 @@ const CommentModal = (props) => {
       // userId, postId, lastCommentId
       const response = await getCommentListFetch(accessToken, refreshToken, content.postId, lastCommentId)
       const newData = await response.json()
-      console.log(newData)
       return newData
       // return tempData
     } catch (e) {
@@ -46,11 +43,10 @@ const CommentModal = (props) => {
     }
   }
 
-  const getWriteCommentDate = async () => {
+  const getWriteCommentData = async () => {
     try {
       const response = await getWriteCommentFetch(accessToken, refreshToken, content.postId, inputComment, isChecked)
       const newData = await response.json()
-      console.log(newData)
       if (newData.dataHeader.successCode == 0) {
         Alert.alert('댓글이 작성되었습니다.', props.setReload(!props.reload), props.setShowComment(false))
       } else {
@@ -156,7 +152,7 @@ const CommentModal = (props) => {
                     <View style={{ width: '5%' }}>
                       <TouchableOpacity
                         onPress={() => {
-                          getWriteCommentDate()
+                          getWriteCommentData()
                         }}
                       >
                         <Icon
@@ -183,7 +179,8 @@ const CommentModal = (props) => {
           }}
         >
           <AnswerCommentModal
-            commentId={content.commentId}
+            postId={content.postId}
+            comment={comment}
             setAnswerCommentModal={setAnswerCommentModal}
           />
         </Modal>

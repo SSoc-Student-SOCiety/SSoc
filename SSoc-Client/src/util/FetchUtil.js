@@ -169,6 +169,19 @@ export const getChangeAllFetch = async (userEmail, userNowPassword, userChangePa
   })
 }
 
+export const getDeleteUserFetch = async (accessToken, refreshToken) => {
+  return await fetch(`${url}/user/delete`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
 // BoardFetch
 ///////////////////
 export const getContentListFetch = async (accessToken, refreshToken, groupId, keyword, category, lastPostId) => {
@@ -272,7 +285,6 @@ export const getCommentListFetch = async (accessToken, refreshToken, postId, las
   }
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
-  console.log(fullUrl)
 
   return await fetch(fullUrl, {
     method: 'GET',
@@ -316,6 +328,74 @@ export const getCommentDeleteFetch = async (accessToken, refreshToken, postId, c
 
 export const getEditCommentFetch = async (accessToken, refreshToken, postId, commentId, content, isAnonymous) => {
   return await fetch(`${url}/posts/${postId}/comments/${commentId}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      content: content,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
+export const getReplyListFetch = async (accessToken, refreshToken, commentId, postId, lastReplyId) => {
+  const baseUrl = `${url}/posts/${postId}/replies`
+  const queryParams = {
+    commentId: commentId,
+    'filter.lastReplyId': lastReplyId,
+    'filter.pageSize': 10,
+  }
+
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+
+  console.log(fullUrl)
+  return await fetch(fullUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+export const getWriteReplyFetch = async (accessToken, refreshToken, postId, commentId, content, isAnonymous) => {
+  return await fetch(`${url}/posts/${postId}/replies`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      commentId: commentId,
+      content: content,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
+export const getReplyDeleteFetch = async (accessToken, refreshToken, postId, replyId) => {
+  return await fetch(`${url}/posts/${postId}/replies/${replyId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+export const getEditReplyFetch = async (accessToken, refreshToken, postId, replyId, content, isAnonymous) => {
+  return await fetch(`${url}/posts/${postId}/replies/${replyId}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
