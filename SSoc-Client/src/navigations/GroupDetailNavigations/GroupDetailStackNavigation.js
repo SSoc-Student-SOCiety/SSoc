@@ -5,7 +5,9 @@ import ContentDetailScreen from '../../screens/GroupDetailBottomTabs/Board/Conte
 import { AddScheduleScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddScheduleScreen'
 import { AddReceiptScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddReceiptScreen'
 import { BookingManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/BookingManageScreen'
-import { MemberManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageScreen'
+
+import { MemberManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/MemberManageScreen'
+import { BookingItemDetailScreen } from '../../screens/GroupDetailBottomTabs/Booking/BookingItemDetailScreen'
 import { MemberManageTopTabs } from '../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageTopTabs'
 
 const Stack = createNativeStackNavigator()
@@ -60,6 +62,12 @@ export const GroupDetailStackNavigation = ({ route }) => {
         component={MemberManageScreen}
         options={{ tabName: tabName }}
       />
+        <Stack.Screen
+        name="BookingItemDetialScreen"
+        component = {BookingItemDetailScreen}
+        options={{tabName: tabName}}
+        />
+
     </Stack.Navigator>
   )
 }
