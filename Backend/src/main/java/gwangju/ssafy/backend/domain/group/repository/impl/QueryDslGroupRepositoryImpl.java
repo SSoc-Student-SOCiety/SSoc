@@ -64,6 +64,7 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 				group.isActive.isTrue(),
 				filterGroupCategory(cond.getCategory()),
 				searchKeyword(cond.getKeyword()))
+			.orderBy(group.id.desc())
 			.limit(cond.getPageSize())
 			.fetch();
 	}
