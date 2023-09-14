@@ -6,7 +6,6 @@ import { AddScheduleScreen } from '../../screens/GroupDetailBottomTabs/Manage/Ad
 import { AddReceiptScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddReceiptScreen'
 import { BookingManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/BookingManageScreen'
 
-import { MemberManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/MemberManageScreen'
 import { BookingItemDetailScreen } from '../../screens/GroupDetailBottomTabs/Booking/BookingItemDetailScreen'
 import { MemberManageTopTabs } from '../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageTopTabs'
 
@@ -59,7 +58,7 @@ export const GroupDetailStackNavigation = ({ route }) => {
       />
       <Stack.Screen
         name="MemberManageScreen"
-        component={MemberManageScreen}
+        component={MemberManageTopTabs}
         options={{ tabName: tabName }}
       />
         <Stack.Screen
