@@ -41,7 +41,8 @@ public class QuerydslPostRepositoryImpl implements QuerydslPostRepository {
 				ExpressionUtils.as(
 					JPAExpressions.select(count(comment.id))
 						.from(comment)
-						.where(comment.post.id.eq(post.id)),
+						.where(comment.post.id.eq(post.id),
+							comment.isDeleted.isFalse()),
 					"studentCount"),
 				user.userImageUrl.as("profileImg"),
 				user.id.as("userId")
