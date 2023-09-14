@@ -34,7 +34,6 @@ export const ScheduleScreen = () => {
     setSelectedItemName(name);
     setSelectedItemId(id);
     setSelectedDate(date);
-    console.log(id);
   });
 
   const loadItems = (day) => {
@@ -113,6 +112,7 @@ export const ScheduleScreen = () => {
         selectedItemId={selectedItemId}
         selectedItemName={selectedItemName}
         setIsModalVisible={setIsModalVisible}
+        option = {"일정"}
       />
     </View>
   );

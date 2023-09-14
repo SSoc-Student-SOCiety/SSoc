@@ -1,14 +1,22 @@
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import * as Color from "../Colors/colors";
 import { Modal } from "react-native";
-export const DeleteModal = ({
+import { useNavigation } from "@react-navigation/native";
+export const ReservationRequestModal = ({
   isModalVisible,
   selectedItemId,
   selectedItemName,
+  selectedGroupId, 
   setIsModalVisible,
-  option 
+  selectedDate,
+  selectedTime
 }) => {
+    const navigation = useNavigation();
+
+    
+    
   return (
+    
     <Modal
       animationType="slide"
       transparent={true}
@@ -19,14 +27,17 @@ export const DeleteModal = ({
     >
       <View style={styles.modalView}>
         <Text style={styles.modalText}>
-          {selectedItemId} {selectedItemName}
+          {selectedItemId} {selectedItemName} {selectedDate} {selectedTime} ~ {selectedTime+1}
         </Text>
-        <Text style={styles.modalText}>등록된 {option}을 삭제하시겠습니까?</Text>
+        <Text style={styles.modalText}>예약 하시겠습니까?</Text>
         <View style={{ flexDirection: "row" }}>
           <View style={{ margin: 10 }}>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setIsModalVisible(false)}
+              onPress={() => {setIsModalVisible(false)
+                navigation.goBack();
+            }
+            }
             >
               <Text style={styles.textStyle}>확인</Text>
             </Pressable>
@@ -34,7 +45,9 @@ export const DeleteModal = ({
           <View style={{ margin: 10 }}>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setIsModalVisible(false)}
+              onPress={() => {
+                
+                setIsModalVisible(false)}}
             >
               <Text style={styles.textStyle}>취소</Text>
             </Pressable>
