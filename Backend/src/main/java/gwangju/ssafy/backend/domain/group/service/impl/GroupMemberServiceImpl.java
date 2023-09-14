@@ -15,7 +15,6 @@ import gwangju.ssafy.backend.domain.group.service.GroupMemberService;
 import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,15 +38,15 @@ class GroupMemberServiceImpl implements GroupMemberService {
 	public void addMemberInGroup(Long groupId, Long userId, GroupMemberRole role) {
 
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new GroupException(GroupError.NOT_EXISTS_USER));
+				.orElseThrow(() -> new GroupException(GroupError.NOT_EXISTS_USER));
 		Group group = groupRepository.findByIdAndIsActiveIsTrue(groupId)
-			.orElseThrow(() -> new GroupException(GroupError.NOT_EXISTS_GROUP));
+				.orElseThrow(() -> new GroupException(GroupError.NOT_EXISTS_GROUP));
 
 		groupMemberRepository.save(GroupMember.builder()
-			.group(group)
-			.user(user)
-			.role(role)
-			.build());
+				.group(group)
+				.user(user)
+				.role(role)
+				.build());
 	}
 
 	@Transactional(readOnly = true)
@@ -55,8 +54,8 @@ class GroupMemberServiceImpl implements GroupMemberService {
 	public GetMemberRoleResponse getMemberRole(GetMemberRoleRequest request) {
 
 		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
-				request.getUserId())
-			.orElseThrow(() -> new GroupException(GroupError.NOT_GROUP_MEMBER));
+						request.getUserId())
+				.orElseThrow(() -> new GroupException(GroupError.NOT_GROUP_MEMBER));
 
 		return GetMemberRoleResponse.of(member);
 	}
@@ -77,7 +76,7 @@ class GroupMemberServiceImpl implements GroupMemberService {
 		List<GroupMember> groupMemberList = groupMemberRepository.findAllByGroupIdAndUserId(groupId, loginMemberId);
 		List<GetGroupMemberInfo> groupMemberInfoList = new ArrayList<>();
 		for(GroupMember tempGroupMember: groupMemberList) {
-			// 비활성화 아닌(false) 유저들만 그룹원 리스트에 넣어주기
+			// 비활성화 아닌(즉, false) 유저들만 그룹원 리스트에 넣어주기
 			if(!tempGroupMember.getUser().isDeActivateCheck()) {
 				GetGroupMemberInfo groupMemberInfo = new GetGroupMemberInfo();
 				groupMemberInfo.convert(tempGroupMember);
