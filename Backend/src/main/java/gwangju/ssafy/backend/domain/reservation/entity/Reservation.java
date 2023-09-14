@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -44,7 +44,7 @@ public class Reservation extends BaseEntity {
     private ReservationApproveStatus approveStatus;
 
     @Column(name = "real_date")
-    private LocalDateTime realDate;
+    private LocalDate realDate;
 
     @Column
     private int time;

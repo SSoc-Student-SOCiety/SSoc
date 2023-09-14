@@ -17,13 +17,13 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/reservation")
+@RequestMapping("/product/list")
 @RestController
 public class ProductController {
     private final ProductService productService;
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    @GetMapping("/product/list/{groupId}")
+    @GetMapping("/{groupId}")
     public ResponseEntity<Message<List<ProductSimpleInfo>>> searchProduct(
             @PathVariable("groupId") Long groupId) {
         List<ProductSimpleInfo> productSimpleInfoList = productService.searchProduct(groupId);
@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    @GetMapping("/product/list/{groupId}/{category}")
+    @GetMapping("/{groupId}/{category}")
     public ResponseEntity<Message<List<ProductSimpleInfo>>> searchProductByCategory(
             @PathVariable("groupId") Long groupId,
             @PathVariable("category") ProductCategory category) {
