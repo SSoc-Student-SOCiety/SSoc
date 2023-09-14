@@ -183,7 +183,6 @@ export const getContentListFetch = async (accessToken, refreshToken, groupId, ke
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
 
-  console.log(fullUrl)
   return await fetch(fullUrl, {
     method: 'GET',
     headers: {
@@ -247,6 +246,90 @@ export const getContentDeleteFetch = async (accessToken, refreshToken, postId) =
   })
 }
 
+export const getEditContentFetch = async (accessToken, refreshToken, postId, title, content, category, isAnonymous) => {
+  return await fetch(`${url}/posts/${postId}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      title: title,
+      content: content,
+      category: category,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
+export const getCommentListFetch = async (accessToken, refreshToken, postId, lastCommentId) => {
+  const baseUrl = `${url}/posts/${postId}/comments`
+  const queryParams = {
+    'filter.lastCommentId': lastCommentId,
+    'filter.pageSize': 10,
+  }
+
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+  console.log(fullUrl)
+
+  return await fetch(fullUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+export const getWriteCommentFetch = async (accessToken, refreshToken, postId, content, isAnonymous) => {
+  return await fetch(`${url}/posts/${postId}/comments`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      content: content,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
+export const getCommentDeleteFetch = async (accessToken, refreshToken, postId, commentId) => {
+  return await fetch(`${url}/posts/${postId}/comments/${commentId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+export const getEditCommentFetch = async (accessToken, refreshToken, postId, commentId, content, isAnonymous) => {
+  return await fetch(`${url}/posts/${postId}/comments/${commentId}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      content: content,
+      isAnonymous: isAnonymous,
+    }),
+  })
+}
+
 // GroupFetch
 ///////////////////
 export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, keyword, category) => {
@@ -260,7 +343,6 @@ export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, 
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
 
-  console.log(fullUrl)
   return await fetch(fullUrl, {
     method: 'GET',
     headers: {
@@ -275,7 +357,6 @@ export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, 
 export const getGroupDetailFetch = async (accessToken, refreshToken, groupId) => {
   const baseUrl = `${url}/groups/${groupId}`
 
-  // console.log(baseUrl)
   return await fetch(baseUrl, {
     method: 'GET',
     headers: {

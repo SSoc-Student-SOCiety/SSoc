@@ -7,13 +7,12 @@ import { useNavigation } from '@react-navigation/native'
 export const ContentCard = (props) => {
   const content = props.content
   const navigation = useNavigation()
-  // console.log(content)
 
   return (
     <View style={{ margin: 8, flexDirection: 'column', borderRadius: 10, borderWidth: 0.2, borderBottomWidth: 2, borderColor: Color.GRAY }}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('ContentDetailScreen', { content })
+          navigation.navigate('ContentDetailScreen', { content: content, reload: props.reload, setReload: props.setReload })
         }}
       >
         <View style={{ flex: 1, flexDirection: 'row', marginBottom: 8, marginTop: 8, alignItems: 'center', marginHorizontal: 25 }}>

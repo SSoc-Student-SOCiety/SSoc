@@ -5,8 +5,7 @@ import { BoardDetailTopTabs } from './BoardDetatilTopTabs'
 export const BoardDetailScreen = (props) => {
   const groupId = props.route.params.groupId
   const groupMemberRole = props.route.params.groupMemberRole
-  console.log('BoardDetailScreen.js (groupId) : ', groupId)
-  console.log('BoardDetailScreen.js (groupMemberRole) : ', groupMemberRole)
+
   return (
     <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
       <BoardDetailTopTabs

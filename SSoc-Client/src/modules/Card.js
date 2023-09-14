@@ -41,7 +41,7 @@ export const Card = (props) => {
             {props.name}
           </Typography>
           <Spacer space={5} />
-          <View style={{ height: '35%' }}>
+          <View style={{ height: '30%' }}>
             <Typography
               fontSize={12}
               color={Color.LIGHT_GRAY}

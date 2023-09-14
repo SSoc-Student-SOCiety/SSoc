@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import * as Color from '../../../components/Colors/colors'
 import { Icon } from '../../../components/Icons/Icons'
@@ -10,13 +10,32 @@ export const BoardContentList = (props) => {
   const [writeNewContent, setWriteNewContent] = useState(false)
   const board = props.board
   const groupMemberRole = props.groupMemberRole
-
-  console.log('BoardContentScreen.js (props)', props)
+  const [reload, setReload] = useState(false)
 
   return (
-    <View style={{ backgroundColor: Color.WHITE, marginBottom: 70 }}>
+    <View
+      key={reload}
+      style={{ backgroundColor: Color.WHITE, marginBottom: 70 }}
+    >
       <BoardSearch category={board.category} />
-      <ContentList board={board} />
+      <View style={{ position: 'absolute', bottom: 30, right: 30, zIndex: 1 }}>
+        <TouchableOpacity
+          onPress={() => {
+            setReload(!reload)
+          }}
+        >
+          <Icon
+            name="refresh-circle"
+            size={50}
+            color={Color.GRAY}
+          />
+        </TouchableOpacity>
+      </View>
+      <ContentList
+        board={board}
+        setReload={setReload}
+        reload={reload}
+      />
       {board.category == 'NOTICE' && groupMemberRole != 'MANAGER' ? null : (
         <View style={styles.plusBtn}>
           <TouchableOpacity
@@ -43,6 +62,8 @@ export const BoardContentList = (props) => {
           board={board}
           groupMemberRole={groupMemberRole}
           setWriteNewContent={setWriteNewContent}
+          setReload={setReload}
+          reload={reload}
         />
       </Modal>
     </View>
@@ -52,7 +73,8 @@ export const BoardContentList = (props) => {
 const styles = StyleSheet.create({
   plusBtn: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 90,
     right: 30,
+    zIndex: 1,
   },
 })
