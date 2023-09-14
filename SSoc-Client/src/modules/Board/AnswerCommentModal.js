@@ -1,82 +1,82 @@
-import { useState } from 'react'
-import { FlatList, KeyboardAvoidingView, Modal, Platform, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { useState, useEffect } from 'react'
+import { Alert, FlatList, KeyboardAvoidingView, Modal, Platform, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import CheckBox from 'react-native-check-box'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useRecoilValue } from 'recoil'
 import * as Color from '../../components/Colors/colors'
 import { Icon } from '../../components/Icons/Icons'
 import { SingleLineInput } from '../../components/Input/SingleLineInput'
+import { getReplyListFetch, getWriteReplyFetch } from '../../util/FetchUtil'
 import { UserInfoState } from '../../util/RecoilUtil/Atoms'
+import { getTokens } from '../../util/TokenUtil'
 import AnswerCommentCard from './AnswerCommentCard'
-import CommentCard from './CommentCard'
+import EditReply from './EditReply'
 
 const AnswerCommentModal = (props) => {
-  const answerCommentId = props.answerCommentId
+  const comment = props.comment
+  const postId = props.postId
   const user = useRecoilValue(UserInfoState)
+
+  const [editReply, setEditReply] = useState(false)
+  const [reply, setReply] = useState(null)
+
+  const [inputReply, setInputReply] = useState('')
   const [isChecked, setIsChecked] = useState(false)
 
-  const tempData = [
-    {
-      postId: '1',
-      userId: '1',
-      userNickName: '김싸피',
-      parentId: '1',
-      annonymous_flag: '1',
-      content: '남는 무엇을 역사를 장식하는 품고 끓는다. 가슴이 어디 싹이 내는 청춘의 힘차게 칼이다.',
-      delete_flag: '0',
-      create_date: '2023-09-09',
-    },
-    {
-      postId: '1',
-      userId: '1',
-      userNickName: '김신한',
-      parentId: '1',
-      annonymous_flag: '0',
-      content: 'asdgasdgasdgsdgasdags',
-      delete_flag: '1',
-      create_date: '2023-09-09',
-    },
-    {
-      postId: '1',
-      userId: '1',
-      userNickName: '김땡땡',
-      parentId: '1',
-      annonymous_flag: '1',
-      content: '커다란 품었기 곳으로 이성은 있으랴?',
-      delete_flag: '0',
-      create_date: '2023-09-09',
-    },
-    {
-      postId: '1',
-      userId: '1',
-      userNickName: '김땡땡',
-      parentId: '1',
-      annonymous_flag: '1',
-      content: '커다란 품었기 곳으로 이성은 있으랴?',
-      delete_flag: '0',
-      create_date: '2023-09-09',
-    },
-    {
-      postId: '1',
-      userId: '1',
-      userNickName: '김땡땡',
-      parentId: '1',
-      annonymous_flag: '1',
-      content: '커다란 품었기 곳으로 이성은 있으랴?',
-      delete_flag: '0',
-      create_date: '2023-09-09',
-    },
-    {
-      postId: '1',
-      userId: '1',
-      userNickName: '김땡땡',
-      parentId: '1',
-      annonymous_flag: '1',
-      content: '커다란 품었기 곳으로 이성은 있으랴?',
-      delete_flag: '0',
-      create_date: '2023-09-09',
-    },
-  ]
+  const [data, setData] = useState([])
+  const [lastReplyId, setLastReplyId] = useState('')
+
+  const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
+
+  const getWriteReplyData = async () => {
+    try {
+      const response = await getWriteReplyFetch(accessToken, refreshToken, postId, comment.commentId, inputReply, isChecked)
+      const newData = await response.json()
+      console.log(newData)
+      if (newData.dataHeader.successCode == 0) {
+        Alert.alert('답글이 작성되었습니다.', props.setAnswerCommentModal(false))
+      } else {
+        Alert.alert(newData.dataHeader.resultMessage)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getReplyListData = async () => {
+    try {
+      const response = await getReplyListFetch(accessToken, refreshToken, comment.commentId, postId, lastReplyId)
+      const newData = await response.json()
+      return newData
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
+  const loadData = async () => {
+    const newData = await getReplyListData()
+    if (newData.dataHeader.successCode == 0) {
+      if (newData.dataBody.length > 0) {
+        setLastReplyId(newData.dataBody[newData.dataBody.length - 1].replyId.toString())
+        setData((prevData) => [...prevData, ...newData.dataBody])
+      } else {
+        if (data.length > 10) Alert.alert('마지막 댓글입니다.')
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!isTokenGet) {
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
+    } else {
+      loadData()
+    }
+  }, [isTokenGet])
+
+  const handleEndReached = () => {
+    loadData()
+  }
 
   return (
     <>
@@ -109,15 +109,22 @@ const AnswerCommentModal = (props) => {
               keyboardVerticalOffset={Platform.OS === 'ios' ? 70 : 0} // iOS에서 조정이 필요할 수 있습니다.
             >
               <FlatList
-                data={tempData}
+                data={data}
                 renderItem={({ item }) => {
-                  console.log(item)
                   return (
                     <View onStartShouldSetResponder={() => true}>
-                      <AnswerCommentCard answerComment={item} />
+                      <AnswerCommentCard
+                        setReply={setReply}
+                        setEditReply={setEditReply}
+                        setAnswerCommentModal={props.setAnswerCommentModal}
+                        answerComment={item}
+                        postId={postId}
+                      />
                     </View>
                   )
                 }}
+                onEndReached={handleEndReached}
+                onEndReachedThreshold={0.1}
               />
               <View style={{ height: 80, borderTopWidth: 1, borderColor: Color.BLACK }}>
                 <View style={{ alignItems: 'center' }}>
@@ -132,10 +139,19 @@ const AnswerCommentModal = (props) => {
                       <Text style={{ marginHorizontal: 5 }}>익명</Text>
                     </View>
                     <View style={{ width: '65%' }}>
-                      <SingleLineInput placeholder="답글을 입력하세요." />
+                      <SingleLineInput
+                        placeholder="답글을 입력하세요."
+                        onChangeText={(text) => {
+                          setInputReply(text)
+                        }}
+                      />
                     </View>
                     <View style={{ width: '5%' }}>
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          getWriteReplyData()
+                        }}
+                      >
                         <Icon
                           size={16}
                           color={Color.BLUE}
@@ -149,6 +165,20 @@ const AnswerCommentModal = (props) => {
             </KeyboardAvoidingView>
           </View>
         </TouchableWithoutFeedback>
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={editReply}
+          onBackdropPress={() => setEditReply(false)}
+        >
+          <EditReply
+            reply={reply}
+            setEditReply={setEditReply}
+            postId={postId}
+            setAnswerCommentModal={props.setAnswerCommentModal}
+          />
+        </Modal>
       </TouchableOpacity>
     </>
   )

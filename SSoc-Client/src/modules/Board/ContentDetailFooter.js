@@ -7,10 +7,14 @@ import CommentModal from './CommentModal'
 const ContentDetailFooter = (props) => {
   const content = props.content
   const [showComment, setShowComment] = useState(false)
+  const [reload, setReload] = useState(false)
   return (
-    <View style={{ height: '10%', borderTopWidth: 0.5 }}>
+    <View
+      key={reload}
+      style={{ height: '10%', borderTopWidth: 0.5 }}
+    >
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingHorizontal: 20 }}>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <View style={{ flexDirection: 'row', padding: 10, margin: 2, alignItems: 'center' }}>
             <Icon
               name="heart-outline"
@@ -19,19 +23,19 @@ const ContentDetailFooter = (props) => {
             />
             <Text style={{ fontSize: 20 }}>{' ' + content.likes}</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
             setShowComment(true)
           }}
         >
-          <View style={{ flexDirection: 'row', padding: 15, margin: 3, alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', padding: 15, paddingBottom: 25, margin: 3, alignItems: 'center' }}>
             <Icon
               name="md-chatbubble-ellipses-outline"
               color={Color.BLUE}
               size={26}
             />
-            <Text style={{ fontSize: 20 }}>{' ' + content.comments}</Text>
+            <Text style={{ fontSize: 20, color: Color.GRAY }}>{' ' + content.commentCnt}</Text>
           </View>
         </TouchableOpacity>
         <Modal
@@ -46,6 +50,8 @@ const ContentDetailFooter = (props) => {
           <CommentModal
             setShowComment={setShowComment}
             content={content}
+            setReload={setReload}
+            reload={reload}
           />
         </Modal>
       </View>

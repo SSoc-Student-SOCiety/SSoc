@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Groups")
+@Table(name = "`Group`")
 @Entity
 public class Group {
 
@@ -45,7 +45,7 @@ public class Group {
 	@Column
 	private String aboutUs;
 
-	@Lob
+	@Column(length = 1000)
 	private String introduce;
 
 	@Column

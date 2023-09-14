@@ -18,6 +18,9 @@ public interface UserService {
     // 로그인 처리
     TokenUserInfoDto loginCheckUser(UserLoginRequestDto loginUserDto);
 
+    // 로그아웃 처리
+    void logoutUser(String userEmail);
+
     // 유저정보에서 닉네임만 수정
     TokenUserInfoDto updateNickName(UserUpdateDto userUpdateDto);
 
@@ -30,10 +33,6 @@ public interface UserService {
     // 임시 비밀번호 발급 및 db에 임시 비밀번호 저장
     void tempPassword(UserDto userDto, MailCodeDto mailCodeDto);
 
-//    TokenResponseDto tokenCheck(TokenRequestDto tokenRequestDto);
-
-    // 유저 이메일로 해당 유저 정보 불러오기
-//    TokenUserInfoDto userInformationFind(String userEmail);
 
     // id값을 받아와 해당 유저 정보 삭제
     void deleteUser(Long id);

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ScheduleExceptionHandler {
 
 	@ExceptionHandler(ScheduleException.class)
-	public ResponseEntity<Message> postExceptionHandler(ScheduleException e) {
+	public ResponseEntity<Message> scheduleExceptionHandler(ScheduleException e) {
 		log.error("{} is occured", e.getErrorCode());
 		return ResponseEntity.status(e.getErrorCode().getHttpStatus())
 			.body(Message.fail(e.getErrorCode().name(), e.getErrorCode().getErrorMessage()));

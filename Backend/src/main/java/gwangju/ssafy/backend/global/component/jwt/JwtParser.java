@@ -2,11 +2,10 @@ package gwangju.ssafy.backend.global.component.jwt;
 
 
 import gwangju.ssafy.backend.global.component.jwt.security.JwtAuthenticationFilter;
-import gwangju.ssafy.backend.global.exception.ErrorCode;
+import gwangju.ssafy.backend.global.exception.GlobalError;
 import gwangju.ssafy.backend.global.exception.TokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.DecodingException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
-
-import static gwangju.ssafy.backend.global.component.jwt.JwtUtils.KEY_EMAIL;
 
 @Slf4j
 @Component
@@ -39,12 +36,17 @@ public class JwtParser {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | UnsupportedJwtException |
                  IllegalArgumentException | DecodingException e) {
 //            log.info("잘못된 JWT 서명입니다. (유효하지 않은 인증 토큰입니다)");
-            throw new TokenException(ErrorCode.INVALID_TOKEN, e);
+            throw new TokenException(GlobalError.INVALID_TOKEN, e);
         } catch (ExpiredJwtException e) {
 
 //            log.info("만료된 JWT 토큰입니다.");
             String refreshToken = request.getHeader(JwtAuthenticationFilter.REFRESH_HEADER);
             log.info(refreshToken);
+            // 쌍따옴표 붙여서 나오는 부분 제거
+            if(refreshToken != null) {
+                refreshToken = refreshToken.replaceAll("\"", "");
+            }
+
             if (StringUtils.hasText(refreshToken) && refreshToken.startsWith((JwtAuthenticationFilter.BEARER_PREFIX))) {
                 refreshToken = refreshToken.substring(7);
                 try {
@@ -56,10 +58,10 @@ public class JwtParser {
                 }
                 // RefreshToken도 만료된 경우 둘다 만료됐다는 Exception 발생
                 catch(Exception exception){
-                    throw new TokenException(ErrorCode.EXPIRED_TOKEN, exception);
+                    throw new TokenException(GlobalError.EXPIRED_TOKEN, exception);
                 }
                 // AccessToken만 만료된 경우
-                throw new TokenException(ErrorCode.ACCESS_EXPIRED_TOKEN, e);
+                throw new TokenException(GlobalError.ACCESS_EXPIRED_TOKEN, e);
             }
         }
         // AccessToken 만료 안된 경우

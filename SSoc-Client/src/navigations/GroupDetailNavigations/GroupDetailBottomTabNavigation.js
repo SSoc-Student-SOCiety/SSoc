@@ -7,7 +7,10 @@ import { SettlementsTopTabs } from '../../screens/GroupDetailBottomTabs/Settleme
 import { TabIcon } from '../../components/Icons/TabIcon'
 const Tabs = createBottomTabNavigator()
 
-export const GroupDetailBottomTabNavigation = () => {
+export const GroupDetailBottomTabNavigation = (props) => {
+  const groupId = props.route.params.groupId
+  const groupMemberRole = props.route.params.groupMemberRole
+
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
@@ -40,6 +43,7 @@ export const GroupDetailBottomTabNavigation = () => {
       <Tabs.Screen
         name="게시판"
         component={BoardDetailScreen}
+        initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
       ></Tabs.Screen>
       <Tabs.Screen
         name="결산안"

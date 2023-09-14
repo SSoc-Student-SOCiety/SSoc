@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class EmailException extends RuntimeException {
-    private final ErrorCode errorCode;
+    private final GlobalError errorCode;
     private final int status;
     private final String errorMessage;
 
-    public EmailException(ErrorCode errorCode) {
+    public EmailException(GlobalError errorCode) {
         super(errorCode.getErrorMessage());
         this.errorCode = errorCode;
         this.status = errorCode.getHttpStatus().value();
