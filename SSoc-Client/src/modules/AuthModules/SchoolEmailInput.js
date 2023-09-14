@@ -36,6 +36,8 @@ const SchoolEmailInput = (props) => {
       setTimeout(() => {
         setWaitTime(false)
       }, 180000)
+      // TO-DO(수린)
+      // 이메일 인증코드 발송 시 오래 걸림 = LOADER를 하나 만들까 생각 중
       if (emailAuthCodeData.dataHeader.successCode == 0) {
         Alert.alert('이메일 인증코드가 발송되었습니다.', '이메일을 확인해주세요.')
         props.onPressCheck()
