@@ -58,7 +58,7 @@ export const MainScreen = () => {
             {' '}
             * 최근 만들어진 학생회/동아리
           </Typography>
-          <Spacer space={10} />
+          <Spacer space={8} />
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -112,5 +112,5 @@ export const MainScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
-  cardContainer: { paddingTop: 60, paddingHorizontal: 15 },
+  cardContainer: { paddingTop: 25, paddingHorizontal: 15 },
 })

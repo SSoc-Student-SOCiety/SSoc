@@ -11,7 +11,7 @@ import AnswerCommentCard from './AnswerCommentCard'
 import CommentCard from './CommentCard'
 
 const AnswerCommentModal = (props) => {
-  const answerCommentId = props.answerCommentId
+  const commentId = props.commentId
   const user = useRecoilValue(UserInfoState)
   const [isChecked, setIsChecked] = useState(false)
 

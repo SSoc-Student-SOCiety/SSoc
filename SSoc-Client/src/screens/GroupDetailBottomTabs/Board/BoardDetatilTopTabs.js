@@ -8,8 +8,6 @@ const Tab = createMaterialTopTabNavigator()
 export const BoardDetailTopTabs = (props) => {
   const groupId = props.groupId
   const groupMemberRole = props.groupMemberRole
-  console.log('BoardDetailTopTabs.js (groupId) : ', groupId)
-  console.log('BoardDetailTopTabs.js (groupMemberRole) : ', groupMemberRole)
 
   const boardList = [
     {

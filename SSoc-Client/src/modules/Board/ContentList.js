@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react'
 import { TouchableOpacity, View, Text, FlatList, ScrollView, Alert } from 'react-native'
 import { useRecoilState } from 'recoil'
 import { getContentListFetch } from '../../util/FetchUtil'
-import { UserInfoState } from '../../util/RecoilUtil/Atoms'
 import { getTokens } from '../../util/TokenUtil'
 import { ContentCard } from './ContentCard'
 
 const ContentList = (props) => {
   const board = props.board
-  const groupMemberRole = props.groupMemberRole
-  const [user, setUser] = useRecoilState(UserInfoState)
   const [data, setData] = useState([])
   const [lastPostId, setLastPostId] = useState('')
 
@@ -34,6 +31,8 @@ const ContentList = (props) => {
       if (newData.dataBody.length > 0) {
         setLastPostId(newData.dataBody[newData.dataBody.length - 1].postId.toString())
         setData((prevData) => [...prevData, ...newData.dataBody])
+      } else {
+        if (data.length > 10) Alert.alert('마지막 페이지입니다.')
       }
     }
   }
@@ -41,9 +40,8 @@ const ContentList = (props) => {
   useEffect(() => {
     if (!isTokenGet) {
       getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
-      loadData()
     }
-  }, [])
+  }, [isTokenGet])
 
   const handleEndReached = () => {
     loadData()
@@ -56,7 +54,11 @@ const ContentList = (props) => {
         data={data}
         renderItem={({ item }) => (
           <View>
-            <ContentCard content={item} />
+            <ContentCard
+              content={item}
+              setReload={props.setReload}
+              reload={props.reload}
+            />
           </View>
         )}
         onEndReached={handleEndReached}

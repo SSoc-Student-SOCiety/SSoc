@@ -20,19 +20,18 @@ const WriteContent = (props) => {
 
   const board = props.board
   const groupMemberRole = props.groupMemberRole
-  console.log('writeContentForm.js: ', props)
 
   const [options, setOptions] = useState({
     FREE: false,
-    NOTICE: false,
     SUGGEST: false,
+    NOTICE: false,
   })
 
   const onPressOption = (selectedOption) => {
     setOptions({
       FREE: false,
-      NOTICE: false,
       SUGGEST: false,
+      NOTICE: false,
       [selectedOption]: true,
     })
   }
@@ -47,7 +46,7 @@ const WriteContent = (props) => {
           return
         }
       }
-      if (inputTitle.length == 0 || inputContent == 0) {
+      if (inputTitle.length == 0 || inputContent.length == 0) {
         Alert.alert('제목과 내용을 필수로 입력해주세요.')
         return
       }
@@ -55,7 +54,7 @@ const WriteContent = (props) => {
       const data = await response.json()
       if (data != null) {
         if (data.dataHeader.successCode == 0) {
-          Alert.alert('게시글이 작성되었습니다.', props.setWriteNewContent(false))
+          Alert.alert('게시글이 작성되었습니다.', props.setWriteNewContent(false), props.setReload(!props.reload))
         } else {
           Alert.alert(data.dataHeader.resultMessage, props.setWriteNewContent(false))
         }

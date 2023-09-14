@@ -10,8 +10,6 @@ const Tabs = createBottomTabNavigator()
 export const GroupDetailBottomTabNavigation = (props) => {
   const groupId = props.route.params.groupId
   const groupMemberRole = props.route.params.groupMemberRole
-  console.log('GroupDetailBottomTabNavigation.js (groupId) : ', groupId)
-  console.log('GroupDetailBottomTabNavigation.js (groupMemberRole) : ', groupMemberRole)
 
   return (
     <Tabs.Navigator
