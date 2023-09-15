@@ -100,7 +100,7 @@ public class GroupSignupServiceImpl implements GroupSignupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new GroupException(NOT_EXISTS_GROUP));
 
-        GroupSignup groupSignup = groupSignupRepository.findByUserId(userId);
+        GroupSignup groupSignup = groupSignupRepository.findByUserIdAndGroupId(userId, groupId);
 
         if (groupSignup == null) {
             groupSignup = GroupSignup.builder()
