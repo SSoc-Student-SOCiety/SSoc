@@ -23,9 +23,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: /Backend
 
     steps:
     - uses: actions/checkout@v3
@@ -39,7 +36,7 @@ jobs:
     - name: Make application.yml
       env:
         APPLICATION_YML: ${{ secrets.APPLICATION_YML }}
-        APPLICATION_YML_DIR: ./Backend/src/main/resources
+        APPLICATION_YML_DIR: Backend/src/main/resources
         APPLICATION_YML_NAME: application.yml
       run: echo $APPLICATION_YML | base64 --decode > $APPLICATION_YML_DIR/$APPLICATION_YML_NAME
       shell: bash
@@ -49,8 +46,8 @@ jobs:
       
     - name: Build with Gradle
       run: |
-           chmod +x ./Backend/gradlew
-           ./Backend/gradlew clean build -x test
+           cd Backend
+           ./gradlew bootJar
            
     - name: Docker build & push to docker repo
       run: |
