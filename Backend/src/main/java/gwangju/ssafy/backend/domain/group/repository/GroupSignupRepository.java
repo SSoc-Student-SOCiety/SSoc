@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface GroupSignupRepository extends JpaRepository<GroupSignup, Long> {
     List<GroupSignup> findAllBySignupStatusAndGroupId(boolean status, Long groupId);
 
-    GroupSignup findByUserId(Long userId);
+    GroupSignup findByUserIdAndGroupId(Long userId, Long groupId);
 }
