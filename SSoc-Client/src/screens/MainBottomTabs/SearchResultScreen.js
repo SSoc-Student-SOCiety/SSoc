@@ -21,9 +21,12 @@ export const SearchResultScreen = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const [searchValue, setSearchValue] = useState('')
+  const [searchCategory, setSearchCategory] = useState('all')
+
   const getGroupListData = async () => {
     try {
-      const response = await getGroupListFetch(accessToken, refreshToken, lastGroupId, '', '')
+      const response = await getGroupListFetch(accessToken, refreshToken, lastGroupId, searchValue, searchCategory == 'all' ? '' : searchCategory)
       const newData = await response.json()
       return newData
     } catch (e) {
@@ -56,9 +59,18 @@ export const SearchResultScreen = () => {
   }, [isTokenGet])
 
   const handleEndReached = () => {
-    if (lastGroupId !== '') {
+    if (!isLoading) {
       loadData()
     }
+  }
+
+  // TO-DO
+  // lastGroupId가 자꾸 완전 초기화가 되는 것이 아닌 오락가락 하는 중
+  // 확인 필요
+  const onPressSearch = () => {
+    setLastGroupId('')
+    setData([])
+    loadData()
   }
 
   return (
@@ -71,7 +83,7 @@ export const SearchResultScreen = () => {
         url={'https://picsum.photos/600'}
       />
       <View style={styles.commonItem}>
-        <SearchOptionCategoryScroll />
+        <SearchOptionCategoryScroll setSearchCategory={setSearchCategory} />
 
         <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
           <View
@@ -79,9 +91,14 @@ export const SearchResultScreen = () => {
             borderRadius={10}
             marginVertical={10}
           >
-            <SingleLineInput placeholder="✎) ex. 00대학교 총학생회" />
+            <SingleLineInput
+              onChangeText={(text) => {
+                setSearchValue(text)
+              }}
+              placeholder="✎) ex. 00대학교 총학생회"
+            />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPressSearch}>
             <SearchButton
               color={Color.BLUE}
               title={'학생회 / 동아리 공금 현황 보러가기'}
