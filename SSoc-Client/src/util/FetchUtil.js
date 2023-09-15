@@ -423,6 +423,31 @@ export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, 
   }
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+  // console.log(fullUrl)
+
+  return await fetch(fullUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+export const getMyGroupListFetch = async (accessToken, refreshToken, lastGroupId, keyword, category) => {
+  const baseUrl = `${url}/groups/my-groups`
+  const queryParams = {
+    lastGroupId: lastGroupId,
+    keyword: keyword,
+    category: category,
+    pageSize: 5,
+  }
+
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+
+  // console.log(fullUrl)
 
   return await fetch(fullUrl, {
     method: 'GET',
@@ -446,5 +471,96 @@ export const getGroupDetailFetch = async (accessToken, refreshToken, groupId) =>
       Authorization: accessToken,
       Refresh: refreshToken,
     },
+  })
+}
+
+export const getGroupRoleFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}/my-role`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 소속원 관리
+// /groups/{groupId}/member/list
+export const getGroupMemberListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}/member/list`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 소속원 삭제
+// /groups/{groupId}/member/delete/{userId}
+export const getDeleteGroupMemberFetch = async (accessToken, refreshToken, groupId, userId) => {
+  return await fetch(`${url}/groups/${groupId}/member/delete/${userId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// 가입신청된 유저 목록 조회
+// /group/signup/list/{groupId}
+export const getGroupSignupMemberListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/group/signup/list/${groupId}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 가입 요청 거절
+// /group/signup/reject/{groupSignupId}
+export const getRejectGroupSignUpMemberFetch = async (accessToken, refreshToken, groupSignupId) => {
+  return await fetch(`${url}/group/signup/reject/${groupSignupId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// 가입 요청 수락
+// /group/signup/approve/{groupSignupId}
+export const getApproveGroupSignUpMemberFetch = async (accessToken, refreshToken, groupSignupId) => {
+  return await fetch(`${url}/group/signup/approve/${groupSignupId}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
   })
 }

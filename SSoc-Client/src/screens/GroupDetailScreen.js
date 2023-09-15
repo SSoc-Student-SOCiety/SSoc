@@ -1,4 +1,4 @@
-import { View, Image, ScrollView, Animated, TouchableOpacity } from 'react-native'
+import { View, Image, ScrollView, Animated, TouchableOpacity, Alert } from 'react-native'
 import { ProfileImage } from '../modules/ProfileImage'
 import * as Color from '../components/Colors/colors'
 import { Typography } from '../components/Basic/Typography'
@@ -10,34 +10,12 @@ import { Icon } from '../components/Icons/Icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { getGroupDetailFetch } from '../util/FetchUtil'
+import { getGroupDetailFetch, getGroupRoleFetch } from '../util/FetchUtil'
 import { getTokens } from '../util/TokenUtil'
 export const GroupDetailScreen = ({ route }) => {
   const { onScrollEndDrag, onScrollBeginDrag, onScroll, headerAnim } = useScrollEvent()
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
-
-  const tempData = {
-    dataHeader: {
-      successCode: 0,
-      resultCode: null,
-      resultMessage: null,
-    },
-    dataBody: {
-      groupId: 1,
-      name: 'TestName1',
-      aboutUs: '제36대 총학생회',
-      school: '전남대',
-      thumbnail: 'https://picsum.photos/600',
-      memberCnt: 1,
-      category: 'COUNCIL',
-      introduce: `교내 중앙동아리 중 유일한 달리기 동아리이다. 2011년 나이키 트레이닝 런에 참여하던 모임에서 출발해 함께 마라톤대회에 나가고 러닝 프로그램에 참여하는 교내 소모임의 성격이었다가, 2012년 하반기 가동아리 신청과 함께 본격적인 교내 동아리로 발전하였다. 달리샤라는 이름은 동아리화에 대해
-      이야기하다 이것저것 막 던지다 정해진 것으로, 달리기+人(사람 인)+정문 샤 모양의 조합으로 달리人F로 정했고, 달리샤로 부르게 되었다. 평일에는 교내 운동장 트랙 및 순환도로 달리기, 주말에는 나이키 트레이닝 런 또는 대회 참여 등 교외 달리기로 주2회 모임을 기본으로 하여, 현재(2018년 상반기
-      기준)도 수요일 저녁 교내 달리기, 토요일 오전 교외 달리기의 기조가 유지되고 있다(+모임 후기 작성자를 가위바위보로 정하는 것도 계속 유지되고 있다. 과거 활동했던 회원들에게는 아련한 추억일 듯하다.). 한때는 맴버들끼리 '먹고 마시고 달리샤'라 부를 정도로 거의 매 모임마다 뒤풀이 및 번개
-      모임과 뒤풀이, 또는 그냥 먹고 마시는 모임들을 가졌었으나 정동아리가 되면서 회원수가 급증하고부터는 운동동아리 본연의 모습으로 돌아왔다. 교내 구성원이면 상시 가입 가능하며, 모임 참여 및 회비 납부를 활동회원의 기준으로 하고 있다. 2020년 상반기에는 코로나19로 인해 다른 기준 적용되고 있다.
-      자세한 내용은 인스타그램 달리샤 계정(http://www.instagram.com/snu_dalisha) 공지글 참조. 2018년 상반기에 동아리방을 얻게 되어, 학생회관 616호를 동아리방으로 사용 중이다.(2020년 8월 기준) 2021년에도 코로나로 인한 힘든시기를 겪고있으나 회장의 뛰어난 리더쉽으로 이끌어가는중이다.`,
-    },
-  }
 
   //to-do
   // 그룹아이디 같이 보냄
@@ -50,37 +28,54 @@ export const GroupDetailScreen = ({ route }) => {
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
   const [groupDetailData, setGroupDetailData] = useState(null)
+  const [groupMemberRole, setGroupMemberRole] = useState('')
 
   const getGroupDetailData = async () => {
     try {
       const response = await getGroupDetailFetch(accessToken, refreshToken, groupId)
       const data = await response.json()
-      // console.log(data)
-      // await setGroupDetailData(data.dataBody)
       await setGroupDetailData(data.dataBody)
     } catch (e) {
       console.log(e)
     }
   }
 
-  useEffect(() => {
-    if (!isTokenGet) {
-      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
-    } else {
-      if (groupDetailData == null) getGroupDetailData()
+  const getGroupRoleData = async () => {
+    try {
+      const response = await getGroupRoleFetch(accessToken, refreshToken, groupId)
+      const data = await response.json()
+      if (data.dataHeader != undefined) {
+        if (data.dataHeader.successCode == 0) {
+          setGroupMemberRole(data.dataBody.groupMemberRole)
+        } else {
+          navigation.goBack()
+          Alert.alert(data.dataHeader.resultMessage)
+          return
+        }
+      } else {
+        Alert.alert('알 수 없는 에러 발생')
+      }
+    } catch (e) {
+      console.log(e)
     }
-  }, [isTokenGet, groupDetailData])
+  }
+
+  useEffect(() => {
+    if (!isTokenGet) getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
+    else {
+      getGroupRoleData()
+      getGroupDetailData()
+    }
+  }, [isTokenGet])
 
   const onPressGoBack = useCallback(() => {
     navigation.goBack()
   })
 
   const onPressGoToTab = useCallback((tabName) => {
-    navigation.navigate('GroupDetailTab', { tabName })
+    navigation.navigate('GroupDetailTab', { tabName, groupId, groupMemberRole })
   })
 
-  // TO-DO (수린)
-  // 4개 버튼 탭 눌렀을 때 groupId값도 같이 넘겨줘야함. 위의 navigate tabname과 함께 같이 쏴야할 듯 합니당
   const ButtonData = [
     {
       title: '공금 사용현황',
@@ -100,7 +95,7 @@ export const GroupDetailScreen = ({ route }) => {
     },
   ]
 
-  if (groupDetailData != null)
+  if (groupDetailData != null && groupMemberRole != '')
     return (
       <View style={{ flex: 1 }}>
         <TouchableOpacity
@@ -224,15 +219,7 @@ export const GroupDetailScreen = ({ route }) => {
               <Spacer space={40} />
               <Typography fontSize={22}>About us</Typography>
               <Spacer space={40} />
-              <Typography fontSize={15}>
-                {groupDetailData.introduce}
-                {/* to-do :  group id 값으로 받아오기 */}
-                {/* 교내 중앙동아리 중 유일한 달리기 동아리이다. 2011년 나이키 트레이닝 런에 참여하던 모임에서 출발해 함께 마라톤대회에 나가고 러닝 프로그램에 참여하는 교내 소모임의 성격이었다가, 2012년 하반기 가동아리 신청과 함께 본격적인 교내 동아리로 발전하였다. 달리샤라는 이름은 동아리화에 대해
-              이야기하다 이것저것 막 던지다 정해진 것으로, 달리기+人(사람 인)+정문 샤 모양의 조합으로 달리人F로 정했고, 달리샤로 부르게 되었다. 평일에는 교내 운동장 트랙 및 순환도로 달리기, 주말에는 나이키 트레이닝 런 또는 대회 참여 등 교외 달리기로 주2회 모임을 기본으로 하여, 현재(2018년 상반기
-              기준)도 수요일 저녁 교내 달리기, 토요일 오전 교외 달리기의 기조가 유지되고 있다(+모임 후기 작성자를 가위바위보로 정하는 것도 계속 유지되고 있다. 과거 활동했던 회원들에게는 아련한 추억일 듯하다.). 한때는 맴버들끼리 '먹고 마시고 달리샤'라 부를 정도로 거의 매 모임마다 뒤풀이 및 번개
-              모임과 뒤풀이, 또는 그냥 먹고 마시는 모임들을 가졌었으나 정동아리가 되면서 회원수가 급증하고부터는 운동동아리 본연의 모습으로 돌아왔다. 교내 구성원이면 상시 가입 가능하며, 모임 참여 및 회비 납부를 활동회원의 기준으로 하고 있다. 2020년 상반기에는 코로나19로 인해 다른 기준 적용되고 있다.
-              자세한 내용은 인스타그램 달리샤 계정(http://www.instagram.com/snu_dalisha) 공지글 참조. 2018년 상반기에 동아리방을 얻게 되어, 학생회관 616호를 동아리방으로 사용 중이다.(2020년 8월 기준) 2021년에도 코로나로 인한 힘든시기를 겪고있으나 회장의 뛰어난 리더쉽으로 이끌어가는중이다. */}
-              </Typography>
+              <Typography fontSize={15}>{groupDetailData.introduce}</Typography>
             </View>
           </ScrollView>
         </SafeAreaView>

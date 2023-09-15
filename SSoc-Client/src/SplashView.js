@@ -52,19 +52,25 @@ export const SplashView = () => {
       // TO-DO
       // 기본 이미지 먼저 S3에 넣고 url 받아온 다음 해결해야할 듯.
       if (authInfo != null) {
-        if (authInfo.dataHeader.successCode == 0) {
-          const imageUrl = authInfo.dataBody.userInfo.userImageUrl || ''
-          setUser({ ...authInfo.dataBody.userInfo, userImageUrl: imageUrl })
-          if (authInfo.dataHeader.resultCode == 1) {
-            setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refreshToken)
-          }
-          setTimeout(() => {
-            setGoMainPage(true)
-          }, 1500)
-        } else {
+        if (authInfo.dataHeader == undefined) {
           setTimeout(() => {
             navigation.reset({ routes: [{ name: 'Login' }] })
           }, 1500)
+        } else {
+          if (authInfo.dataHeader.successCode == 0) {
+            const imageUrl = authInfo.dataBody.userInfo.userImageUrl || ''
+            setUser({ ...authInfo.dataBody.userInfo, userImageUrl: imageUrl })
+            if (authInfo.dataHeader.resultCode == 1) {
+              setTokens(authInfo.dataBody.token.accessToken, authInfo.dataBody.token.refreshToken)
+            }
+            setTimeout(() => {
+              setGoMainPage(true)
+            }, 1500)
+          } else {
+            setTimeout(() => {
+              navigation.reset({ routes: [{ name: 'Login' }] })
+            }, 1500)
+          }
         }
       }
     }

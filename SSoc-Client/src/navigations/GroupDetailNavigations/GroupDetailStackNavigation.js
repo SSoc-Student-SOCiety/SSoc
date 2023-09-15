@@ -7,17 +7,12 @@ import { AddReceiptScreen } from '../../screens/GroupDetailBottomTabs/Manage/Add
 import { BookingManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/BookingManageScreen'
 import { BookingItemDetailScreen } from '../../screens/GroupDetailBottomTabs/Booking/BookingItemDetailScreen'
 import { MemberManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageScreen'
-
+import { MemberManageTopTabs } from '../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageTopTabs'
 const Stack = createNativeStackNavigator()
 export const GroupDetailStackNavigation = ({ route }) => {
-  const { tabName } = route.params
-  // TO-DO
-  // 이전 GroupDetialScreen내에서 가져온 groupId를 GroupDetailTab의 route내부에서 계속해 끌고 올 듯 하다. + 그룹 매니저인지도 가져올 듯 합니다.
-  // props로 다 연결해서 가져와주는 작업 필요
-  // 아니면 그룹 정보 자체를 보내서 확인해도 됨. 정보 너무 많이 끌고 오면 별로일까봐 우선 board에서 가지고올 정보만 끌고 와봤습니다..
-  // 우선 임시값 1, 'MANAGER'로 주고 작업
-  const groupId = '1'
-  const groupMemberRole = 'MANAGER'
+  const { tabName } = route.params.tabName
+  const groupId = route.params.groupId
+  const groupMemberRole = route.params.groupMemberRole
 
   return (
     <Stack.Navigator
@@ -35,10 +30,12 @@ export const GroupDetailStackNavigation = ({ route }) => {
       <Stack.Screen
         name="BoardDetailScreen"
         component={BoardDetailScreen}
+        options={{ tabName: tabName }}
       />
       <Stack.Screen
         name="ContentDetailScreen"
         component={ContentDetailScreen}
+        options={{ tabName: tabName }}
       />
       <Stack.Screen
         name="AddScheduleScreen"
@@ -65,6 +62,12 @@ export const GroupDetailStackNavigation = ({ route }) => {
         component={BookingItemDetailScreen}
         options={{ tabName: tabName }}
       />
+      <Stack.Screen
+        name="MemberManageTopTabs"
+        component={MemberManageTopTabs}
+        initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
+        options={{ tabName: tabName }}
+      ></Stack.Screen>
     </Stack.Navigator>
   )
 }

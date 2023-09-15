@@ -19,12 +19,16 @@ export const SearchResultScreen = () => {
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [searchValue, setSearchValue] = useState('')
+  const [searchCategory, setSearchCategory] = useState('all')
+
   const getGroupListData = async () => {
     try {
-      const response = await getGroupListFetch(accessToken, refreshToken, lastGroupId, '', '')
+      const response = await getGroupListFetch(accessToken, refreshToken, lastGroupId, searchValue, searchCategory == 'all' ? '' : searchCategory)
       const newData = await response.json()
-      console.log(newData)
-      return tempData
+      return newData
     } catch (e) {
       console.log(e)
       return []
@@ -32,24 +36,40 @@ export const SearchResultScreen = () => {
   }
 
   const loadData = async () => {
+    if (isLoading) {
+      return
+    }
+    setIsLoading(true)
     const newData = await getGroupListData()
-    console.log(newData)
     if (newData.dataHeader.successCode == 0) {
       if (newData.dataBody.length > 0) {
-        setLastGroupId(newData.dataBody[newData.dataBody.length - 1].groupId.toString())
+        setLastGroupId(newData.dataBody[newData.dataBody.length - 1].groupId)
         setData((prevData) => [...prevData, ...newData.dataBody])
       }
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
     if (!isTokenGet) {
       getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
+    } else {
       loadData()
     }
-  }, [])
+  }, [isTokenGet])
 
   const handleEndReached = () => {
+    if (!isLoading) {
+      loadData()
+    }
+  }
+
+  // TO-DO
+  // lastGroupId가 자꾸 완전 초기화가 되는 것이 아닌 오락가락 하는 중
+  // 확인 필요
+  const onPressSearch = () => {
+    setLastGroupId('')
+    setData([])
     loadData()
   }
 
@@ -63,7 +83,7 @@ export const SearchResultScreen = () => {
         url={'https://picsum.photos/600'}
       />
       <View style={styles.commonItem}>
-        <SearchOptionCategoryScroll />
+        <SearchOptionCategoryScroll setSearchCategory={setSearchCategory} />
 
         <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
           <View
@@ -71,9 +91,14 @@ export const SearchResultScreen = () => {
             borderRadius={10}
             marginVertical={10}
           >
-            <SingleLineInput placeholder="✎) ex. 00대학교 총학생회" />
+            <SingleLineInput
+              onChangeText={(text) => {
+                setSearchValue(text)
+              }}
+              placeholder="✎) ex. 00대학교 총학생회"
+            />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPressSearch}>
             <SearchButton
               color={Color.BLUE}
               title={'학생회 / 동아리 공금 현황 보러가기'}
@@ -113,53 +138,3 @@ var styles = StyleSheet.create({
   searchBar: { paddingTop: 30, paddingHorizontal: 20, backgroundColor: Color.GRAY },
   commonItem: { paddingTop: 30, paddingHorizontal: 20 },
 })
-
-const tempData = {
-  dataHeader: {
-    successCode: 0,
-    resultCode: null,
-    resultMessage: null,
-  },
-  dataBody: [
-    {
-      groupId: 1,
-      name: 'TestName1',
-      aboutUs: '제36대 총학생회',
-      school: '전남대',
-      thumbnail: 'https://picsum.photos/600',
-      memberCnt: 1,
-    },
-    {
-      groupId: 2,
-      name: 'TestName2',
-      aboutUs: '제37대 총학생회',
-      school: '서울대',
-      thumbnail: 'https://picsum.photos/500',
-      memberCnt: 124,
-    },
-    {
-      groupId: 3,
-      name: 'TestName3',
-      aboutUs: '제38대 총학생회',
-      school: '신한대',
-      thumbnail: 'https://picsum.photos/700',
-      memberCnt: 55,
-    },
-    {
-      groupId: 4,
-      name: 'TestName4',
-      aboutUs: '제39대 총학생회',
-      school: '싸피대',
-      thumbnail: 'https://picsum.photos/400',
-      memberCnt: 3,
-    },
-    {
-      groupId: 5,
-      name: 'TestName5',
-      aboutUs: '제40대 총학생회',
-      school: '싸피대',
-      thumbnail: 'https://picsum.photos/400',
-      memberCnt: 3,
-    },
-  ],
-}

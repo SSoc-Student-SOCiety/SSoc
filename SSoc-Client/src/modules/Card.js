@@ -6,16 +6,18 @@ import { Spacer } from '../components/Basic/Spacer'
 import { useNavigation } from '@react-navigation/native'
 export const Card = (props) => {
   const navigation = useNavigation()
+
   const onPressDetail = () => {
     const { onPress, ...otherProps } = props
     navigation.navigate('GroupDetailScreen', otherProps)
   }
+
   return (
     <TouchableOpacity onPress={onPressDetail}>
       <View
         style={{
           height: 210,
-          width: 140,
+          width: 145,
           borderRadius: 10,
           marginHorizontal: 5,
         }}
@@ -28,14 +30,14 @@ export const Card = (props) => {
           />
           <Spacer space={10} />
           <Typography
-            fontSize={18}
+            fontSize={16}
             color={Color.WHITE}
           >
             {props.school}
           </Typography>
           <Spacer space={5} />
           <Typography
-            fontSize={15}
+            fontSize={14}
             color={Color.WHITE}
           >
             {props.name}
