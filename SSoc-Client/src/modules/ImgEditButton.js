@@ -1,30 +1,74 @@
-import {
-  DrawerLayoutAndroidBase,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Button } from "../components/Basic/Button";
 import * as Color from "../components/Colors/colors";
 import { Icon } from "../components/Icons/Icons";
 import * as ImagePicker from "expo-image-picker";
 import { useCallback, useState } from "react";
-import { useImagePickAndUpload } from "../hooks/useImagePickAndUpload";
 import { UserInfoState } from "../util/RecoilUtil/Atoms";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { useCurrentDate } from "../util/hooks/useCurrentDate";
-import database from "@react-native-firebase/database";
+import { useRecoilState } from "recoil";
 import storage from "@react-native-firebase/storage";
-
-import { setStatusBarNetworkActivityIndicatorVisible } from "expo-status-bar";
+import { useEffect } from "react";
+import { getChangeProfileFetch } from "../util/FetchUtil";
+import { getTokens, setTokens } from "../util/TokenUtil";
+import { getAsync } from "../util/AsyncUtil";
 const SettingImgEditButton = (props) => {
   const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
-  const imageUrl =
-    props.userInfo.userImageUrl == null ? "" : props.userInfo.userImageUrl;
-  const [newImageUrl, setNewImageUrl] = useState("");
+
   // 권한 요청을 위한 hooks
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
+  const [accessToken, setAccessToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
+  const [isTokenGet, setIsTokenGet] = useState(false);
+  useEffect(async () => {
+    if (!isTokenGet) {
+      await getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
+    }
+  }, [isTokenGet]);
+
+  const [profile, setProfile] = useState(userInfo.userImageUrl);
+
+  const getChangeProfile = async () => {
+    console.log("access", accessToken);
+    console.log("refresh", refreshToken);
+    try {
+      const response = await getChangeProfileFetch(
+        accessToken,
+        refreshToken,
+        userInfo.userEmail,
+        profile
+      );
+      const data = await response.json();
+      if (data.dataHeader != undefined) {
+        if (data.dataHeader.successCode == 0) {
+          setUserInfo({ ...userInfo, userImageUrl: profile });
+          Alert.alert("프로필 이미지를 변경하였습니다.");
+        } else if (
+          data.dataHeader.successCode == 0 &&
+          data.dataHeader.resultCode == 1
+        ) {
+          // 토큰 재발급
+          setTokens(
+            data.dataBody.token.accessToken,
+            data.dataBody.token.refreshToken
+          );
+          Alert.alert("닉네임 변경에 실패했습니다.", "다시 시도해주세요.");
+        } else {
+          Alert.alert(data.dataHeader.resultMessage);
+        }
+      } else {
+        Alert.alert("회원정보 변경에 실패했습니다.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  // const getChangeProfileFetch = async (
+  //   acessToken,
+  //   refreshToken,
+  //   userEmail,
+  //   userImage
+  // )
   const onPressEditImage = useCallback(async () => {
     // 이미지 접근 권한 관련 요청
     if (!status?.granted) {
@@ -34,18 +78,10 @@ const SettingImgEditButton = (props) => {
       }
     }
 
-    // 이미지 가져오기 요청
-    const imagePickResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      quality: 1,
-      aspect: [1, 1],
-    });
-
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
-      quality: 1,
+      quality: 0.3,
       aspect: [1, 1],
     });
 
@@ -73,6 +109,8 @@ const SettingImgEditButton = (props) => {
           .getDownloadURL();
 
         console.log("다운로드 URL: ", downloadUrl);
+        setProfile(downloadUrl);
+        getChangeProfile();
       } else {
         console.log("파일 업로드 실패");
       }
