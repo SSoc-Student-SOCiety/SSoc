@@ -1,6 +1,8 @@
 package gwangju.ssafy.backend.domain.reservation.controller;
 
+import gwangju.ssafy.backend.domain.reservation.dto.GetReservationUser;
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
+import gwangju.ssafy.backend.domain.reservation.entity.enums.ReservationApproveStatus;
 import gwangju.ssafy.backend.domain.reservation.service.ReservationService;
 import gwangju.ssafy.backend.domain.user.dto.LoginActiveUserDto;
 import gwangju.ssafy.backend.global.common.dto.Message;
@@ -8,9 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/reservation")
@@ -42,5 +46,18 @@ public class ReservationController {
     ) {
             ReservationSimpleInfo reservationSimpleInfo = reservationService.setReservation(productId, login.getId(), date, time);
             return ResponseEntity.ok().body(Message.success(reservationSimpleInfo));
+    }
+
+    // 그룹관리자 부분
+    @GetMapping("/list/{groupId}")
+    public ResponseEntity<Message<List<GetReservationUser>>> reservationList(
+            @PathVariable("groupId") Long groupId,
+            @RequestParam(name = "approveStatus", required = false) ReservationApproveStatus approveStatus, // 문자열로 받음
+            @RequestParam(name = "returnStatus", required = false) Optional<Boolean> returnStatus,  // 문자열로 받음
+            @AuthenticationPrincipal LoginActiveUserDto login
+    ) {
+        List<GetReservationUser> getReservationUserList = reservationService.searchAllGroupReservation(groupId,
+                login.getId(), approveStatus, returnStatus);
+        return ResponseEntity.ok().body(Message.success(getReservationUserList));
     }
 }

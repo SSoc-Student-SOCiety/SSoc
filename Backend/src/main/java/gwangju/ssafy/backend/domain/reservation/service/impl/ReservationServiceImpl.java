@@ -1,5 +1,11 @@
 package gwangju.ssafy.backend.domain.reservation.service.impl;
 
+import gwangju.ssafy.backend.domain.group.entity.GroupMember;
+import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.domain.group.exception.GroupError;
+import gwangju.ssafy.backend.domain.group.exception.GroupException;
+import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
+import gwangju.ssafy.backend.domain.reservation.dto.GetReservationUser;
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.entity.Product;
 import gwangju.ssafy.backend.domain.reservation.entity.Reservation;
@@ -14,12 +20,16 @@ import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MEMBER;
 
 @RequiredArgsConstructor
 @Transactional
@@ -31,6 +41,8 @@ public class ReservationServiceImpl implements ReservationService {
     private final ProductRepository productRepository;
 
     private final UserRepository userRepository;
+
+    private final GroupMemberRepository groupMemberRepository;
 
     // 대여 물품에 대한 예약 내역 확인
     @Override
@@ -89,5 +101,31 @@ public class ReservationServiceImpl implements ReservationService {
         ReservationSimpleInfo reservationSimpleInfo = new ReservationSimpleInfo();
         reservationSimpleInfo.convert(reservation);
         return reservationSimpleInfo;
+    }
+
+    // 해당 그룹의 예약 내역 전체 조회
+    @Override
+    public List<GetReservationUser> searchAllGroupReservation(Long groupId,
+                                                              Long loginMemberId,
+                                                              ReservationApproveStatus approveStatus,
+                                                              Optional<Boolean> returnStatus) {
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+                .orElseThrow(() -> new GroupException(NOT_GROUP_MEMBER));
+
+        if(groupMember.getRole() != GroupMemberRole.MANAGER) {
+            throw new GroupException(NOT_GROUP_MEMBER);
+        }
+
+
+        List<Reservation> reservationList = reservationRepository.findByProductIdReservation(groupId, approveStatus, returnStatus);
+        List<GetReservationUser> getReservationUserList = new ArrayList<>();
+
+        for(Reservation reservation: reservationList) {
+            GetReservationUser getReservationUser = new GetReservationUser();
+            getReservationUser.convert(reservation);
+            getReservationUserList.add(getReservationUser);
+        }
+
+        return getReservationUserList;
     }
 }
