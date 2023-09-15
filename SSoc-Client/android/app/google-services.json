@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1094595217718",
+    "project_id": "ssoc-d5624",
+    "storage_bucket": "ssoc-d5624.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094595217718:android:b80c9bd0b259282ef30b97",
+        "android_client_info": {
+          "package_name": "com.anonymous.SSocClient"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJbhNQohldD4WJWvaRCrNHBfTch9xdigg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094595217718:android:c2f664793e2a940ef30b97",
+        "android_client_info": {
+          "package_name": "com.ssafy.ssoc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJbhNQohldD4WJWvaRCrNHBfTch9xdigg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
