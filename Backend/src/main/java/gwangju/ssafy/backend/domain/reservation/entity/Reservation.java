@@ -49,6 +49,10 @@ public class Reservation extends BaseEntity {
     @Column
     private int time;
 
+    public void setApproveStatus(ReservationApproveStatus approveStatus) {
+        this.approveStatus = approveStatus;
+    }
+
 
 
 }

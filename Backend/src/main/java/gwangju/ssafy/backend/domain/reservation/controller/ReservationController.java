@@ -38,17 +38,19 @@ public class ReservationController {
 
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PostMapping("/detail/{productId}/{date}/{time}/ok")
-    public ResponseEntity<Message<ReservationSimpleInfo>> setReserVation(
+    public ResponseEntity<Message<ReservationSimpleInfo>> createReservation(
             @PathVariable("productId") Long productId,
             @AuthenticationPrincipal LoginActiveUserDto login,
             @PathVariable("date") String date,
             @PathVariable("time") int time
     ) {
-            ReservationSimpleInfo reservationSimpleInfo = reservationService.setReservation(productId, login.getId(), date, time);
+            ReservationSimpleInfo reservationSimpleInfo = reservationService.createReservation(productId, login.getId(), date, time);
             return ResponseEntity.ok().body(Message.success(reservationSimpleInfo));
     }
 
     // 그룹관리자 부분
+    // 예약 내역 전체 조회 및 반납 여부애 따른 조회 및 승인 여부에 따른 조회
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping("/list/{groupId}")
     public ResponseEntity<Message<List<GetReservationUser>>> reservationList(
             @PathVariable("groupId") Long groupId,
@@ -59,5 +61,19 @@ public class ReservationController {
         List<GetReservationUser> getReservationUserList = reservationService.searchAllGroupReservation(groupId,
                 login.getId(), approveStatus, returnStatus);
         return ResponseEntity.ok().body(Message.success(getReservationUserList));
+    }
+
+    // 해당 예약 승인 여부 값에 따른 처리 (수락 or 거절)
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @PutMapping("{groupId}/{reservationId}")
+    public ResponseEntity<Message<GetReservationUser>> setApproveReservation(
+            @PathVariable("groupId") Long groupId,
+            @AuthenticationPrincipal LoginActiveUserDto login,
+            @PathVariable("reservationId") Long reservationId,
+            @RequestParam(name = "approveStatus") ReservationApproveStatus approveStatus
+    ) {
+        GetReservationUser getReservationUser = reservationService.setApproveReservation(groupId, login.getId(),
+                reservationId, approveStatus);
+        return ResponseEntity.ok().body(Message.success(getReservationUser));
     }
 }
