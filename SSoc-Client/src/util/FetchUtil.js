@@ -353,7 +353,6 @@ export const getReplyListFetch = async (accessToken, refreshToken, commentId, po
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
 
-  console.log(fullUrl)
   return await fetch(fullUrl, {
     method: 'GET',
     headers: {
@@ -423,7 +422,6 @@ export const getGroupListFetch = async (accessToken, refreshToken, lastGroupId, 
   }
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
-  // console.log(fullUrl)
 
   return await fetch(fullUrl, {
     method: 'GET',
@@ -446,8 +444,6 @@ export const getMyGroupListFetch = async (accessToken, refreshToken, lastGroupId
   }
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
-
-  // console.log(fullUrl)
 
   return await fetch(fullUrl, {
     method: 'GET',
@@ -562,5 +558,73 @@ export const getApproveGroupSignUpMemberFetch = async (accessToken, refreshToken
       Refresh: refreshToken,
     },
     body: JSON.stringify({}),
+  })
+}
+
+// product(reservation)
+///////////////////
+
+// 대여물품 전체조회
+// /product/list/{groupId}
+export const getProductListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/product/list/${groupId}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 대여물품 카테고리별 조회
+// /product/list/{groupId}/{category}
+// CONVENIENCE, PARTY, BOOK
+export const getProductCategoryListFetch = async (accessToken, refreshToken, groupId, category) => {
+  const baseUrl = `${url}/product/list/${groupId}/${category}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 대여물품 상세정보 -> 예약 가능 시간 확인
+// /reservation/detail/{productId}/{date}
+export const getReservationTimeFetch = async (accessToken, refreshToken, productId, date) => {
+  const baseUrl = `${url}/reservation/detail/${productId}/${date}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 대여물품 예약하기
+// /reservation/detail/{productId}/{date}/{time}/ok
+export const getReservationRequestFetch = async (accessToken, refreshToken, productId, date, time) => {
+  const baseUrl = `${url}/reservation/detail/${productId}/${date}/${time}/ok`
+
+  return await fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
   })
 }

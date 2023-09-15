@@ -40,6 +40,8 @@ export const GroupDetailScreen = ({ route }) => {
     }
   }
 
+  // 그룹원인 경우 = groupMemberRole = enum(MEMBER, MANAGER)
+  // 그룹원이 아닌 경우 = groupMemberRole = ''
   const getGroupRoleData = async () => {
     try {
       const response = await getGroupRoleFetch(accessToken, refreshToken, groupId)
@@ -47,10 +49,6 @@ export const GroupDetailScreen = ({ route }) => {
       if (data.dataHeader != undefined) {
         if (data.dataHeader.successCode == 0) {
           setGroupMemberRole(data.dataBody.groupMemberRole)
-        } else {
-          navigation.goBack()
-          Alert.alert(data.dataHeader.resultMessage)
-          return
         }
       } else {
         Alert.alert('알 수 없는 에러 발생')
@@ -95,7 +93,7 @@ export const GroupDetailScreen = ({ route }) => {
     },
   ]
 
-  if (groupDetailData != null && groupMemberRole != '')
+  if (groupDetailData != null)
     return (
       <View style={{ flex: 1 }}>
         <TouchableOpacity
