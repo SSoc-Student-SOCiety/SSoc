@@ -13,11 +13,18 @@ public interface ReservationService {
     List<ReservationSimpleInfo> searchReservation(Long productId, String date);
 
     // 해당 날짜 및 시간에 해당 물품 예약하기
-    ReservationSimpleInfo setReservation(Long productId, Long userId, String date, int time);
+    ReservationSimpleInfo createReservation(Long productId, Long userId, String date, int time);
 
-    // 해당 그룹의 예약 내역 전체 조회 (그룹장)
+    // 해당 그룹의 예약 내역 조회 (그룹장)
     List<GetReservationUser> searchAllGroupReservation(Long groupId,
                                                        Long loginMemberId,
                                                        ReservationApproveStatus approveStatusStr,
                                                        Optional<Boolean> returnStatus);
+
+
+    // 해당 그룹의 예약 승인 여부 처리 (수락 또는 거절)
+    GetReservationUser setApproveReservation(Long groupId,
+                                             Long loginMemberId,
+                                             Long reservationId,
+                                             ReservationApproveStatus reservationApproveStatus);
 }
