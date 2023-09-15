@@ -20,7 +20,7 @@ export const RequestManageScreen = (props) => {
   const [isTokenGet, setIsTokenGet] = useState(false)
 
   const onPressAccept = useCallback((groupSignupId) => {
-    console.log('수락', groupSignupId)
+    getApproveGroupSignUpMemberData(groupSignupId)
   })
 
   const onPressRejcet = useCallback((groupSignupId) => {

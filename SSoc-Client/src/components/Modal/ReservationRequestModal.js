@@ -1,43 +1,33 @@
-import { View, StyleSheet, Pressable, Text } from "react-native";
-import * as Color from "../Colors/colors";
-import { Modal } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-export const ReservationRequestModal = ({
-  isModalVisible,
-  selectedItemId,
-  selectedItemName,
-  selectedGroupId, 
-  setIsModalVisible,
-  selectedDate,
-  selectedTime
-}) => {
-    const navigation = useNavigation();
+import { View, StyleSheet, Pressable, Text } from 'react-native'
+import * as Color from '../Colors/colors'
+import { Modal } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
-    
-    
+export const ReservationRequestModal = ({ isModalVisible, selectedItemId, selectedItemName, selectedGroupId, setIsModalVisible, selectedDate, selectedTime }) => {
+  const navigation = useNavigation()
+
   return (
-    
     <Modal
       animationType="slide"
       transparent={true}
       visible={isModalVisible}
       onRequestClose={() => {
-        setIsModalVisible(false);
+        setIsModalVisible(false)
       }}
     >
       <View style={styles.modalView}>
         <Text style={styles.modalText}>
-          {selectedItemId} {selectedItemName} {selectedDate} {selectedTime} ~ {selectedTime+1}
+          {selectedItemId} {selectedItemName} {selectedDate} {selectedTime} ~ {selectedTime + 1}
         </Text>
         <Text style={styles.modalText}>예약 하시겠습니까?</Text>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={{ margin: 10 }}>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {setIsModalVisible(false)
-                navigation.goBack();
-            }
-            }
+              onPress={() => {
+                setIsModalVisible(false)
+                navigation.goBack()
+              }}
             >
               <Text style={styles.textStyle}>확인</Text>
             </Pressable>
@@ -46,8 +36,8 @@ export const ReservationRequestModal = ({
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
-                
-                setIsModalVisible(false)}}
+                setIsModalVisible(false)
+              }}
             >
               <Text style={styles.textStyle}>취소</Text>
             </Pressable>
@@ -55,15 +45,15 @@ export const ReservationRequestModal = ({
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   item: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     borderRadius: 10,
     padding: 10,
     marginRight: 10,
@@ -71,23 +61,23 @@ const styles = StyleSheet.create({
     backgroundColor: Color.LIGHT_BLUE,
     height: 60,
     width: 300,
-    justifyContent: "space-around",
-    alignItems: "center",
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
   },
   modalView: {
     margin: 20,
     marginTop: 350,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -102,18 +92,18 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
   },
-});
+})
