@@ -612,3 +612,19 @@ export const getReservationTimeFetch = async (accessToken, refreshToken, product
     },
   })
 }
+
+// 대여물품 예약하기
+// /reservation/detail/{productId}/{date}/{time}/ok
+export const getReservationRequestFetch = async (accessToken, refreshToken, productId, date, time) => {
+  const baseUrl = `${url}/reservation/detail/${productId}/${date}/${time}/ok`
+
+  return await fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
