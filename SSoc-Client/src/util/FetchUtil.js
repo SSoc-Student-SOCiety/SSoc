@@ -13,6 +13,8 @@ export default getAPIHost = () => {
 }
 const url = getAPIHost()
 
+// const url = 'https://ssafy.xyz'
+
 export const makeQueryStringForGet = (baseUrl, queryParams) => {
   const queryString = Object.keys(queryParams)
     .filter((key) => queryParams[key] !== undefined)
@@ -675,6 +677,69 @@ export const getReservationRequestFetch = async (accessToken, refreshToken, prod
 
   return await fetch(baseUrl, {
     method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// calendar
+///////////////////
+
+// 일정 생성하기
+// /groups/{groupId}/schedules
+export const getCreateScheduleFetch = async (accessToken, refreshToken, groupId, title, content, category, startedAt) => {
+  const baseUrl = `${url}/groups/${groupId}/schedules`
+
+  console.log(baseUrl)
+  console.log(title, content, category, startedAt)
+
+  return await fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      title: title,
+      content: content,
+      category: category,
+      startedAt: startedAt,
+    }),
+  })
+}
+
+// 일정 삭제
+// /groups/{groupId}/schedules/{scheduleId}
+export const getDeleteSceduleFetch = async (accessToken, refreshToken, groupId, scheduleId) => {
+  return await fetch(`${url}/groups/${groupId}/schedules/${scheduleId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// 일정 리스트 정보
+// /groups/{groupId}/schedules
+export const getSceduleListFetch = async (accessToken, refreshToken, groupId, date) => {
+  const baseUrl = `${url}/groups/${groupId}/schedules`
+  const queryParams = {
+    date: date,
+  }
+  const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
+
+  return await fetch(fullUrl, {
+    method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

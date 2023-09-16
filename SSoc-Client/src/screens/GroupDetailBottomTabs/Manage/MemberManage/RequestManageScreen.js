@@ -45,7 +45,6 @@ export const RequestManageScreen = (props) => {
     try {
       const response = await getRejectGroupSignUpMemberFetch(accessToken, refreshToken, groupSignupId)
       const data = await response.json()
-      console.log(data)
       if (data != null) {
         if (data.dataHeader != undefined) {
           if (data.dataHeader.successCode == 0) setRejectGroupSignupMemberData(data.dataBody)
@@ -58,9 +57,9 @@ export const RequestManageScreen = (props) => {
 
   const getApproveGroupSignUpMemberData = async (groupSignupId) => {
     try {
+      console.log(groupSignupId)
       const response = await getApproveGroupSignUpMemberFetch(accessToken, refreshToken, groupSignupId)
       const data = await response.json()
-      console.log(data)
       if (data != null) {
         if (data.dataHeader != undefined) {
           if (data.dataHeader.successCode == 0) setApproveGroupSignupMemberData(data.dataBody)

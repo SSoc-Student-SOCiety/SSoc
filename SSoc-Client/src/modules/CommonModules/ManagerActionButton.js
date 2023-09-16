@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 import * as Color from '../../components/Colors/colors'
 import { useNavigation } from '@react-navigation/native'
 
-export const ManagerActionButton = ({ groupMemberRole }) => {
+export const ManagerActionButton = ({ groupMemberRole, groupId, reload, setReload }) => {
   const navigation = useNavigation()
 
   return (
@@ -56,7 +56,7 @@ export const ManagerActionButton = ({ groupMemberRole }) => {
             buttonColor="#1abc9c"
             title="일정등록"
             onPress={() => {
-              navigation.navigate('AddScheduleScreen')
+              navigation.navigate('AddScheduleScreen', { groupId })
             }}
           >
             <Ionicons
