@@ -27,7 +27,19 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.annonymous.SSocClient</string>
+          <string>com.anonymous.SSocClient</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.1094595217718-0gkiohvo4dk0id05h5ebfic48bm350en</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+ssoc-client</string>
         </array>
       </dict>
     </array>

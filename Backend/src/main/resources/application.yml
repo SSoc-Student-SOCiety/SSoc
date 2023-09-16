@@ -1,1 +1,72 @@
 
+shinhan:
+  apiKey: 2023_Shinhan_SSAFY_Hackathon
+logging:
+  level:
+    gwangju.ssafy.backend.component.shinhan: debug
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:ssoc       # 데이터베이스 URL
+    username: sa                     # 데이터베이스 계정명
+    password:                        # 데이터베이스 계정 비밀번호
+    driver-class-name: org.h2.Driver # DB 드라이버
+  h2:
+    console:
+      enabled: true                  # h2 DB 사용 시 웹 콘솔 사용 여부
+
+  jpa:
+    defer-datasource-initialization: true
+    generate-ddl: true
+
+    hibernate:
+      ddl-auto: create-drop                 # ddl 자동 작성 여부
+
+    open-in-view: false
+
+    properties:
+      hibernate:
+        format_sql: true             # 하이버네이트가 실행한 SQL을 출력할 때 보기 좋게 정렬
+        show_sql: true               # 하이버네이트가 실행한 SQL을 출력
+        jdbc:
+          batch_size: 100              #   insert/update 쿼리를 원하는 개수만큼 모아서 DB에 날릴 수 있는 옵션
+        default_batch_fetch_size: 100
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: donggeun3484@gmail.com
+    password: tbplnbqivtwteeki
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  main:
+    allow-circular-references: true
+
+
+  #      token:
+  #        access-expiration-time: 1800000    # 30분
+  #        refresh-expiration-time: 604800000   # 7일
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+jwt:
+  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+
+  expired-min:
+    access: 100000000   # 액세스 토큰 만료제한시간 60분 (1시간)
+    refresh: 10000000  # 리프레쉬 토큰 만료제한시간 10080분 (7일)
