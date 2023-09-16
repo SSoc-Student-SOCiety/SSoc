@@ -216,6 +216,25 @@ export const getAllBookingListFetch = async (accessToken, refreshToken, groupId)
   })
 }
 
+export const getAllBookingListByOptionFetch = async (
+  accessToken,
+  refreshToken,
+  groupId,
+  option
+) => {
+  const baseUrl = `${url}/reservation/list/${groupId}?approveStatus=${option}`;
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
 // BoardFetch
 ///////////////////
 export const getContentListFetch = async (accessToken, refreshToken, groupId, keyword, category, lastPostId) => {
@@ -754,6 +773,78 @@ export const getMyReservationFetch = async (accessToken, refreshToken, groupId) 
   })
 }
 
+// 대여 물품 생성
+// /product/create/{groupId}
+export const getProductCreateFetch = async (
+  accessToken,
+  refreshToken,
+  groupId,
+  category,
+  name,
+  description,
+  content,
+  imageUrl
+) => {
+  const baseUrl = `${url}/product/create/${groupId}`;
+
+  return await fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      category: category,
+      name: name,
+      description: description,
+      content: content,
+      imageUrl: imageUrl,
+    }),
+  });
+};
+
+// 대여 물품 삭제
+// /product/delete/{groupId}/{productId}
+export const getDeleteProductFetch = async (
+  accessToken,
+  refreshToken,
+  groupId,
+  productId
+) => {
+  return await fetch(`${url}/product/delete/${groupId}/${productId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  });
+};
+
+// 내가 예약한 대여물품
+// /reservation/my/list/{groupId}
+export const getMyReservationFetch = async (
+  accessToken,
+  refreshToken,
+  groupId
+) => {
+  const baseUrl = `${url}/reservation/my/list/${groupId}`;
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
 // calendar
 ///////////////////
 
@@ -761,6 +852,7 @@ export const getMyReservationFetch = async (accessToken, refreshToken, groupId) 
 // /groups/{groupId}/schedules
 export const getCreateScheduleFetch = async (accessToken, refreshToken, groupId, title, content, category, startedAt) => {
   const baseUrl = `${url}/groups/${groupId}/schedules`
+
   return await fetch(baseUrl, {
     method: 'POST',
     headers: {
@@ -830,8 +922,55 @@ export const getMonthlyStaticsFetch = async (accessToken, refreshToken, year, ac
 }
 
 //가입 그룹 계좌 조회
-export const getTransactionData = async (accessToken, refreshToken, accountId) => {
-  const baseUrl = `${url}/accounts/${account}/transactions`
+export const getTransactionFetch = async (
+  accessToken,
+  refreshToken,
+  accountId,
+  lastTransactionId
+) => {
+  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=10&filter.lastTransactionId=${lastTransactionId}`;
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+//가입 그룹 계좌 조회
+export const getDailyStaticsFetch = async (
+  accessToken,
+  refreshToken,
+  accountId,
+  startDate,
+  endDate
+) => {
+  const baseUrl = `${url}/accounts/${accountId}/daily-statistics?startDate=${startDate}&endDate=${endDate}`;
+  console.log("baseUrl", baseUrl);
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+//가입 그룹 계좌 조회
+export const getTransactionByDurationFetch = async (
+  accessToken,
+  refreshToken,
+  accountId,
+  startDate,
+  endDate
+) => {
+  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=30&filter.startDate=${startDate}&filter.endDate=${endDate}`;
 
   return await fetch(baseUrl, {
     method: 'GET',
