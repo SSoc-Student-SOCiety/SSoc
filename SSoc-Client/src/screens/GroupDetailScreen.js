@@ -1,4 +1,4 @@
-import { View, Image, ScrollView, Animated, TouchableOpacity, Alert } from 'react-native'
+import { View, Image, ScrollView, Animated, TouchableOpacity, Alert, Modal } from 'react-native'
 import { ProfileImage } from '../modules/ProfileImage'
 import * as Color from '../components/Colors/colors'
 import { Typography } from '../components/Basic/Typography'
@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { getGroupDetailFetch, getGroupRoleFetch } from '../util/FetchUtil'
 import { getTokens } from '../util/TokenUtil'
+import EditGroupInfoModal from './GroupDetailBottomTabs/Manage/EditGroupInfoModal'
 export const GroupDetailScreen = ({ route }) => {
   const { onScrollEndDrag, onScrollBeginDrag, onScroll, headerAnim } = useScrollEvent()
   const insets = useSafeAreaInsets()
@@ -29,6 +30,11 @@ export const GroupDetailScreen = ({ route }) => {
   const [isTokenGet, setIsTokenGet] = useState(false)
   const [groupDetailData, setGroupDetailData] = useState(null)
   const [groupMemberRole, setGroupMemberRole] = useState('')
+
+  const [ButtonData, setButtonData] = useState([])
+
+  const [editGroupForm, setEditGroupForm] = useState(false)
+  const [reload, setReload] = useState(false)
 
   const getGroupDetailData = async () => {
     try {
@@ -71,29 +77,48 @@ export const GroupDetailScreen = ({ route }) => {
   })
 
   const onPressGoToTab = useCallback((tabName) => {
-    navigation.navigate('GroupDetailTab', { tabName, groupId, groupMemberRole })
+    if (tabName == 'editGroupInfo') {
+      setEditGroupForm(true)
+    } else if (tabName == 'groupSignUp') {
+    } else {
+      navigation.navigate('GroupDetailTab', { tabName, groupId, groupMemberRole })
+    }
   })
 
-  const ButtonData = [
-    {
-      title: '공금 사용현황',
-      tabName: 'settlement',
-    },
-    {
-      title: '커뮤니티 바로가기',
-      tabName: 'board',
-    },
-    {
-      title: '동아리 / 학생회 일정',
-      tabName: 'schedlue',
-    },
-    {
-      title: '물품 예약',
-      tabName: 'booking',
-    },
-  ]
+  useEffect(() => {
+    if (groupMemberRole == '') {
+      setButtonData([
+        {
+          title: '그룹 가입 요청하기',
+          tabName: 'groupSignUp',
+        },
+      ])
+    } else if (groupMemberRole == 'MEMBER') {
+      setButtonData([
+        {
+          title: '그룹 커뮤니티 바로가기',
+          tabName: 'board',
+        },
+      ])
+    } else if (groupMemberRole == 'MANAGER') {
+      setButtonData([
+        {
+          title: '그룹 커뮤니티 바로가기',
+          tabName: 'board',
+        },
+        {
+          title: '그룹 정보 변경하기',
+          tabName: 'editGroupInfo',
+        },
+      ])
+    }
+  }, [groupMemberRole])
 
-  if (groupDetailData != null)
+  useEffect(() => {
+    getGroupDetailData()
+  }, [reload])
+
+  if (groupDetailData != null && ButtonData.length != 0)
     return (
       <View style={{ flex: 1 }}>
         <TouchableOpacity
@@ -206,7 +231,7 @@ export const GroupDetailScreen = ({ route }) => {
                     }}
                   >
                     <SearchButton
-                      color={Color.BLUE}
+                      color={button.tabName == 'editGroupInfo' ? Color.LIGHT_RED : Color.BLUE}
                       title={button.title}
                       iconName="airplane-outline"
                       isIcon={false}
@@ -215,12 +240,25 @@ export const GroupDetailScreen = ({ route }) => {
                 </TouchableOpacity>
               ))}
               <Spacer space={40} />
-              <Typography fontSize={22}>About us</Typography>
+              <Typography fontSize={22}>introduce</Typography>
               <Spacer space={40} />
               <Typography fontSize={15}>{groupDetailData.introduce}</Typography>
             </View>
           </ScrollView>
         </SafeAreaView>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={editGroupForm}
+          onBackdropPress={() => setEditGroupForm(false)}
+        >
+          <EditGroupInfoModal
+            setEditGroupForm={setEditGroupForm}
+            groupInfo={groupDetailData}
+            reload={reload}
+            setReload={setReload}
+          />
+        </Modal>
       </View>
     )
 }

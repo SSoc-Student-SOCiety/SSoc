@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { Typography } from '../components/Basic/Typography'
 import * as Color from '../components/Colors/colors'
 import { ProfileImage } from './ProfileImage'
@@ -36,20 +36,22 @@ export const Card = (props) => {
             {props.school}
           </Typography>
           <Spacer space={5} />
-          <Typography
-            fontSize={14}
-            color={Color.WHITE}
-          >
-            {props.name}
+          <Typography>
+            <Text
+              numberOfLines={1}
+              style={{ fontSize: 14, color: Color.WHITE }}
+            >
+              {props.name}
+            </Text>
           </Typography>
           <Spacer space={5} />
           <View style={{ height: '30%' }}>
-            <Typography
-              fontSize={12}
-              color={Color.LIGHT_GRAY}
+            <Text
+              numberOfLines={3}
+              style={{ fontSize: 12, color: Color.LIGHT_GRAY }}
             >
               {props.aboutUs}
-            </Typography>
+            </Text>
           </View>
           <Typography
             fontSize={13}
