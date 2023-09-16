@@ -18,7 +18,7 @@ export const ContentCard = (props) => {
         <View style={{ flex: 1, flexDirection: 'row', marginBottom: 8, marginTop: 8, alignItems: 'center', marginHorizontal: 25 }}>
           <ProfileImage
             size={40}
-            url={content.userImage}
+            url={content.profileImg}
           />
           <View style={{ marginLeft: 6, flexDirection: 'column' }}>
             <Text style={{ paddingBottom: 4, fontSize: 18, fontWeight: 'bold' }}>{content.title}</Text>
