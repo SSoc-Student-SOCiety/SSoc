@@ -3,8 +3,19 @@ import { View, StyleSheet, Pressable, Text, Alert } from 'react-native'
 import * as Color from '../Colors/colors'
 import { Modal } from 'react-native'
 import { getTokens } from '../../util/TokenUtil'
-import { getDeleteSceduleFetch } from '../../util/FetchUtil'
-export const DeleteModal = ({ isModalVisible, selectedItemId, groupId, selectedItemName, selectedItemContent, setIsModalVisible, option, reload, setReload }) => {
+import { getDeleteProductFetch, getDeleteSceduleFetch } from '../../util/FetchUtil'
+// export const DeleteModal = ({ isModalVisible, selectedItemId, groupId, selectedItemName, selectedItemContent, setIsModalVisible, option, reload, setReload, selectedBookingId }) => {
+export const DeleteModal = (props) => {
+  const groupId = props.groupId
+  const isModalVisible = props.isModalVisible
+  const option = props.option
+  const reload = props.reload
+  const selectedItemContent = props.selectedItemContent
+  const selectedItemId = props.selectedItemId
+  const selectedItemName = props.selectedItemName
+  const setIsModalVisible = props.setIsModalVisible
+  const setReload = props.setReload
+
   const [accessToken, setAccessToken] = useState(null)
   const [refreshToken, setRefreshToken] = useState(null)
   const [isTokenGet, setIsTokenGet] = useState(false)
@@ -44,12 +55,52 @@ export const DeleteModal = ({ isModalVisible, selectedItemId, groupId, selectedI
     }
   }
 
+  const getDeleteProductData = async () => {
+    try {
+      console.log(groupId)
+      const response = await getDeleteProductFetch(accessToken, refreshToken, groupId, selectedItemId)
+      const data = await response.json()
+
+      console.log(data)
+      if (data != null && data.dataHeader != undefined) {
+        if (data.dataHeader.successCode == 0) {
+          Alert.alert('물품이 삭제되었습니다.', '', [
+            {
+              text: '확인',
+              onPress: () => {
+                setReload(!reload)
+                setIsModalVisible(false)
+              },
+            },
+          ])
+        } else {
+          Alert.alert(data.dataHeader.resultMessage, '', [
+            {
+              text: '확인',
+              onPress: () => {
+                setIsModalVisible(false)
+              },
+            },
+          ])
+        }
+      } else {
+        Alert.alert('서버 통신 오류 발생', '다시 시도해주세요.')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   useEffect(() => {
     getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
   }, [])
 
   const onPressDelete = () => {
-    getDeleteSceduleData()
+    if (option == '일정') {
+      getDeleteSceduleData()
+    } else {
+      getDeleteProductData()
+    }
   }
 
   return (

@@ -1,19 +1,19 @@
 import { Platform } from 'react-native'
 
-const _ANDROID_AVD_API_HOST = 'http://10.0.2.2:8080'
-const _IOS_API_HOST = 'http://localhost:8080'
-export default getAPIHost = () => {
-  if (Platform.OS === 'ios') {
-    return _IOS_API_HOST
-  } else if (Platform.OS === 'android') {
-    return _ANDROID_AVD_API_HOST
-  } else {
-    throw 'Platform not supported'
-  }
-}
-const url = getAPIHost()
+// const _ANDROID_AVD_API_HOST = 'http://10.0.2.2:8080'
+// const _IOS_API_HOST = 'http://localhost:8080'
+// export default getAPIHost = () => {
+//   if (Platform.OS === 'ios') {
+//     return _IOS_API_HOST
+//   } else if (Platform.OS === 'android') {
+//     return _ANDROID_AVD_API_HOST
+//   } else {
+//     throw 'Platform not supported'
+//   }
+// }
+// const url = getAPIHost()
 
-// const url = 'https://ssafy.xyz'
+const url = 'https://ssafy.xyz'
 
 export const makeQueryStringForGet = (baseUrl, queryParams) => {
   const queryString = Object.keys(queryParams)
@@ -202,25 +202,19 @@ export const getDeleteUserFetch = async (accessToken, refreshToken) => {
 }
 
 //BookingManageFetch
-export const getAllBookingListFetch = async (
-  accessToken,
-  refreshToken,
-  groupId
-) => {
-  const baseUrl = `${url}/reservation/list/${groupId}`;
-  console.log("fetch", accessToken);
-  console.log(refreshToken);
-  console.log(baseUrl);
+export const getAllBookingListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/reservation/list/${groupId}`
+
   return await fetch(baseUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
-  });
-};
+  })
+}
 
 // BoardFetch
 ///////////////////
@@ -392,7 +386,6 @@ export const getReplyListFetch = async (accessToken, refreshToken, commentId, po
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams)
 
-  console.log(fullUrl)
   return await fetch(fullUrl, {
     method: 'GET',
     headers: {
@@ -496,40 +489,8 @@ export const getMyGroupListFetch = async (accessToken, refreshToken, lastGroupId
   })
 }
 
-export const getMyGroupListFetch = async (
-  accessToken,
-  refreshToken,
-  lastGroupId,
-  keyword,
-  category
-) => {
-  const baseUrl = `${url}/groups/my-groups`;
-  const queryParams = {
-    lastGroupId: lastGroupId,
-    keyword: keyword,
-    category: category,
-    pageSize: 5,
-  };
-
-  const fullUrl = makeQueryStringForGet(baseUrl, queryParams);
-
-  return await fetch(fullUrl, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: accessToken,
-      Refresh: refreshToken,
-    },
-  });
-};
-
-export const getGroupDetailFetch = async (
-  accessToken,
-  refreshToken,
-  groupId
-) => {
-  const baseUrl = `${url}/groups/${groupId}`;
+export const getGroupDetailFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}`
 
   return await fetch(baseUrl, {
     method: 'GET',
@@ -543,64 +504,40 @@ export const getGroupDetailFetch = async (
 }
 
 export const getGroupRoleFetch = async (accessToken, refreshToken, groupId) => {
-  const baseUrl = `${url}/groups/${groupId}/my-role`;
+  const baseUrl = `${url}/groups/${groupId}/my-role`
 
   return await fetch(baseUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
-  });
-};
+  })
+}
 
 // 소속원 관리
 // /groups/{groupId}/member/list
-export const getGroupMemberListFetch = async (
-  accessToken,
-  refreshToken,
-  groupId
-) => {
-  const baseUrl = `${url}/groups/${groupId}/member/list`;
+export const getGroupMemberListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}/member/list`
 
   return await fetch(baseUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
-  });
-};
+  })
+}
 
 // 소속원 삭제
 // /groups/{groupId}/member/delete/{userId}
-export const getDeleteGroupMemberFetch = async (
-  accessToken,
-  refreshToken,
-  groupId,
-  userId
-) => {
+export const getDeleteGroupMemberFetch = async (accessToken, refreshToken, groupId, userId) => {
   return await fetch(`${url}/groups/${groupId}/member/delete/${userId}`, {
-    method: "DELETE",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: accessToken,
-      Refresh: refreshToken,
-    },
-    body: JSON.stringify({}),
-  });
-};
-
-// 유저의 그룹 가입 신청
-// /group/signup/user/{groupId}
-export const getGroupSignUpFetch = async (accessToken, refreshToken, groupId) => {
-  return await fetch(`${url}/group/signup/user/${groupId}`, {
-    method: 'POST',
+    method: 'DELETE',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -628,61 +565,49 @@ export const getGroupSignUpFetch = async (accessToken, refreshToken, groupId) =>
 
 // 가입신청된 유저 목록 조회
 // /group/signup/list/{groupId}
-export const getGroupSignupMemberListFetch = async (
-  accessToken,
-  refreshToken,
-  groupId
-) => {
-  const baseUrl = `${url}/group/signup/list/${groupId}`;
+export const getGroupSignupMemberListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/group/signup/list/${groupId}`
 
   return await fetch(baseUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
-  });
-};
+  })
+}
 
 // 가입 요청 거절
 // /group/signup/reject/{groupSignupId}
-export const getRejectGroupSignUpMemberFetch = async (
-  accessToken,
-  refreshToken,
-  groupSignupId
-) => {
+export const getRejectGroupSignUpMemberFetch = async (accessToken, refreshToken, groupSignupId) => {
   return await fetch(`${url}/group/signup/reject/${groupSignupId}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
     body: JSON.stringify({}),
-  });
-};
+  })
+}
 
 // 가입 요청 수락
 // /group/signup/approve/{groupSignupId}
-export const getApproveGroupSignUpMemberFetch = async (
-  accessToken,
-  refreshToken,
-  groupSignupId
-) => {
+export const getApproveGroupSignUpMemberFetch = async (accessToken, refreshToken, groupSignupId) => {
   return await fetch(`${url}/group/signup/approve/${groupSignupId}`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
     body: JSON.stringify({}),
-  });
-};
+  })
+}
 
 // 그룹 정보 변경
 // /groups/{groupId}
@@ -712,66 +637,52 @@ export const getEditGroupInfoFetch = async (accessToken, refreshToken, groupId, 
 
 // 대여물품 전체조회
 // /product/list/{groupId}
-export const getProductListFetch = async (
-  accessToken,
-  refreshToken,
-  groupId
-) => {
-  const baseUrl = `${url}/product/list/${groupId}`;
+export const getProductListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/product/list/${groupId}`
 
   return await fetch(baseUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
-  });
-};
+  })
+}
 
 // 대여물품 카테고리별 조회
 // /product/list/{groupId}/{category}
 // CONVENIENCE, PARTY, BOOK
-export const getProductCategoryListFetch = async (
-  accessToken,
-  refreshToken,
-  groupId,
-  category
-) => {
-  const baseUrl = `${url}/product/list/${groupId}/${category}`;
+export const getProductCategoryListFetch = async (accessToken, refreshToken, groupId, category) => {
+  const baseUrl = `${url}/product/list/${groupId}/${category}`
 
   return await fetch(baseUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
-  });
-};
+  })
+}
 
 // 대여물품 상세정보 -> 예약 가능 시간 확인
 // /reservation/detail/{productId}/{date}
-export const getReservationTimeFetch = async (
-  accessToken,
-  refreshToken,
-  productId,
-  date
-) => {
-  const baseUrl = `${url}/reservation/detail/${productId}/${date}`;
+export const getReservationTimeFetch = async (accessToken, refreshToken, productId, date) => {
+  const baseUrl = `${url}/reservation/detail/${productId}/${date}`
 
   return await fetch(baseUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
       Authorization: accessToken,
       Refresh: refreshToken,
     },
-  });
-};
+  })
+}
 
 // 대여물품 예약하기
 // /reservation/detail/{productId}/{date}/{time}/ok
@@ -789,6 +700,59 @@ export const getReservationRequestFetch = async (accessToken, refreshToken, prod
   })
 }
 
+// 대여 물품 생성
+// /product/create/{groupId}
+export const getProductCreateFetch = async (accessToken, refreshToken, groupId, category, name, description, content, imageUrl) => {
+  const baseUrl = `${url}/product/create/${groupId}`
+
+  return await fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      category: category,
+      name: name,
+      description: description,
+      content: content,
+      imageUrl: imageUrl,
+    }),
+  })
+}
+
+// 대여 물품 삭제
+// /product/delete/{groupId}/{productId}
+export const getDeleteProductFetch = async (accessToken, refreshToken, groupId, productId) => {
+  return await fetch(`${url}/product/delete/${groupId}/${productId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// 내가 예약한 대여물품
+// /reservation/my/list/{groupId}
+export const getMyReservationFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/reservation/my/list/${groupId}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
 
 // calendar
 ///////////////////
@@ -797,9 +761,6 @@ export const getReservationRequestFetch = async (accessToken, refreshToken, prod
 // /groups/{groupId}/schedules
 export const getCreateScheduleFetch = async (accessToken, refreshToken, groupId, title, content, category, startedAt) => {
   const baseUrl = `${url}/groups/${groupId}/schedules`
-
-  console.log(baseUrl)
-  console.log(title, content, category, startedAt)
 
   return await fetch(baseUrl, {
     method: 'POST',

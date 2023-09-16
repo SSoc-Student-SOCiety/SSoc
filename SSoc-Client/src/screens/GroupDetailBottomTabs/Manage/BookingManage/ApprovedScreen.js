@@ -1,69 +1,66 @@
-import { View, TouchableOpacity, FlatList } from "react-native";
-import { Typography } from "../../../../components/Basic/Typography";
-import React, { useState, useEffect, useCallback } from "react";
-import { getAllBookingListFetch } from "../../../../util/FetchUtil";
-import { getTokens } from "../../../../util/TokenUtil";
-import { Divider } from "../../../../components/Basic/Divider";
-import { ProfileImage } from "../../../../modules/ProfileImage";
-import * as Color from "../../../../components/Colors/colors";
-import { Spacer } from "../../../../components/Basic/Spacer";
-import { ReservationAcceptRejectModal } from "../../../../components/Modal/ReservationAcceptRejectModal";
+import { View, TouchableOpacity, FlatList } from 'react-native'
+import { Typography } from '../../../../components/Basic/Typography'
+import React, { useState, useEffect, useCallback } from 'react'
+import { getAllBookingListFetch } from '../../../../util/FetchUtil'
+import { getTokens } from '../../../../util/TokenUtil'
+import { Divider } from '../../../../components/Basic/Divider'
+import { ProfileImage } from '../../../../modules/ProfileImage'
+import * as Color from '../../../../components/Colors/colors'
+import { Spacer } from '../../../../components/Basic/Spacer'
+import { ReservationAcceptRejectModal } from '../../../../components/Modal/ReservationAcceptRejectModal'
 
 export const ApprovedScreen = (props) => {
-  const [data, setData] = useState(mockResponse.dataBody);
-  const [groupId, setGroupId] = useState(props.route.params.groupId);
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
-  const [isTokenGet, setIsTokenGet] = useState(false);
+  const [data, setData] = useState(mockResponse.dataBody)
+  const [groupId, setGroupId] = useState(props.route.params.groupId)
+  const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
   const getAllBookingListData = async () => {
-    console.log(groupId);
+    console.log(groupId)
     try {
-      const response = await getAllBookingListFetch(
-        accessToken,
-        refreshToken,
-        1
-      );
-      const newData = await response.json();
-      console.log("api 결과", newData);
+      // console.log(accessToken)
+      const response = await getAllBookingListFetch(accessToken, refreshToken, 1)
+      const newData = await response.json()
+      // console.log("api 결과", newData);
 
-      console.log(newData);
-      return newData;
+      // console.log(newData);
+      return newData
     } catch (e) {
-      console.error(e);
-      return [];
+      console.error(e)
+      return []
     }
-  };
+  }
 
   useEffect(() => {
     if (!isTokenGet) {
-      getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
     }
-  }, [isTokenGet]);
+  }, [isTokenGet])
 
   const onPressGetTest = useCallback(() => {
-    getAllBookingListData();
-  });
+    getAllBookingListData()
+  })
 
   const loadData = async () => {
-    const newData = await getAllBookingListData();
+    const newData = await getAllBookingListData()
 
     if (newData.dataHeader.successCode == 0) {
       if (newData.dataBody.length > 0) {
-        setData((prevData) => [...prevData, ...newData.dataBody]);
+        setData((prevData) => [...prevData, ...newData.dataBody])
       }
     }
-  };
+  }
   const handleEndReached = () => {
-    loadData();
-  };
+    loadData()
+  }
 
   //예약 상태 변화 모달 띄우는 버튼
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState();
-  const [selectedUserName, setSelectedUserName] = useState();
-  const [selectedDate, setSelectedDate] = useState();
-  const [selectedTime, setSelectedTime] = useState();
-  const [selectedProductName, setSelectedProductName] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [selectedBookingId, setSelectedBookingId] = useState()
+  const [selectedUserName, setSelectedUserName] = useState()
+  const [selectedDate, setSelectedDate] = useState()
+  const [selectedTime, setSelectedTime] = useState()
+  const [selectedProductName, setSelectedProductName] = useState()
 
   return (
     <View style={{ flex: 1 }}>
@@ -72,23 +69,27 @@ export const ApprovedScreen = (props) => {
         showsHorizontalScrollIndicator={false}
         data={data}
         renderItem={({ item, index }) => {
-          console.log("item", item);
+          console.log('item', item)
           return (
             <View>
               <Divider />
               <View
                 style={{
                   marginHorizontal: 15,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
-                <View style={{ marginVertical: 4 }} flexDirection={"row"}>
-                  <View
-                    style={{ alignItems: "center", justifyContent: "center" }}
-                  >
-                    <ProfileImage size={60} url={item.imageUrl} />
+                <View
+                  style={{ marginVertical: 4 }}
+                  flexDirection={'row'}
+                >
+                  <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <ProfileImage
+                      size={60}
+                      url={item.imageUrl}
+                    />
                   </View>
                   <View>
                     <Typography fontSize={15}>{item.userName}</Typography>
@@ -97,37 +98,42 @@ export const ApprovedScreen = (props) => {
                       {item.reservationRealDate} {item.reservationTime}시 예약
                     </Typography>
 
-                    <Typography fontSize={10} color={Color.GRAY}>
+                    <Typography
+                      fontSize={10}
+                      color={Color.GRAY}
+                    >
                       {item.userEmail}
                     </Typography>
                   </View>
                 </View>
-                <View style={{ flexDirection: "row" }}>
+                <View style={{ flexDirection: 'row' }}>
                   {/* Render TouchableOpacity conditionally */}
-                  {item.reservationApproveStatus === "NOTCONFIRM" ? (
+                  {item.reservationApproveStatus === 'NOTCONFIRM' ? (
                     <TouchableOpacity
                       onPress={() => {
-                        setSelectedBookingId(item.selectedBookingId);
-                        setSelectedUserName(item.userName);
-                        setSelectedDate(item.reservationRealDate);
-                        setSelectedTime(item.reservationTime);
-                        setSelectedProductName(item.productName);
-                        setIsModalVisible(true);
+                        setSelectedBookingId(item.selectedBookingId)
+                        setSelectedUserName(item.userName)
+                        setSelectedDate(item.reservationRealDate)
+                        setSelectedTime(item.reservationTime)
+                        setSelectedProductName(item.productName)
+                        setIsModalVisible(true)
                       }}
                     >
                       <View
                         style={{
-                          backgroundColor:
-                            colorStatus[item.reservationApproveStatus],
+                          backgroundColor: colorStatus[item.reservationApproveStatus],
                           width: 100,
                           height: 40,
                           borderRadius: 10,
-                          justifyContent: "center",
-                          alignItems: "center",
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           marginHorizontal: 5,
                         }}
                       >
-                        <Typography fontSize={15} color={Color.WHITE}>
+                        <Typography
+                          fontSize={15}
+                          color={Color.WHITE}
+                        >
                           {koreanStatus[item.reservationApproveStatus]}
                         </Typography>
                       </View>
@@ -135,17 +141,19 @@ export const ApprovedScreen = (props) => {
                   ) : (
                     <View
                       style={{
-                        backgroundColor:
-                          colorStatus[item.reservationApproveStatus],
+                        backgroundColor: colorStatus[item.reservationApproveStatus],
                         width: 100,
                         height: 40,
                         borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
+                        justifyContent: 'center',
+                        alignItems: 'center',
                         marginHorizontal: 5,
                       }}
                     >
-                      <Typography fontSize={15} color={Color.WHITE}>
+                      <Typography
+                        fontSize={15}
+                        color={Color.WHITE}
+                      >
                         {koreanStatus[item.reservationApproveStatus]}
                       </Typography>
                     </View>
@@ -153,7 +161,7 @@ export const ApprovedScreen = (props) => {
                 </View>
               </View>
             </View>
-          );
+          )
         }}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.1}
@@ -168,20 +176,20 @@ export const ApprovedScreen = (props) => {
         setIsModalVisible={setIsModalVisible}
       />
     </View>
-  );
-};
+  )
+}
 
 const colorStatus = {
   ACCEPT: Color.LIGHT_BLUE,
   REJECT: Color.LIGHT_RED,
   NOTCONFIRM: Color.GRAY,
-};
+}
 
 const koreanStatus = {
-  ACCEPT: "승인됨",
-  REJECT: "거절됨",
-  NOTCONFIRM: "확인안함",
-};
+  ACCEPT: '승인됨',
+  REJECT: '거절됨',
+  NOTCONFIRM: '확인안함',
+}
 
 const mockResponse = {
   dataHeader: {
@@ -191,16 +199,16 @@ const mockResponse = {
   },
   dataBody: [
     {
-      productName: "물품 테스트2 (편의성2)",
-      imageUrl: "https://imageUrl",
-      userName: "한주",
-      userEmail: "hanju@yonsei.ac.kr",
-      reservationCreatedAt: "2023-09-15 11:59",
+      productName: '물품 테스트2 (편의성2)',
+      imageUrl: 'https://imageUrl',
+      userName: '한주',
+      userEmail: 'hanju@yonsei.ac.kr',
+      reservationCreatedAt: '2023-09-15 11:59',
       reservationCancelFlag: true,
       reservationReturnStatus: false,
-      reservationApproveStatus: "NOTCONFIRM",
-      reservationRealDate: "2023-09-15",
+      reservationApproveStatus: 'NOTCONFIRM',
+      reservationRealDate: '2023-09-15',
       reservationTime: 16,
     },
   ],
-};
+}

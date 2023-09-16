@@ -30,6 +30,8 @@ export const MainBookingScreen = (props) => {
 
   const [productListData, setProductListData] = useState([])
 
+  const [reload, setReload] = useState(false)
+
   const onPressDelete = useCallback((name, id) => {
     setIsModalVisible(true)
     setSelectedItemName(name)
@@ -240,6 +242,14 @@ export const MainBookingScreen = (props) => {
   // 관리자용 대여 중 전체 리스트 조회
   //예약테이블 중에서 반납확인이 false이고 승인여부
 
+  useEffect(() => {
+    if (selectedCategory == 'all') {
+      getProductListData()
+    } else {
+      getProductCategoryListData()
+    }
+  }, [reload])
+
   return (
     <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
       <View style={{ justifyContent: 'center' }}>
@@ -271,6 +281,9 @@ export const MainBookingScreen = (props) => {
         selectedItemId={selectedItemId}
         selectedItemName={selectedItemName}
         setIsModalVisible={setIsModalVisible}
+        reload={reload}
+        groupId={groupId}
+        setReload={setReload}
         option={'물품'}
       />
     </View>
