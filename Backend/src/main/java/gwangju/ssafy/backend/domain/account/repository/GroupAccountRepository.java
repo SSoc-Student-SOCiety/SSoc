@@ -13,4 +13,6 @@ public interface GroupAccountRepository extends JpaRepository<GroupAccount, Long
 
 	Optional<GroupAccount> findByGroupIdAndNumber(Long groupId, String accountNumber);
 
+	List<GroupAccount> findAllByGroupIdAndIsActiveIsTrue(Long groupId);
+
 }
