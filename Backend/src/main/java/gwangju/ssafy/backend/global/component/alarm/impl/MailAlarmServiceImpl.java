@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -21,6 +22,7 @@ public class MailAlarmServiceImpl implements AlarmService {
 	private final TemplateEngine templateEngine;
 
 
+	@Async("threadPoolTaskExecutor")
 	@Override
 	public void sendMailAlarm(String title, String contents, String receiver,String template) {
 		try {
