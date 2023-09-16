@@ -9,6 +9,8 @@ import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_GR
 import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_GROUP_MEMBER;
 import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_MATCHED_AUTHCODE;
 
+import gwangju.ssafy.backend.domain.account.dto.GetMyGroupAccountRequest;
+import gwangju.ssafy.backend.domain.account.dto.GroupAccountInfo;
 import gwangju.ssafy.backend.domain.account.dto.RegisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.account.dto.SendAuthCodeRequest;
 import gwangju.ssafy.backend.domain.account.dto.UnregisterGroupAccountRequest;
@@ -26,6 +28,7 @@ import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankServi
 import gwangju.ssafy.backend.global.utils.AuthCodeGenerator;
 import jakarta.transaction.Transactional;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -72,7 +75,7 @@ class GroupAccountServiceImpl implements GroupAccountService {
 
 		// Redis에 인증 코드 저장
 		redisTemplate.opsForValue()
-			.set(KEY_PREFIX + request.getAccountNumber() + "::"+ request.getGroupId(), authCode,
+			.set(KEY_PREFIX + request.getAccountNumber() + "::" + request.getGroupId(), authCode,
 				Duration.ofMinutes(3));
 
 		// 신한 1원 이체 API로 해당 계좌에 인증 코드 발송
@@ -98,7 +101,7 @@ class GroupAccountServiceImpl implements GroupAccountService {
 			}
 		}
 
-		String key = KEY_PREFIX + request.getAccountNumber() + "::"+ request.getGroupId();
+		String key = KEY_PREFIX + request.getAccountNumber() + "::" + request.getGroupId();
 		System.out.println("what is this " + key);
 		// 인증 코드 검증
 		String authCode = getAuthCodeInRedis(key)
@@ -148,6 +151,17 @@ class GroupAccountServiceImpl implements GroupAccountService {
 		validateAuthority(groupAccount.getGroup().getId(), request.getUserId());
 
 		groupAccount.deactivate();
+	}
+
+	@Override
+	public List<GroupAccountInfo> getMyGroupAccount(GetMyGroupAccountRequest request) {
+
+		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(request.getGroupId(),
+				request.getUserId())
+			.orElseThrow(() -> new AccountException(NOT_GROUP_MEMBER));
+
+		return groupAccountRepository.findAllByGroupIdAndIsActiveIsTrue(request.getGroupId())
+			.stream().map(GroupAccountInfo::of).toList();
 	}
 
 }
