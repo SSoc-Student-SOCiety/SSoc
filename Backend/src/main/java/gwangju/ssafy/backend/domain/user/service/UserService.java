@@ -6,9 +6,6 @@ import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 
 public interface UserService {
 
-    // 이메일 보내기
-    void sendSimpleMessage(MailSendDto mailSendDto);
-
     // 이메일 중복체크를 위해 이메일이 존재하는지 여부 조회
     void existsUserByUserEmail(String userEmail);
 

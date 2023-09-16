@@ -19,6 +19,12 @@ public class GlobalException {
     @ExceptionHandler(EmailException.class)
     public ResponseEntity<Message> emailException(EmailException e) {
         log.error("{} is occured", e.getMessage());
+        if(e.getErrorCode().toString().equals("EXPIRES_SIGNUP_CODE")) {
+            return ResponseEntity.ok().body(Message.fail("0", e.getMessage()));
+        }
+        else if(e.getErrorCode().toString().equals("NOT_MATCH_SIGNUP_CODE")) {
+            return ResponseEntity.ok().body(Message.fail("1", e.getMessage()));
+        }
         return ResponseEntity.ok().body(Message.fail(null, e.getMessage()));
     }
 
