@@ -5,6 +5,7 @@ import * as Color from "../../components/Colors/colors";
 import { useNavigation } from "@react-navigation/native";
 
 export const ManagerActionButton = ({ groupMemberRole, groupId }) => {
+  console.log("버튼의", groupId);
   const navigation = useNavigation();
   return (
     <>
