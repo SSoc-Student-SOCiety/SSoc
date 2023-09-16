@@ -4,12 +4,14 @@
 ## 📸 Summary 
 핸드폰으로 편리하게 소속 동아리/학생회 공금 사용 내역을 확인하고 교류할 수 있는 커뮤니티 서비스 
 
+
+
 ### 📚 Tech Stack 
-- BE : JAVA, Spring boot, MySQL,  Spring Data JPA, Query DSL, Spring Security
+- BE : JAVA, Spring boot, MySQL,  Spring Data JPA, Query DSL, Spring Security, Spring Batch
 APP
 - APP : React Native, ES6, Recoil 
 Deploy (ci/cd)
-- 서버 배포 : Docker, Jenkins, AWS
+- 서버 배포 : Docker, Github Actions , Oracle Cloud Instance
 - 앱 배포    :  Code push, Fast Lane
 
 ## ⭐️  기능 
@@ -46,3 +48,19 @@ Deploy (ci/cd)
 6. JWT 기반 로그인, 로그아웃 기능 구현
    - 학교 이메일과 계좌 인증을 통한 본인 인증
    - Spring Security와 JWT를 이용한 로그인 , 로그아웃
+
+<br>
+
+
+
+## 🧑‍🤝‍🧑 팀원 소개
+
+|  ![image](https://avatars.githubusercontent.com/u/51315222?v=4)   | ![8A47FFE3-01CC-4D5D-BFEF-2442C199](https://avatars.githubusercontent.com/u/119592507?v=4)     |   ![imoge](https://avatars.githubusercontent.com/u/42789808?v=4)  |  ![ldh](https://github.com/SSoc-Student-SOCiety/SSoc/assets/87813831/937c6e7a-cbb5-44c3-8dc0-4af4094842ac)    | 
+| :---------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
+|Front-End|Front-End|Back-End|Back-End|Back-End|Back-End|
+| [김수린](https://github.com/uhyeon19) | [김한주](https://github.com/dev1week) | [신동근](https://github.com/shindonggeun) | [이도훈](https://github.com/Dokuny) |
+
+
+
+## 🏢Architecture
+![프로젝트아키텍처](https://github.com/SSoc-Student-SOCiety/SSoc/assets/87813831/f73472d9-97e8-4a66-816c-0aeee181d2aa)

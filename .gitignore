@@ -40,3 +40,7 @@ out/
 
 
 Backend/src/main/generated/
+
+SSoc-Client/google-services.json
+
+SSoc-Client/GoogleService-Info.plist
