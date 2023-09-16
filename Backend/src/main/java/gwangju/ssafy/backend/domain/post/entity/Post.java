@@ -56,9 +56,10 @@ public class Post extends BaseEntity {
 	@Column
 	private boolean isDeleted;
 
-	public void edit(String title, String content) {
+	public void edit(String title, String content, Boolean isAnonymous) {
 		this.title = title;
 		this.content = content;
+		this.isAnonymous = isAnonymous;
 	}
 
 	public void delete() {
