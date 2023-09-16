@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.domain.account.service;
 
+import gwangju.ssafy.backend.domain.account.dto.BalanceInfo;
 import gwangju.ssafy.backend.domain.account.dto.GetMyGroupAccountRequest;
 import gwangju.ssafy.backend.domain.account.dto.GroupAccountInfo;
 import gwangju.ssafy.backend.domain.account.dto.RegisterGroupAccountRequest;
@@ -16,6 +17,8 @@ public interface GroupAccountService {
 	void unregisterGroupAccount(UnregisterGroupAccountRequest request);
 
 	List<GroupAccountInfo> getMyGroupAccount(GetMyGroupAccountRequest request);
+
+	BalanceInfo getAccountBalance(Long userId, Long accountId);
 
 
 }

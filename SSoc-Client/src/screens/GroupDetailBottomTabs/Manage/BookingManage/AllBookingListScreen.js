@@ -1,3 +1,4 @@
+
 import { View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
 import { Typography } from '../../../../components/Basic/Typography'
 import React, { useState, useEffect, useCallback } from 'react'
@@ -51,10 +52,7 @@ export const AllBookingListScreen = (props) => {
       <Spacer space={10} />
       {isLoading ? (
         // 로딩 중일 때 로딩 메시지 표시
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-        />
+        <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <FlatList
           showsHorizontalScrollIndicator={false}
@@ -66,20 +64,16 @@ export const AllBookingListScreen = (props) => {
                 <View
                   style={{
                     marginHorizontal: 15,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <View
-                    style={{ marginVertical: 4 }}
-                    flexDirection={'row'}
-                  >
-                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                      <ProfileImage
-                        size={60}
-                        url={item.imageUrl}
-                      />
+                  <View style={{ marginVertical: 4 }} flexDirection={"row"}>
+                    <View
+                      style={{ alignItems: "center", justifyContent: "center" }}
+                    >
+                      <ProfileImage size={60} url={item.imageUrl} />
                     </View>
                     <View>
                       <Typography fontSize={15}>{item.userName}</Typography>
@@ -88,42 +82,37 @@ export const AllBookingListScreen = (props) => {
                         {item.reservationRealDate} {item.reservationTime}시 예약
                       </Typography>
 
-                      <Typography
-                        fontSize={10}
-                        color={Color.GRAY}
-                      >
+                      <Typography fontSize={10} color={Color.GRAY}>
                         {item.userEmail}
                       </Typography>
                     </View>
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: "row" }}>
                     {/* Render TouchableOpacity conditionally */}
-                    {item.reservationApproveStatus === 'NOTCONFIRM' ? (
+                    {item.reservationApproveStatus === "NOTCONFIRM" ? (
                       <TouchableOpacity
                         onPress={() => {
-                          setSelectedBookingId(item.selectedBookingId)
-                          setSelectedUserName(item.userName)
-                          setSelectedDate(item.reservationRealDate)
-                          setSelectedTime(item.reservationTime)
-                          setSelectedProductName(item.productName)
-                          setIsModalVisible(true)
+                          setSelectedBookingId(item.selectedBookingId);
+                          setSelectedUserName(item.userName);
+                          setSelectedDate(item.reservationRealDate);
+                          setSelectedTime(item.reservationTime);
+                          setSelectedProductName(item.productName);
+                          setIsModalVisible(true);
                         }}
                       >
                         <View
                           style={{
-                            backgroundColor: colorStatus[item.reservationApproveStatus],
+                            backgroundColor:
+                              colorStatus[item.reservationApproveStatus],
                             width: 100,
                             height: 40,
                             borderRadius: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            justifyContent: "center",
+                            alignItems: "center",
                             marginHorizontal: 5,
                           }}
                         >
-                          <Typography
-                            fontSize={15}
-                            color={Color.WHITE}
-                          >
+                          <Typography fontSize={15} color={Color.WHITE}>
                             {koreanStatus[item.reservationApproveStatus]}
                           </Typography>
                         </View>
@@ -151,7 +140,7 @@ export const AllBookingListScreen = (props) => {
                   </View>
                 </View>
               </View>
-            )
+            );
           }}
           // onEndReached={handleEndReached}
           // onEndReachedThreshold={0.1}
@@ -177,7 +166,7 @@ const colorStatus = {
 }
 
 const koreanStatus = {
-  ACCEPT: '승인됨',
-  REJECT: '거절됨',
-  NOTCONFIRM: '확인안함',
-}
+  ACCEPT: "승인됨",
+  REJECT: "거절됨",
+  NOTCONFIRM: "확인안함",
+};

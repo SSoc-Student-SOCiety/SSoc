@@ -19,6 +19,7 @@ import gwangju.ssafy.backend.domain.user.entity.User;
 import gwangju.ssafy.backend.domain.user.exception.UserError;
 import gwangju.ssafy.backend.domain.user.exception.UserException;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
+import gwangju.ssafy.backend.global.component.alarm.AlarmService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,8 @@ public class ReservationServiceImpl implements ReservationService {
     private final UserRepository userRepository;
 
     private final GroupMemberRepository groupMemberRepository;
+
+    private final AlarmService alarmService;
 
     // 대여 물품에 대한 예약 내역 확인
     @Override
@@ -150,6 +153,21 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ReservationException(NOT_EXIST_RESERVATION));
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("예약이 ");
+        // 예약 승인된 경우
+        if(reservationApproveStatus.getValue().equals("ACCEPT")) {
+            sb.append("승인되었습니다.").append("<br><br>");
+            sb.append("예약된 물품은 ").append(reservation.getProduct().getName()).append("입니다.");
+            alarmService.sendMailAlarm("대여물품 예약이 승인되었습니다.", sb.toString(), reservation.getUser().getUserEmail(), "alarm");
+        }
+        // 예약 거절된 경우
+        else if(reservationApproveStatus.getValue().equals("REJECT")){
+            sb.append("거절되었습니다.").append("<br><br>");
+            alarmService.sendMailAlarm("대여 물품 예약이 거절되었습니다.", sb.toString(), reservation.getUser().getUserEmail(), "alarm");
+        }
 
         reservation.setApproveStatus(reservationApproveStatus); // 해당 예약 승인 여부 값 받아서 update 처리 -> 승인(ACCEPT), 거절(RRJECT)
 
