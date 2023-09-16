@@ -10,7 +10,7 @@ import { Icon } from '../components/Icons/Icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { getGroupDetailFetch, getGroupRoleFetch } from '../util/FetchUtil'
+import { getGroupDetailFetch, getGroupRoleFetch, getGroupSignUpFetch } from '../util/FetchUtil'
 import { getTokens } from '../util/TokenUtil'
 import EditGroupInfoModal from './GroupDetailBottomTabs/Manage/EditGroupInfoModal'
 export const GroupDetailScreen = ({ route }) => {
@@ -46,6 +46,24 @@ export const GroupDetailScreen = ({ route }) => {
     }
   }
 
+  const getGroupSignUpData = async () => {
+    try {
+      const response = await getGroupSignUpFetch(accessToken, refreshToken, groupId)
+      const data = await response.json()
+      if (data != null && data.dataHeader != undefined) {
+        if (data.dataHeader.successCode == 0) {
+          Alert.alert('그룹 가입 요청이\n 그룹장에게 전달되었습니다.')
+        } else {
+          Alert.alert(data.dataHeader.resultMessage)
+        }
+      } else {
+        Alert.alert('서버 통신 에러 발생', '다시 시도해주세요')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   // 그룹원인 경우 = groupMemberRole = enum(MEMBER, MANAGER)
   // 그룹원이 아닌 경우 = groupMemberRole = ''
   const getGroupRoleData = async () => {
@@ -57,7 +75,7 @@ export const GroupDetailScreen = ({ route }) => {
           setGroupMemberRole(data.dataBody.groupMemberRole)
         }
       } else {
-        Alert.alert('알 수 없는 에러 발생')
+        Alert.alert('서버 통신 오류 발생', '다시 시도해주세요.')
       }
     } catch (e) {
       console.log(e)
@@ -80,6 +98,7 @@ export const GroupDetailScreen = ({ route }) => {
     if (tabName == 'editGroupInfo') {
       setEditGroupForm(true)
     } else if (tabName == 'groupSignUp') {
+      getGroupSignUpData()
     } else {
       navigation.navigate('GroupDetailTab', { tabName, groupId, groupMemberRole })
     }
@@ -208,7 +227,7 @@ export const GroupDetailScreen = ({ route }) => {
             onScroll={onScroll}
             onScrollEndDrag={onScrollEndDrag}
           >
-            <View style={{ marginHorizontal: 15 }}>
+            <View style={{ marginHorizontal: 15, minHeight: 500 }}>
               <Typography fontSize={22}>{groupDetailData.aboutUs}</Typography>
               <Spacer space={5} />
               <Typography
