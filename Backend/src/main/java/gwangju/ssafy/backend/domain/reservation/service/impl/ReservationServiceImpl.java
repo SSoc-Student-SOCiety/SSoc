@@ -59,6 +59,7 @@ public class ReservationServiceImpl implements ReservationService {
     public List<ReservationSimpleInfo> searchReservation(Long productId, String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateTime = LocalDate.parse(date, formatter);
+
         List<Reservation> reservationList = reservationRepository.findByProductIdAndTime(productId, dateTime);
         List<ReservationSimpleInfo> reservationSimpleInfoList = new ArrayList<>();
 

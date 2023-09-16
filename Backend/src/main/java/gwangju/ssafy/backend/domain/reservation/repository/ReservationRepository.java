@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 //    List<Reservation> findByProductId(Long productId);
 
-    @Query("select re from Reservation re where re.product.id = :productId AND to_char(re.realDate, 'yyyy-mm-dd') = :date")
+    @Query("select re from Reservation re where re.product.id = :productId AND re.realDate = :date")
     List<Reservation> findByProductIdAndTime(@Param("productId") Long productId, @Param("date") LocalDate date);
 
     //    @Query("select re from Reservation re where re.product.id = (select pr.id from Product pr where pr.group.id = :groupId)")
