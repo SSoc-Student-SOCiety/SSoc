@@ -259,7 +259,7 @@ export const getAllBookingListByOptionFetch = async (
   option
 ) => {
   const baseUrl = `${url}/reservation/list/${groupId}?approveStatus=${option}`;
-  console.log(baseUrl);
+
   return await fetch(baseUrl, {
     method: "GET",
     headers: {
@@ -924,9 +924,6 @@ export const getCreateScheduleFetch = async (
 ) => {
   const baseUrl = `${url}/groups/${groupId}/schedules`;
 
-  console.log(baseUrl);
-  console.log(title, content, category, startedAt);
-
   return await fetch(baseUrl, {
     method: "POST",
     headers: {
@@ -1014,9 +1011,52 @@ export const getMonthlyStaticsFetch = async (
 export const getTransactionFetch = async (
   accessToken,
   refreshToken,
-  accountId
+  accountId,
+  lastTransactionId
 ) => {
-  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=10`;
+  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=10&filter.lastTransactionId=${lastTransactionId}`;
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+//가입 그룹 계좌 조회
+export const getDailyStaticsFetch = async (
+  accessToken,
+  refreshToken,
+  accountId,
+  startDate,
+  endDate
+) => {
+  const baseUrl = `${url}/accounts/${accountId}/daily-statistics?startDate=${startDate}&endDate=${endDate}`;
+  console.log("baseUrl", baseUrl);
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+//가입 그룹 계좌 조회
+export const getTransactionByDurationFetch = async (
+  accessToken,
+  refreshToken,
+  accountId,
+  startDate,
+  endDate
+) => {
+  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=30&filter.startDate=${startDate}&filter.endDate=${endDate}`;
 
   return await fetch(baseUrl, {
     method: "GET",
