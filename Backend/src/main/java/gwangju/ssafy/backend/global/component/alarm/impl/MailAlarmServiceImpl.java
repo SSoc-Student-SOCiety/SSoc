@@ -34,7 +34,7 @@ public class MailAlarmServiceImpl implements AlarmService {
 			//템플릿에 전달할 데이터 설정
 			HashMap<String, String> emailValues = new HashMap<>();
 			emailValues.put("title", title);
-			emailValues.put("contents", contents);
+			emailValues.put("content", contents);
 
 			Context context = new Context();
 			emailValues.forEach((key, value)->{
