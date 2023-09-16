@@ -1,4 +1,4 @@
-import { View, FlatList, Touchable, TouchableOpacity } from 'react-native'
+import { View, FlatList, Touchable, TouchableOpacity, Alert } from 'react-native'
 import { StackHeader } from '../../../modules/StackHeader'
 import * as Color from '../../../components/Colors/colors'
 import { Calendar } from 'react-native-calendars'
@@ -64,7 +64,7 @@ export const BookingItemDetailScreen = () => {
       console.log(e)
     }
   }
-  
+
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 데이터를 설정합니다.
     if (!isTokenGet) {

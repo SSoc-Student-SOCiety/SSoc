@@ -16,8 +16,8 @@ export const Card = (props) => {
     <TouchableOpacity onPress={onPressDetail}>
       <View
         style={{
-          height: 210,
-          width: 145,
+          height: 230,
+          width: 150,
           borderRadius: 10,
           marginHorizontal: 5,
         }}

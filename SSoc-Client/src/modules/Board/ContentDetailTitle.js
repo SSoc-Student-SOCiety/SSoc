@@ -74,7 +74,7 @@ const ContentDetailTitle = (props) => {
         <View>
           <ProfileImage
             size={50}
-            url={content.userImage}
+            url={content.profileImg}
           />
         </View>
         <View style={{ flex: 1, marginLeft: 6, flexDirection: 'column', justifyContent: 'space-evenly' }}>
