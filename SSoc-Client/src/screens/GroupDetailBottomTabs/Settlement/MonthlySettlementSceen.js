@@ -25,6 +25,7 @@ export const MonthlySettlementScreen = () => {
   const [yWithdrawals, setYWithdrawals] = useState([]);
 
   const [transactionList, setTransactionList] = useState([]);
+  const [lastId, setLastId] = useState("");
 
   const getMonthlyStaticsData = async () => {
     try {
@@ -44,8 +45,6 @@ export const MonthlySettlementScreen = () => {
         setXMonths(months);
         setYWithdrawals(withdrawals);
         setIsLoading(false);
-
-        console.log(months);
       }
     } catch (e) {
       console.error(e);
@@ -55,24 +54,51 @@ export const MonthlySettlementScreen = () => {
   const getTransactionData = async () => {
     try {
       var accountId = 1;
-      const response = await getTransactionFetch(accessToken, refreshToken, 1);
+      const response = await getTransactionFetch(
+        accessToken,
+        refreshToken,
+        1,
+        lastId
+      );
       const data = await response.json();
 
-      console.log("transaction", data.dataBody);
-      setTransactionList(data.dataBody);
+      console.log("heeadf");
+      return data;
     } catch (e) {
       console.error(e);
     }
   };
 
+  const loadData = async () => {
+    const newData = await getTransactionData();
+    // console.log(lastId);
+    if (newData.dataHeader.successCode == 0) {
+      if (newData.dataBody.length > 0) {
+        setLastId(
+          newData.dataBody[newData.dataBody.length - 1].transactionId.toString()
+        );
+        setTransactionList((prevData) => [...prevData, ...newData.dataBody]);
+      } else {
+        if (data.length >= 10) Alert.alert("마지막 페이지입니다.");
+      }
+    }
+  };
+
   useEffect(() => {
-    if (!isTokenGet) {
-      getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
-    } else {
+    getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
+  }, []);
+
+  useEffect(() => {
+    if (isTokenGet) {
       getMonthlyStaticsData();
-      getTransactionData();
+      // getTransactionData();
+      loadData();
     }
   }, [isTokenGet]);
+
+  const handleEndReached = () => {
+    loadData();
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
@@ -94,6 +120,7 @@ export const MonthlySettlementScreen = () => {
           <Typography fontSize={24}>거래 내역</Typography>
         </View>
         <Divider />
+
         <FlatList
           contentContainerStyle={{ paddingBottom: 30 }}
           style={styles.commonItem}
@@ -101,6 +128,8 @@ export const MonthlySettlementScreen = () => {
           renderItem={({ item }) => {
             return <TransactionItem item={item}></TransactionItem>;
           }}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.2}
         />
       </View>
     </View>
@@ -120,63 +149,6 @@ const monthLabels = [
   "Oct",
   "Nov",
   "Dec",
-];
-
-const mockData = [
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-  Math.random() * 100,
-];
-const transactionList = [
-  {
-    id: 1,
-    name: "김밥천국",
-    note: "간식사업 구매  비용",
-    date: "2023.03.18",
-    withdrawl: "220000",
-    deposit: "0",
-  },
-  {
-    id: 2,
-    name: "사계진미 숯불 닭갈비",
-    note: "정기 회의 후 회식",
-    date: "2023.03.17",
-    withdrawl: "320000",
-    deposit: "0",
-  },
-  {
-    id: 3,
-    name: "광산약국",
-    note: "상시 사업 약품 비용",
-    date: "2023.03.15",
-    withdrawl: "54900",
-    deposit: "0",
-  },
-  {
-    id: 4,
-    name: "스타벅스",
-    note: "개강 소통 이벤트 상품",
-    date: "2023.03.12",
-    withdrawl: "24000",
-    deposit: "0",
-  },
-  {
-    id: 5,
-    name: "알파문구",
-    note: "구비 용품 구매",
-    date: "2023.04.15",
-    withdrawl: "194600",
-    deposit: "0",
-  },
 ];
 
 var styles = StyleSheet.create({
