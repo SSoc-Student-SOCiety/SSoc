@@ -41,7 +41,7 @@ public class UserSignUpRequestDto {
                 .userName(userName)
                 .userPassword(userPassword)
                 .userNickname(userNickName)
-                .userImageUrl(null)
+                .userImageUrl("https://quarantine.doh.gov.ph/wp-content/uploads/2016/12/no-image-icon-md.png")
                 .role(UserRole.USER)
                 .build();
         return user;
