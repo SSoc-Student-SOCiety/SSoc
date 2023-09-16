@@ -81,15 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-<<<<<<< HEAD
     namespace 'com.anonymous.SSocClient'
     defaultConfig {
         applicationId 'com.anonymous.SSocClient'
-=======
-    namespace "com.ssocclient"
-    defaultConfig {
-        applicationId 'com.annonymous.SSocClient'
->>>>>>> master
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -184,8 +178,5 @@ dependencies {
 
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute(null, rootDir).text.trim(), "../native_modules.gradle");
 applyNativeModulesAppBuildGradle(project)
-<<<<<<< HEAD
 
 apply plugin: 'com.google.gms.google-services'
-=======
->>>>>>> master
