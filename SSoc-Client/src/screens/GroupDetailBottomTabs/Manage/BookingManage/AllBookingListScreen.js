@@ -1,58 +1,51 @@
-import {
-  View,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
-import { Typography } from "../../../../components/Basic/Typography";
-import React, { useState, useEffect, useCallback } from "react";
-import { getAllBookingListFetch } from "../../../../util/FetchUtil";
-import { getTokens } from "../../../../util/TokenUtil";
-import { Divider } from "../../../../components/Basic/Divider";
-import { ProfileImage } from "../../../../modules/ProfileImage";
-import * as Color from "../../../../components/Colors/colors";
-import { Spacer } from "../../../../components/Basic/Spacer";
-import { ReservationAcceptRejectModal } from "../../../../components/Modal/ReservationAcceptRejectModal";
+
+import { View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
+import { Typography } from '../../../../components/Basic/Typography'
+import React, { useState, useEffect, useCallback } from 'react'
+import { getAllBookingListFetch } from '../../../../util/FetchUtil'
+import { getTokens } from '../../../../util/TokenUtil'
+import { Divider } from '../../../../components/Basic/Divider'
+import { ProfileImage } from '../../../../modules/ProfileImage'
+import * as Color from '../../../../components/Colors/colors'
+import { Spacer } from '../../../../components/Basic/Spacer'
+import { ReservationAcceptRejectModal } from '../../../../components/Modal/ReservationAcceptRejectModal'
 
 export const AllBookingListScreen = (props) => {
-  const [data, setData] = useState([]);
-  const [groupId, setGroupId] = useState(props.route.params.groupId);
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
-  const [isTokenGet, setIsTokenGet] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([])
+  const [groupId, setGroupId] = useState(props.route.params.groupId)
+  const [accessToken, setAccessToken] = useState(null)
+  const [refreshToken, setRefreshToken] = useState(null)
+  const [isTokenGet, setIsTokenGet] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
   const getAllBookingListData = async () => {
     try {
-      const response = await getAllBookingListFetch(
-        accessToken,
-        refreshToken,
-        groupId
-      );
-      const newData = await response.json();
+      const response = await getAllBookingListFetch(accessToken, refreshToken, groupId)
+      const newData = await response.json()
 
-      setData(newData["dataBody"]);
-      setIsLoading(false);
+      setData(newData['dataBody'])
+      setIsLoading(false)
     } catch (e) {
-      console.error(e);
-      return [];
+      console.error(e)
+      return []
     }
-  };
+  }
 
   useEffect(() => {
     if (!isTokenGet) {
-      getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
     } else {
-      getAllBookingListData();
+      getAllBookingListData()
     }
-  }, [isTokenGet]);
+  }, [isTokenGet])
 
   //예약 상태 변화 모달 띄우는 버튼
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState();
-  const [selectedUserName, setSelectedUserName] = useState();
-  const [selectedDate, setSelectedDate] = useState();
-  const [selectedTime, setSelectedTime] = useState();
-  const [selectedProductName, setSelectedProductName] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [selectedBookingId, setSelectedBookingId] = useState()
+  const [selectedUserName, setSelectedUserName] = useState()
+  const [selectedDate, setSelectedDate] = useState()
+  const [selectedTime, setSelectedTime] = useState()
+  const [selectedProductName, setSelectedProductName] = useState()
 
   return (
     <View style={{ flex: 1 }}>
@@ -127,17 +120,19 @@ export const AllBookingListScreen = (props) => {
                     ) : (
                       <View
                         style={{
-                          backgroundColor:
-                            colorStatus[item.reservationApproveStatus],
+                          backgroundColor: colorStatus[item.reservationApproveStatus],
                           width: 100,
                           height: 40,
                           borderRadius: 10,
-                          justifyContent: "center",
-                          alignItems: "center",
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           marginHorizontal: 5,
                         }}
                       >
-                        <Typography fontSize={15} color={Color.WHITE}>
+                        <Typography
+                          fontSize={15}
+                          color={Color.WHITE}
+                        >
                           {koreanStatus[item.reservationApproveStatus]}
                         </Typography>
                       </View>
@@ -161,14 +156,14 @@ export const AllBookingListScreen = (props) => {
         setIsModalVisible={setIsModalVisible}
       />
     </View>
-  );
-};
+  )
+}
 
 const colorStatus = {
   ACCEPT: Color.LIGHT_BLUE,
   REJECT: Color.LIGHT_RED,
   NOTCONFIRM: Color.GRAY,
-};
+}
 
 const koreanStatus = {
   ACCEPT: "승인됨",

@@ -37,7 +37,7 @@ export const NotApprovedScreen = (props) => {
       console.error(e);
       return [];
     }
-  };
+  }
 
   useEffect(() => {
     if (!isTokenGet) {
@@ -45,7 +45,7 @@ export const NotApprovedScreen = (props) => {
     } else {
       getAllBookingListData();
     }
-  }, [isTokenGet]);
+  }, [isTokenGet])
 
   //예약 상태 변화 모달 띄우는 버튼
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -162,17 +162,17 @@ export const NotApprovedScreen = (props) => {
         setIsModalVisible={setIsModalVisible}
       />
     </View>
-  );
-};
+  )
+}
 
 const colorStatus = {
   ACCEPT: Color.LIGHT_BLUE,
   REJECT: Color.LIGHT_RED,
   NOTCONFIRM: Color.GRAY,
-};
+}
 
 const koreanStatus = {
-  ACCEPT: "승인됨",
-  REJECT: "거절됨",
-  NOTCONFIRM: "확인안함",
-};
+  ACCEPT: '승인됨',
+  REJECT: '거절됨',
+  NOTCONFIRM: '확인안함',
+}
