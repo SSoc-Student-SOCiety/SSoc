@@ -20,9 +20,9 @@ const SettingImgEditButton = (props) => {
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [isTokenGet, setIsTokenGet] = useState(false);
-  useEffect(async () => {
+  useEffect(() => {
     if (!isTokenGet) {
-      await getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
     }
   }, [isTokenGet]);
 
@@ -110,13 +110,14 @@ const SettingImgEditButton = (props) => {
 
         console.log("다운로드 URL: ", downloadUrl);
         setProfile(downloadUrl);
-        getChangeProfile();
       } else {
         console.log("파일 업로드 실패");
       }
     } catch (error) {
       console.error("파일 업로드 또는 URL을 생성하는 과정 중 오류 발생");
     }
+    //끊기
+    getChangeProfile(profile);
   }, [userInfo]);
 
   return (

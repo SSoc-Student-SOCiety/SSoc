@@ -33,20 +33,16 @@ public class GroupSignupController {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @DeleteMapping("/reject/{groupSignupId}")
     public ResponseEntity<Message<GroupSignupInfo>> rejectSignup(
-            @RequestBody DeleteGroupSignInfoRequest request,
             @PathVariable("groupSignupId") Long groupSignupId) {
-        request.setGroupSignUpId(groupSignupId);
-        return ResponseEntity.ok().body(Message.success(groupSignupService.rejectSignup(request)));
+        return ResponseEntity.ok().body(Message.success(groupSignupService.rejectSignup(groupSignupId)));
     }
 
     // 해당 그룹 가입 신청 유저 수락 처리
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @PutMapping("/approve/{groupSignupId}")
     public ResponseEntity<Message<GroupSignupInfo>> approveSignup(
-            @RequestBody GetGroupSignupInfo request,
             @PathVariable("groupSignupId") Long groupSignupId) {
-        request.setGroupSignUpId(groupSignupId);
-        return ResponseEntity.ok().body(Message.success(groupSignupService.ApproveGroupSignup(request)));
+        return ResponseEntity.ok().body(Message.success(groupSignupService.ApproveGroupSignup(groupSignupId)));
     }
 
     // 유저가 해당 그룹 가입 신청

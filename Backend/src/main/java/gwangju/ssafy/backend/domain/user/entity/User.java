@@ -45,7 +45,7 @@ public class User extends BaseEntity {
     @Column(name = "nickname")
     private String userNickname;    // 유저 닉네임
 
-    @Column(name = "image")
+    @Column(name = "image",length = 2000)
     private String userImageUrl;
 
 //    @Column(name = "authority")

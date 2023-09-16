@@ -5,11 +5,13 @@ import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.exception.GroupError;
 import gwangju.ssafy.backend.domain.group.exception.GroupException;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
+import gwangju.ssafy.backend.domain.reservation.dto.GetReservationProduct;
 import gwangju.ssafy.backend.domain.reservation.dto.GetReservationUser;
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.entity.Product;
 import gwangju.ssafy.backend.domain.reservation.entity.Reservation;
 import gwangju.ssafy.backend.domain.reservation.entity.enums.ReservationApproveStatus;
+import gwangju.ssafy.backend.domain.reservation.exception.ReservationException;
 import gwangju.ssafy.backend.domain.reservation.repository.ProductRepository;
 import gwangju.ssafy.backend.domain.reservation.repository.ReservationRepository;
 import gwangju.ssafy.backend.domain.reservation.service.ReservationService;
@@ -19,6 +21,7 @@ import gwangju.ssafy.backend.domain.user.exception.UserException;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,7 +33,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MEMBER;
+import static gwangju.ssafy.backend.domain.reservation.exception.ReservationError.NOT_EXIST_PRODUCT;
+import static gwangju.ssafy.backend.domain.reservation.exception.ReservationError.NOT_EXIST_RESERVATION;
+import static gwangju.ssafy.backend.domain.user.exception.UserError.NOT_EXIST_USER;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -82,10 +89,10 @@ public class ReservationServiceImpl implements ReservationService {
         LocalDate dateTime = LocalDate.parse(date, formatter);
         // 해당 품목 조회
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("해당 품목이 존재하지 않습니다."));
+                .orElseThrow(() -> new ReservationException(NOT_EXIST_PRODUCT));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserError.NOT_EXIST_USER));
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
         Reservation reservation = Reservation.builder()
                 .product(product)
@@ -142,12 +149,30 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new RuntimeException("해당 예약 내역 데이터가 없습니다."));
+                .orElseThrow(() -> new ReservationException(NOT_EXIST_RESERVATION));
 
         reservation.setApproveStatus(reservationApproveStatus); // 해당 예약 승인 여부 값 받아서 update 처리 -> 승인(ACCEPT), 거절(RRJECT)
 
         GetReservationUser getReservationUser = new GetReservationUser();
         getReservationUser.convert(reservation);
         return getReservationUser;
+    }
+
+    // 그룹원(로그인 한 본인)이 예약한 내역 조회
+    @Override
+    public List<GetReservationProduct> searchReservationProduct(Long groupId, Long loginMemberId) {
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+                .orElseThrow(() -> new GroupException(NOT_GROUP_MEMBER));
+
+        List<Reservation> reservationList = reservationRepository.findByUserId(loginMemberId);
+        List<GetReservationProduct> getReservationProductList = new ArrayList<>();
+
+        for(Reservation reservation : reservationList) {
+            GetReservationProduct getReservationProduct = new GetReservationProduct();
+            getReservationProduct.convert(reservation);
+            getReservationProductList.add(getReservationProduct);
+        }
+
+        return getReservationProductList;
     }
 }

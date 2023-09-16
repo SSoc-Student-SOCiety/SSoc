@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.domain.reservation.controller;
 
+import gwangju.ssafy.backend.domain.reservation.dto.GetReservationProduct;
 import gwangju.ssafy.backend.domain.reservation.dto.GetReservationUser;
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.entity.enums.ReservationApproveStatus;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,5 +75,16 @@ public class ReservationController {
         GetReservationUser getReservationUser = reservationService.setApproveReservation(groupId, login.getId(),
                 reservationId, approveStatus);
         return ResponseEntity.ok().body(Message.success(getReservationUser));
+    }
+
+    // 그룹원(로그인 한 본인)이 예약한 내역 조회
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @GetMapping("/my/list/{groupId}")
+    public ResponseEntity<Message<List<GetReservationProduct>>> searchReservationProduct(
+            @PathVariable("groupId") Long groupId,
+            @AuthenticationPrincipal LoginActiveUserDto login
+    ) {
+        List<GetReservationProduct> getReservationProductList = reservationService.searchReservationProduct(groupId, login.getId());
+        return ResponseEntity.ok().body(Message.success(getReservationProductList));
     }
 }

@@ -1,18 +1,18 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { BoardDetailScreen } from '../../screens/GroupDetailBottomTabs/Board/BoardDetailScreen'
-import { GroupDetailBottomTabNavigation } from './GroupDetailBottomTabNavigation'
-import ContentDetailScreen from '../../screens/GroupDetailBottomTabs/Board/ContentDetailScreen'
-import { AddScheduleScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddScheduleScreen'
-import { AddReceiptScreen } from '../../screens/GroupDetailBottomTabs/Manage/AddReceiptScreen'
-import { BookingManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/BookingManageScreen'
-import { BookingItemDetailScreen } from '../../screens/GroupDetailBottomTabs/Booking/BookingItemDetailScreen'
-import { MemberManageScreen } from '../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageScreen'
-import { MemberManageTopTabs } from '../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageTopTabs'
-const Stack = createNativeStackNavigator()
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { BoardDetailScreen } from "../../screens/GroupDetailBottomTabs/Board/BoardDetailScreen";
+import { GroupDetailBottomTabNavigation } from "./GroupDetailBottomTabNavigation";
+import ContentDetailScreen from "../../screens/GroupDetailBottomTabs/Board/ContentDetailScreen";
+import { AddScheduleScreen } from "../../screens/GroupDetailBottomTabs/Manage/AddScheduleScreen";
+import { AddReceiptScreen } from "../../screens/GroupDetailBottomTabs/Manage/AddReceiptScreen";
+import { BookingManageTopTabs } from "../../screens/GroupDetailBottomTabs/Manage/BookingManage/BookingManageTopTabs";
+import { MemberManageScreen } from "../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageScreen";
+import { MemberManageTopTabs } from "../../screens/GroupDetailBottomTabs/Manage/MemberManage/MemberManageTopTabs";
+import { BookingItemDetailScreen } from "../../screens/GroupDetailBottomTabs/Booking/BookingItemDetailScreen";
+const Stack = createNativeStackNavigator();
 export const GroupDetailStackNavigation = ({ route }) => {
-  const { tabName } = route.params.tabName
-  const groupId = route.params.groupId
-  const groupMemberRole = route.params.groupMemberRole
+  const { tabName } = route.params.tabName;
+  const groupId = route.params.groupId;
+  const groupMemberRole = route.params.groupMemberRole;
 
   return (
     <Stack.Navigator
@@ -48,8 +48,8 @@ export const GroupDetailStackNavigation = ({ route }) => {
         options={{ tabName: tabName }}
       />
       <Stack.Screen
-        name="BookingManageScreen"
-        component={BookingManageScreen}
+        name="BookingManageTopTabs"
+        component={BookingManageTopTabs}
         options={{ tabName: tabName }}
       />
       <Stack.Screen
@@ -69,5 +69,5 @@ export const GroupDetailStackNavigation = ({ route }) => {
         options={{ tabName: tabName }}
       ></Stack.Screen>
     </Stack.Navigator>
-  )
-}
+  );
+};

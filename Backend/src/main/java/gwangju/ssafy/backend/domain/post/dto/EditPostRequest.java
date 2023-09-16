@@ -18,5 +18,6 @@ public class EditPostRequest {
 
 	private String title;
 	private String content;
+	private Boolean isAnonymous;
 
 }

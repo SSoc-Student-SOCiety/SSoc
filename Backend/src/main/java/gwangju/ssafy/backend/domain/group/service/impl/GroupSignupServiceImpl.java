@@ -62,8 +62,8 @@ public class GroupSignupServiceImpl implements GroupSignupService {
 
     // 해당 그룹에 가입 신청한 사람 가입 신청 거절
     @Override
-    public GroupSignupInfo rejectSignup(DeleteGroupSignInfoRequest request) {
-        GroupSignup groupSignup = groupSignupRepository.findById(request.getGroupSignUpId())
+    public GroupSignupInfo rejectSignup(Long groupSignupId) {
+        GroupSignup groupSignup = groupSignupRepository.findById(groupSignupId)
                 .orElseThrow(() -> new GroupException(NOT_EXISTS_SIGNUP));
         groupSignupRepository.delete(groupSignup);
         GroupSignupInfo groupSignupInfo = new GroupSignupInfo();
@@ -74,8 +74,8 @@ public class GroupSignupServiceImpl implements GroupSignupService {
 
     // 그룹 내 해당 가입 신청 수락
     @Override
-    public GroupSignupInfo ApproveGroupSignup(GetGroupSignupInfo request) {
-        GroupSignup groupSignup = groupSignupRepository.findById(request.getGroupSignUpId())
+    public GroupSignupInfo ApproveGroupSignup(Long groupSignupId) {
+        GroupSignup groupSignup = groupSignupRepository.findById(groupSignupId)
                 .orElseThrow(() -> new GroupException(NOT_EXISTS_SIGNUP));
         groupSignup.signupApprove();    // 해당 가입신청 가입 처리 (update)
 

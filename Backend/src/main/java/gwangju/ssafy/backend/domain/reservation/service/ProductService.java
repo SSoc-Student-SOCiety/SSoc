@@ -14,5 +14,5 @@ public interface ProductService {
 
     void createProduct(Long groupId, Long loginMemberId, CreateProductRequest request);
 
-
+    void deleteProduct(Long groupId, Long loginMemberId, Long productId);
 }

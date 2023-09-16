@@ -64,7 +64,7 @@ export const BookingItemDetailScreen = () => {
       console.log(e)
     }
   }
-
+n
   useEffect(() => {
     // 컴포넌트가 마운트될 때 초기 데이터를 설정합니다.
     if (!isTokenGet) {

@@ -28,4 +28,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("approveStatus") ReservationApproveStatus approveStatus,
             @Param("returnStatus") Optional<Boolean> returnStatus);
 
+    List<Reservation> findByProductId(Long productId);
+
+    List<Reservation> findByUserId(Long userId);
+
 }
