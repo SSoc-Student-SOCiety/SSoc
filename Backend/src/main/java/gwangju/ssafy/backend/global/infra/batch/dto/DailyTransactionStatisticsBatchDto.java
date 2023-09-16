@@ -14,7 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DailyTransactionStatisticsBatchDto {
-	//t
 	private Long id;
 	private Long totalWithdrawal;
 	private Long totalDeposit;
