@@ -1,5 +1,9 @@
 import { Platform } from "react-native";
 
+
+
+// const url = "https://ssafy.xyz";
+
 // const _ANDROID_AVD_API_HOST = 'http://10.0.2.2:8080'
 // const _IOS_API_HOST = 'http://localhost:8080'
 // export default getAPIHost = () => {
@@ -14,6 +18,7 @@ import { Platform } from "react-native";
 // const url = getAPIHost()
 
 const url = 'https://ssafy.xyz'
+
 
 export const makeQueryStringForGet = (baseUrl, queryParams) => {
   const queryString = Object.keys(queryParams)
@@ -236,6 +241,14 @@ export const getDeleteUserFetch = async (accessToken, refreshToken) => {
 //BookingManageFetch
 export const getAllBookingListFetch = async (accessToken, refreshToken, groupId) => {
   const baseUrl = `${url}/reservation/list/${groupId}`
+
+export const getAllBookingListByOptionFetch = async (
+  accessToken,
+  refreshToken,
+  groupId,
+  option
+) => {
+  const baseUrl = `${url}/reservation/list/${groupId}?approveStatus=${option}`;
 
   return await fetch(baseUrl, {
     method: 'GET',
@@ -882,6 +895,7 @@ export const getCreateScheduleFetch = async (
   startedAt
 ) => {
   const baseUrl = `${url}/groups/${groupId}/schedules`;
+
   return await fetch(baseUrl, {
     method: "POST",
     headers: {
@@ -966,12 +980,55 @@ export const getMonthlyStaticsFetch = async (
 };
 
 //가입 그룹 계좌 조회
-export const getTransactionData = async (
+export const getTransactionFetch = async (
   accessToken,
   refreshToken,
-  accountId
+  accountId,
+  lastTransactionId
 ) => {
-  const baseUrl = `${url}/accounts/${account}/transactions`;
+  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=10&filter.lastTransactionId=${lastTransactionId}`;
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+//가입 그룹 계좌 조회
+export const getDailyStaticsFetch = async (
+  accessToken,
+  refreshToken,
+  accountId,
+  startDate,
+  endDate
+) => {
+  const baseUrl = `${url}/accounts/${accountId}/daily-statistics?startDate=${startDate}&endDate=${endDate}`;
+  console.log("baseUrl", baseUrl);
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+//가입 그룹 계좌 조회
+export const getTransactionByDurationFetch = async (
+  accessToken,
+  refreshToken,
+  accountId,
+  startDate,
+  endDate
+) => {
+  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=30&filter.startDate=${startDate}&filter.endDate=${endDate}`;
 
   return await fetch(baseUrl, {
     method: "GET",

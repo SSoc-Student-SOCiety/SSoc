@@ -31,6 +31,7 @@ const SettingImgEditButton = (props) => {
   const getChangeProfile = async () => {
     console.log("access", accessToken);
     console.log("refresh", refreshToken);
+    console.log("profile", profile);
     try {
       const response = await getChangeProfileFetch(
         accessToken,
