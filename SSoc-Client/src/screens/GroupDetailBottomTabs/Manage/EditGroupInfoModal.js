@@ -31,15 +31,19 @@ const EditGroupInfoModal = (props) => {
       const data = await response.json()
       console.log(data)
       if (data != null && data.dataHeader != undefined) {
-        Alert.alert('그룹 정보를 변경하였습니다.', '', [
-          {
-            text: '확인',
-            onPress: () => {
-              props.setReload(!props.reload)
-              props.setEditGroupForm(false)
+        if (data.dataHeader.successCode == 0) {
+          Alert.alert('그룹 정보를 변경하였습니다.', '', [
+            {
+              text: '확인',
+              onPress: () => {
+                props.setEditGroupForm(false)
+                props.setReload(!props.reload)
+              },
             },
-          },
-        ])
+          ])
+        } else {
+          Alert.alert(data.dataHeader.resultMessage)
+        }
       } else {
         Alert.alert('서버 통신 오류', '다시 시도해주세요.')
       }
