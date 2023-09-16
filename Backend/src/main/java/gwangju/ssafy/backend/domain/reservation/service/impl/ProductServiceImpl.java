@@ -10,8 +10,10 @@ import gwangju.ssafy.backend.domain.reservation.dto.CreateProductRequest;
 import gwangju.ssafy.backend.domain.reservation.dto.ProductInfo;
 import gwangju.ssafy.backend.domain.reservation.dto.ProductSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.entity.Product;
+import gwangju.ssafy.backend.domain.reservation.entity.Reservation;
 import gwangju.ssafy.backend.domain.reservation.entity.enums.ProductCategory;
 import gwangju.ssafy.backend.domain.reservation.repository.ProductRepository;
+import gwangju.ssafy.backend.domain.reservation.repository.ReservationRepository;
 import gwangju.ssafy.backend.domain.reservation.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,8 @@ public class ProductServiceImpl implements ProductService {
     private final GroupMemberRepository groupMemberRepository;
 
     private final GroupRepository groupRepository;
+
+    private final ReservationRepository reservationRepository;
 
     // 해당 그룹의 대여 물품들 전체 조회
     @Override
@@ -88,5 +92,24 @@ public class ProductServiceImpl implements ProductService {
                 .build();
 
         productRepository.save(product);
+    }
+
+    @Override
+    public void deleteProduct(Long groupId, Long loginMemberId, Long productId) {
+        // 그룹장 조회한 뒤
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+                .orElseThrow(() -> new GroupException((NOT_GROUP_MEMBER)));
+
+        // 그룹장이 아닌 경우
+        if (groupMember.getRole() != GroupMemberRole.MANAGER) {
+            throw new GroupException(NOT_GROUP_MANAGER);
+        }
+
+        List<Reservation> reservationList = reservationRepository.findByProductId(productId);
+
+        // 해당 대여 물품에 대한 예약내역들이 조회 되는 경우 해당 예약내역들 먼저 삭제해 준 뒤
+        reservationRepository.deleteAll(reservationList);
+
+        productRepository.deleteById(productId);    // 해당 물품 삭제
     }
 }

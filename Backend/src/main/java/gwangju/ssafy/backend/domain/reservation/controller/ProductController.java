@@ -49,4 +49,16 @@ public class ProductController {
         return ResponseEntity.ok().body(Message.success());
     }
 
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @DeleteMapping("delete/{groupId}/{productId}")
+    public ResponseEntity<Message> deleteProduct(
+            @PathVariable("groupId") Long groupId,
+            @AuthenticationPrincipal LoginActiveUserDto login,
+            @PathVariable("productId") Long productId
+    ) {
+        productService.deleteProduct(groupId, login.getId(), productId);
+        return ResponseEntity.ok().body(Message.success());
+    }
+
+
 }
