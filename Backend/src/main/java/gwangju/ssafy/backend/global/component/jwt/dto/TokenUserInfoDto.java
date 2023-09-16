@@ -36,6 +36,7 @@ public class TokenUserInfoDto {
         claims.put(KEY_EMAIL, this.userEmail);
         claims.put(KEY_NAME, this.userName);
         claims.put(KEY_NICKNAME, this.userNickname);
+        claims.put(KEY_IMAGEURL, this.userImageUrl);
         claims.put(KEY_ROLES, this.role);
         claims.setIssuedAt(now);
         claims.setExpiration(new Date(now.getTime() + expiresMin * ONE_MINUTE));
@@ -50,6 +51,7 @@ public class TokenUserInfoDto {
                 .userEmail(claims.get(KEY_EMAIL, String.class))
                 .userName(claims.get(KEY_NAME, String.class))
                 .userNickname(claims.get(KEY_NICKNAME, String.class))
+                .userImageUrl(claims.get(KEY_IMAGEURL, String.class))
                 .role(claims.get(KEY_ROLES, String.class))
                 .build();
     }
