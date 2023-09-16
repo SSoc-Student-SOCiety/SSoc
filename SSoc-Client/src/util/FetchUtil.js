@@ -589,3 +589,185 @@ export const getGroupDetailFetch = async (
     },
   });
 };
+
+export const getGroupRoleFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}/my-role`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 소속원 관리
+// /groups/{groupId}/member/list
+export const getGroupMemberListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/groups/${groupId}/member/list`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 소속원 삭제
+// /groups/{groupId}/member/delete/{userId}
+export const getDeleteGroupMemberFetch = async (accessToken, refreshToken, groupId, userId) => {
+  return await fetch(`${url}/groups/${groupId}/member/delete/${userId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// 가입신청된 유저 목록 조회
+// /group/signup/list/{groupId}
+export const getGroupSignupMemberListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/group/signup/list/${groupId}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 가입 요청 거절
+// /group/signup/reject/{groupSignupId}
+export const getRejectGroupSignUpMemberFetch = async (accessToken, refreshToken, groupSignupId) => {
+  return await fetch(`${url}/group/signup/reject/${groupSignupId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// 가입 요청 수락
+// /group/signup/approve/{groupSignupId}
+export const getApproveGroupSignUpMemberFetch = async (accessToken, refreshToken, groupSignupId) => {
+  return await fetch(`${url}/group/signup/approve/${groupSignupId}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({}),
+  })
+}
+
+// 그룹 정보 변경
+// /groups/{groupId}
+// 관리자만 가능 -> 관리자만 볼 수 있는 버튼
+export const getEditGroupInfoFetch = async (accessToken, refreshToken, groupId, name, aboutUs, introduce, thumbnail) => {
+  const baseUrl = `${url}/groups/${groupId}`
+
+  return await fetch(baseUrl, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+    body: JSON.stringify({
+      name: name,
+      aboutUs: aboutUs,
+      introduce: introduce,
+      thumbnail: thumbnail,
+    }),
+  })
+}
+
+// product(reservation)
+///////////////////
+
+// 대여물품 전체조회
+// /product/list/{groupId}
+export const getProductListFetch = async (accessToken, refreshToken, groupId) => {
+  const baseUrl = `${url}/product/list/${groupId}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 대여물품 카테고리별 조회
+// /product/list/{groupId}/{category}
+// CONVENIENCE, PARTY, BOOK
+export const getProductCategoryListFetch = async (accessToken, refreshToken, groupId, category) => {
+  const baseUrl = `${url}/product/list/${groupId}/${category}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 대여물품 상세정보 -> 예약 가능 시간 확인
+// /reservation/detail/{productId}/{date}
+export const getReservationTimeFetch = async (accessToken, refreshToken, productId, date) => {
+  const baseUrl = `${url}/reservation/detail/${productId}/${date}`
+
+  return await fetch(baseUrl, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}
+
+// 대여물품 예약하기
+// /reservation/detail/{productId}/{date}/{time}/ok
+export const getReservationRequestFetch = async (accessToken, refreshToken, productId, date, time) => {
+  const baseUrl = `${url}/reservation/detail/${productId}/${date}/${time}/ok`
+
+  return await fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  })
+}

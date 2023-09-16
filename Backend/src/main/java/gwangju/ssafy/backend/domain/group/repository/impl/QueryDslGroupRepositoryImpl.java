@@ -1,16 +1,22 @@
 package gwangju.ssafy.backend.domain.group.repository.impl;
 
+import static com.querydsl.core.types.ExpressionUtils.count;
 import static gwangju.ssafy.backend.domain.group.entity.QGroup.group;
 import static gwangju.ssafy.backend.domain.group.entity.QGroupMember.groupMember;
 import static gwangju.ssafy.backend.domain.group.entity.QSchool.school;
+import static gwangju.ssafy.backend.domain.post.entity.QComment.comment;
+import static gwangju.ssafy.backend.domain.post.entity.QPost.post;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gwangju.ssafy.backend.domain.group.dto.GroupSearchCond;
 import gwangju.ssafy.backend.domain.group.dto.GroupSimpleInfo;
 import gwangju.ssafy.backend.domain.group.dto.MyGroupSearchCond;
+import gwangju.ssafy.backend.domain.group.entity.QGroupMember;
 import gwangju.ssafy.backend.domain.group.entity.enums.GroupCategory;
 import gwangju.ssafy.backend.domain.group.repository.QueryDslGroupRepository;
 import java.util.List;
@@ -32,7 +38,12 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 				group.name.as("name"),
 				group.aboutUs.as("aboutUs"),
 				school.name.as("school"),
-				group.thumbnail.as("thumbnail")
+				group.thumbnail.as("thumbnail"),
+				ExpressionUtils.as(
+					JPAExpressions.select(count(groupMember.id))
+						.from(groupMember)
+						.where(groupMember.group.id.eq(group.id)),
+					"memberCnt")
 			))
 			.from(group)
 			.innerJoin(group.school, school)
@@ -53,7 +64,12 @@ public class QueryDslGroupRepositoryImpl implements QueryDslGroupRepository {
 				group.name.as("name"),
 				group.aboutUs.as("aboutUs"),
 				school.name.as("school"),
-				group.thumbnail.as("thumbnail")
+				group.thumbnail.as("thumbnail"),
+				ExpressionUtils.as(
+					JPAExpressions.select(count(groupMember.id))
+						.from(groupMember)
+						.where(groupMember.group.id.eq(group.id)),
+					"memberCnt")
 			))
 			.from(groupMember)
 			.innerJoin(groupMember.group, group)

@@ -48,14 +48,17 @@ export const GroupDetailBottomTabNavigation = (props) => {
       <Tabs.Screen
         name="결산안"
         component={SettlementsTopTabs}
+        initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
       ></Tabs.Screen>
       <Tabs.Screen
         name="일정"
         component={ScheduleScreen}
+        initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
       ></Tabs.Screen>
       <Tabs.Screen
         name="물품 예약"
         component={BookingTopTabs}
+        initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
       ></Tabs.Screen>
     </Tabs.Navigator>
   )

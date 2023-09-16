@@ -1,5 +1,11 @@
 package gwangju.ssafy.backend.domain.reservation.service.impl;
 
+import gwangju.ssafy.backend.domain.group.entity.GroupMember;
+import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
+import gwangju.ssafy.backend.domain.group.exception.GroupError;
+import gwangju.ssafy.backend.domain.group.exception.GroupException;
+import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
+import gwangju.ssafy.backend.domain.reservation.dto.GetReservationUser;
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.entity.Product;
 import gwangju.ssafy.backend.domain.reservation.entity.Reservation;
@@ -14,12 +20,16 @@ import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MEMBER;
 
 @RequiredArgsConstructor
 @Transactional
@@ -32,6 +42,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final UserRepository userRepository;
 
+    private final GroupMemberRepository groupMemberRepository;
+
     // 대여 물품에 대한 예약 내역 확인
     @Override
     public List<ReservationSimpleInfo> searchReservation(Long productId, String date) {
@@ -41,15 +53,15 @@ public class ReservationServiceImpl implements ReservationService {
         List<ReservationSimpleInfo> reservationSimpleInfoList = new ArrayList<>();
 
 
-        for(Reservation reservation: reservationList) {
+        for (Reservation reservation : reservationList) {
             // 예약 내역이 있으면서
-            if(reservation != null) {
+            if (reservation != null) {
                 // 예약 취소를 안했으면서
-                if(!reservation.isCancelFlag()) {
+                if (!reservation.isCancelFlag()) {
                     // 예약 승인인 것인 경우
-                    if(reservation.getApproveStatus().getValue().equals("ACCEPT")) {
+                    if (reservation.getApproveStatus().getValue().equals("ACCEPT")) {
                         // 반납 안한 것인 경우
-                        if(!reservation.isReturnStatus()) {
+                        if (!reservation.isReturnStatus()) {
                             ReservationSimpleInfo reservationSimpleInfo = new ReservationSimpleInfo();
                             // 해당 대여 물품의 예약 정보 반환할 수 있게끔
                             reservationSimpleInfo.convert(reservation);
@@ -65,7 +77,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationSimpleInfo setReservation(Long productId, Long userId, String date, int time) {
+    public ReservationSimpleInfo createReservation(Long productId, Long userId, String date, int time) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateTime = LocalDate.parse(date, formatter);
         // 해당 품목 조회
@@ -89,5 +101,53 @@ public class ReservationServiceImpl implements ReservationService {
         ReservationSimpleInfo reservationSimpleInfo = new ReservationSimpleInfo();
         reservationSimpleInfo.convert(reservation);
         return reservationSimpleInfo;
+    }
+
+    // 해당 그룹의 예약 내역 전체 조회
+    @Override
+    public List<GetReservationUser> searchAllGroupReservation(Long groupId,
+                                                              Long loginMemberId,
+                                                              ReservationApproveStatus approveStatus,
+                                                              Optional<Boolean> returnStatus) {
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+                .orElseThrow(() -> new GroupException(NOT_GROUP_MEMBER));
+
+        if (groupMember.getRole() != GroupMemberRole.MANAGER) {
+            throw new GroupException(NOT_GROUP_MEMBER);
+        }
+
+
+        List<Reservation> reservationList = reservationRepository.findByProductIdReservation(groupId, approveStatus, returnStatus);
+        List<GetReservationUser> getReservationUserList = new ArrayList<>();
+
+        for (Reservation reservation : reservationList) {
+            GetReservationUser getReservationUser = new GetReservationUser();
+            getReservationUser.convert(reservation);
+            getReservationUserList.add(getReservationUser);
+        }
+
+        return getReservationUserList;
+    }
+
+    @Override
+    public GetReservationUser setApproveReservation(Long groupId,
+                                                    Long loginMemberId,
+                                                    Long reservationId,
+                                                    ReservationApproveStatus reservationApproveStatus) {
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+                .orElseThrow(() -> new GroupException(NOT_GROUP_MEMBER));
+
+        if (groupMember.getRole() != GroupMemberRole.MANAGER) {
+            throw new GroupException(NOT_GROUP_MEMBER);
+        }
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new RuntimeException("해당 예약 내역 데이터가 없습니다."));
+
+        reservation.setApproveStatus(reservationApproveStatus); // 해당 예약 승인 여부 값 받아서 update 처리 -> 승인(ACCEPT), 거절(RRJECT)
+
+        GetReservationUser getReservationUser = new GetReservationUser();
+        getReservationUser.convert(reservation);
+        return getReservationUser;
     }
 }
