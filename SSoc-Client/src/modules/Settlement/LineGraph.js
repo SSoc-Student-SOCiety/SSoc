@@ -4,8 +4,9 @@ import * as Color from "../../components/Colors/colors";
 
 export const LineGraph = ({ labels, mockData }) => {
   return (
-    <View style={{ marginHorizontal: 20 }}>
+    <View style={{ flex: 1, paddingHorizontal: 20 }}>
       <LineChart
+        fromZero={true}
         data={{
           labels: labels,
           datasets: [
@@ -16,8 +17,8 @@ export const LineGraph = ({ labels, mockData }) => {
         }}
         width={Dimensions.get("window").width} // from react-native
         height={220}
-        yAxisSuffix="원"
-        yAxisInterval={1000} // optional, defaults to 1
+        yAxisSuffix="만"
+        yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
           backgroundColor: Color.WHITE,
           backgroundGradientFrom: Color.WHITE,

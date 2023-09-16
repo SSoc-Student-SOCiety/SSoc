@@ -170,13 +170,17 @@ export const getChangePasswordFetch = async (
   });
 };
 
-
-export const getChangeProfileFetch = async (accessToken, refreshToken, userEmail, userImage) => {
-  return await fetch(url + '/user/update/image', {
-    method: 'POST',
+export const getChangeProfileFetch = async (
+  accessToken,
+  refreshToken,
+  userEmail,
+  userImage
+) => {
+  return await fetch(url + "/user/update/image", {
+    method: "POST",
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
       Authorization: accessToken,
       Refresh: refreshToken,
     },
@@ -184,12 +188,20 @@ export const getChangeProfileFetch = async (accessToken, refreshToken, userEmail
       userEmail: userEmail,
       userImage: userImage,
     }),
-  })
-}
+  });
+};
 
-export const getChangeAllFetch = async (accessToken, refreshToken, userEmail, userNowPassword, userChangePassword, userNickName, userImageUrl) => {
-  return await fetch(url + '/user/update/nickname/password', {
-    method: 'POST',
+export const getChangeAllFetch = async (
+  accessToken,
+  refreshToken,
+  userEmail,
+  userNowPassword,
+  userChangePassword,
+  userNickName,
+  userImageUrl
+) => {
+  return await fetch(url + "/user/update/nickname/password", {
+    method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -474,7 +486,7 @@ export const getReplyListFetch = async (
 
   const fullUrl = makeQueryStringForGet(baseUrl, queryParams);
 
-  console.log(fullUrl)
+  console.log(fullUrl);
   return await fetch(fullUrl, {
     method: "GET",
     headers: {
@@ -683,18 +695,22 @@ export const getDeleteGroupMemberFetch = async (
 
 // 유저의 그룹 가입 신청
 // /group/signup/user/{groupId}
-export const getGroupSignUpFetch = async (accessToken, refreshToken, groupId) => {
+export const getGroupSignUpFetch = async (
+  accessToken,
+  refreshToken,
+  groupId
+) => {
   return await fetch(`${url}/group/signup/user/${groupId}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
       Authorization: accessToken,
       Refresh: refreshToken,
     },
     body: JSON.stringify({}),
-  })
-}
+  });
+};
 
 // 가입신청된 유저 목록 조회
 // /group/signup/list/{groupId}
@@ -757,14 +773,22 @@ export const getApproveGroupSignUpMemberFetch = async (
 // 그룹 정보 변경
 // /groups/{groupId}
 // 관리자만 가능 -> 관리자만 볼 수 있는 버튼
-export const getEditGroupInfoFetch = async (accessToken, refreshToken, groupId, name, aboutUs, introduce, thumbnail) => {
-  const baseUrl = `${url}/groups/${groupId}`
+export const getEditGroupInfoFetch = async (
+  accessToken,
+  refreshToken,
+  groupId,
+  name,
+  aboutUs,
+  introduce,
+  thumbnail
+) => {
+  const baseUrl = `${url}/groups/${groupId}`;
 
   return await fetch(baseUrl, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: "application/json",
+      "Content-Type": "application/json",
       Authorization: accessToken,
       Refresh: refreshToken,
     },
@@ -774,8 +798,8 @@ export const getEditGroupInfoFetch = async (accessToken, refreshToken, groupId, 
       introduce: introduce,
       thumbnail: thumbnail,
     }),
-  })
-}
+  });
+};
 
 // product(reservation)
 ///////////////////
@@ -864,3 +888,26 @@ export const getReservationRequestFetch = async (
     },
   });
 };
+
+//transactions 시작
+//월간 통계 내역 조회
+export const getMonthlyStaticsFetch = async (
+  accessToken,
+  refreshToken,
+  year,
+  transactionId
+) => {
+  const baseUrl = `${url}/accounts/${transactionId}/monthly-statistics?year=${year}`;
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+//가입 그룹 계좌 조회

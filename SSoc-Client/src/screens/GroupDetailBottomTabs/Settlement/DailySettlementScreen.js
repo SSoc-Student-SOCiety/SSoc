@@ -6,8 +6,7 @@ import { TransactionItem } from "../../../modules/Settlement/TransactionItem";
 import { Typography } from "../../../components/Basic/Typography";
 import { Divider } from "../../../components/Basic/Divider";
 import { FlatList } from "react-native";
-import React, {useState} from "react";
-
+import React, { useState } from "react";
 
 const weekLabels = ["월", "화", "수", "목", "금", "토", "일"];
 const mockData = [
@@ -24,33 +23,30 @@ export const DaillySettlementScreen = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: Color.WHITE }}>
-      <View style={{flex:1}}> 
-        <LineGraphSection
+      <View style={{ flex: 1 }}>
+        {/* <LineGraphSection
           title={`지난 7일 모아보기`}
           labels={weekLabels}
           data={mockData}
-        />
+        /> */}
       </View>
-      <View style={{flex:1.2}}>
-      
+      <View style={{ flex: 1.2 }}>
         <View style={{ marginHorizontal: 25, marginVertical: 10 }}>
           <Typography fontSize={24}>거래 내역</Typography>
         </View>
         <Divider />
-      <FlatList
-        contentContainerStyle={{ paddingBottom: 30 }} 
-        style={styles.commonItem}
-        data={transactionList}
-        renderItem={({ item }) => {
-          return <TransactionItem item={item}></TransactionItem>;
-        }}
-      />
-    </View>
-    
+        <FlatList
+          contentContainerStyle={{ paddingBottom: 30 }}
+          style={styles.commonItem}
+          data={transactionList}
+          renderItem={({ item }) => {
+            return <TransactionItem item={item}></TransactionItem>;
+          }}
+        />
+      </View>
     </View>
   );
 };
-
 
 const transactionList = [
   {
@@ -120,5 +116,5 @@ const transactionList = [
 ];
 
 var styles = StyleSheet.create({
-  commonItem: { paddingTop: 30, paddingHorizontal: 20},
+  commonItem: { paddingTop: 30, paddingHorizontal: 20 },
 });
