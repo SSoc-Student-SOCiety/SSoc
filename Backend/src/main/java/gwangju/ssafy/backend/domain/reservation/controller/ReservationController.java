@@ -54,8 +54,8 @@ public class ReservationController {
     @GetMapping("/list/{groupId}")
     public ResponseEntity<Message<List<GetReservationUser>>> reservationList(
             @PathVariable("groupId") Long groupId,
-            @RequestParam(name = "approveStatus", required = false) ReservationApproveStatus approveStatus, // 문자열로 받음
-            @RequestParam(name = "returnStatus", required = false) Optional<Boolean> returnStatus,  // 문자열로 받음
+            @RequestParam(name = "approveStatus", required = false) ReservationApproveStatus approveStatus,
+            @RequestParam(name = "returnStatus", required = false) Optional<Boolean> returnStatus,
             @AuthenticationPrincipal LoginActiveUserDto login
     ) {
         List<GetReservationUser> getReservationUserList = reservationService.searchAllGroupReservation(groupId,
