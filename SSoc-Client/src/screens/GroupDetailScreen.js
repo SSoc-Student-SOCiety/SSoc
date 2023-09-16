@@ -83,8 +83,9 @@ export const GroupDetailScreen = ({ route }) => {
   }
 
   useEffect(() => {
-    if (!isTokenGet) getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
-    else {
+    if (!isTokenGet) {
+      getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
+    } else {
       getGroupRoleData()
       getGroupDetailData()
     }
@@ -198,7 +199,7 @@ export const GroupDetailScreen = ({ route }) => {
               <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                 <ProfileImage
                   size={70}
-                  url={groupDetailData.thumbnail}
+                  url={groupDetailData.thumb}
                 />
                 <View style={{ marginHorizontal: 5, marginBottom: 3 }}>
                   <Typography

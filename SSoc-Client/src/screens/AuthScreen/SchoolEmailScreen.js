@@ -11,6 +11,7 @@ import AuthInput from '../../components/Input/AuthInput'
 import { SingleLineInput } from '../../components/Input/SingleLineInput'
 import { AuthStackHeader } from '../../modules/AuthModules/AuthStackHeader'
 import { getEmailCheckFetch } from '../../util/FetchUtil'
+import schoolList from '../../assets/JSON/School.json'
 
 const SchoolEmailScreen = (props) => {
   const navigation = useNavigation()
@@ -18,11 +19,6 @@ const SchoolEmailScreen = (props) => {
   const [schoolEmail, setSchoolEmail] = useState('')
   const [school, setSchool] = useState('')
   const [checkEmailData, setCheckEmailData] = useState(null)
-
-  const schoolList = {
-    'shinhan.ac.kr': '신한대학교',
-    'ssafy.ac.kr': '싸피대학교',
-  }
 
   const onPressRegister = () => {
     if (school.length == 0 || userId.length == 0) {

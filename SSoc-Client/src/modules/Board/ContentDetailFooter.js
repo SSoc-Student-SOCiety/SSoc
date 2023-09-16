@@ -35,7 +35,7 @@ const ContentDetailFooter = (props) => {
               color={Color.BLUE}
               size={26}
             />
-            <Text style={{ fontSize: 20, color: Color.GRAY }}>{' ' + content.commentCnt}</Text>
+            <Text style={{ fontSize: 20, color: Color.GRAY }}></Text>
           </View>
         </TouchableOpacity>
         <Modal
