@@ -122,7 +122,7 @@ public class UserController {
 
     // 임시 비밀번호 재발급 -> 토큰 필요 없음
     @PostMapping("/email/password")
-    public ResponseEntity<Message> sendTempPassword(@RequestBody UserDto userDto) throws Exception {
+    public ResponseEntity<Message> sendTempPassword(@RequestBody UserDto userDto) {
         MailCodeDto mailCodeDto = emailService.sendSimpleMessage(userDto.getUserEmail(), false);
         log.info("메일 전송 완료");
         userService.tempPassword(userDto, mailCodeDto);

@@ -80,7 +80,6 @@ public class ProductServiceImpl implements ProductService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new GroupException(NOT_EXISTS_GROUP));
 
-        log.info(request.getImageUrl());
         request.build();
         Product product = Product.builder()
                 .group(group)

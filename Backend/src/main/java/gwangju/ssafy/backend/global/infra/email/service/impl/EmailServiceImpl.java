@@ -9,6 +9,7 @@ import gwangju.ssafy.backend.global.infra.email.repository.EmailRepository;
 import gwangju.ssafy.backend.global.infra.email.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
