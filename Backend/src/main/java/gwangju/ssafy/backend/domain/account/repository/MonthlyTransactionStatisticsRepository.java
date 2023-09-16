@@ -15,4 +15,7 @@ public interface MonthlyTransactionStatisticsRepository extends
 	List<MonthlyTransactionStatistics> findAllByYear(@Param("groupAccountId") Long groupAccountId,
 		@Param("year") Integer year);
 
+	MonthlyTransactionStatistics findByGroupAccountIdAndYearAndMonth(Long groupAccountId,
+		Integer year, Integer month);
+
 }

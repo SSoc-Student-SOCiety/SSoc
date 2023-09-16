@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.domain.account.controller;
 
+import gwangju.ssafy.backend.domain.account.dto.BalanceInfo;
 import gwangju.ssafy.backend.domain.account.dto.GetMyGroupAccountRequest;
 import gwangju.ssafy.backend.domain.account.dto.GroupAccountInfo;
 import gwangju.ssafy.backend.domain.account.dto.RegisterGroupAccountRequest;
@@ -76,6 +77,16 @@ public class GroupAccountController {
 		request.setAccountId(accountId);
 		groupAccountService.unregisterGroupAccount(request);
 		return ResponseEntity.ok().body(Message.success());
+	}
+
+	@PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+	@GetMapping("/{accountId}/balance")
+	public ResponseEntity<Message<BalanceInfo>> getAccountBalance(
+		@AuthenticationPrincipal LoginActiveUserDto login,
+		@PathVariable Long accountId
+	) {
+
+		return ResponseEntity.ok().body(Message.success(groupAccountService.getAccountBalance(login.getId(),accountId)));
 	}
 
 
