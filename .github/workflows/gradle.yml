@@ -71,6 +71,7 @@ jobs:
         tags: ${{secrets.DOCKER_REPO}}/ssoc:latest
         platforms: |
           linux/arm64    
+          linux/amd64
 
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
