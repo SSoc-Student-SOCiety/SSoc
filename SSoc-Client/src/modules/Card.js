@@ -45,7 +45,7 @@ export const Card = (props) => {
             </Text>
           </Typography>
           <Spacer space={5} />
-          <View style={{ height: '30%' }}>
+          <View style={{ height: '35%' }}>
             <Text
               numberOfLines={3}
               style={{ fontSize: 12, color: Color.LIGHT_GRAY }}

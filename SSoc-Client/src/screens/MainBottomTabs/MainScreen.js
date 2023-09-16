@@ -9,10 +9,14 @@ import { Spacer } from '../../components/Basic/Spacer'
 import * as Color from '../../components/Colors/colors'
 import { getMyGroupListFetch } from '../../util/FetchUtil'
 import { getTokens } from '../../util/TokenUtil'
+import { useRecoilValue } from 'recoil'
+import { UserInfoState } from '../../util/RecoilUtil/Atoms'
 
 export const MainScreen = () => {
   const [lastGroupId, setLastGroupId] = useState('')
   const [data, setData] = useState([])
+  const user = useRecoilValue(UserInfoState)
+  console.log(user)
 
   const [isTokenGet, setIsTokenGet] = useState(false)
   const [accessToken, setAccessToken] = useState(null)
@@ -50,8 +54,8 @@ export const MainScreen = () => {
   return (
     <View style={styles.container}>
       <MainHeader
-        name={'김싸피'}
-        url={'https://picsum.photos/600'}
+        name={user.userNickname}
+        url={user.userImageUrl}
       />
       <ScrollView>
         <Logo />

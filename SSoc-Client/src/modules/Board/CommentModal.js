@@ -104,7 +104,7 @@ const CommentModal = (props) => {
               />
             </TouchableOpacity>
             <View style={{ width: '100%', height: 70, backgroundColor: Color.DARK_BLUE, borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ color: Color.WHITE, fontSize: 20, fontWeight: 'bold' }}>댓글 {content.commentCnt}</Text>
+              <Text style={{ color: Color.WHITE, fontSize: 20, fontWeight: 'bold' }}>댓글</Text>
             </View>
             <KeyboardAvoidingView
               style={{ flex: 1, width: '100%', backgroundColor: Color.WHITE, borderTopLeftRadius: 20, borderTopRightRadius: 20 }}

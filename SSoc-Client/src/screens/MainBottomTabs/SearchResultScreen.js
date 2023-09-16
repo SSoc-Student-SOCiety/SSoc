@@ -11,7 +11,11 @@ import { SearchOptionCategoryScroll } from '../../modules/SearchOptionCategorySc
 import { SearchButton } from '../../modules/SearchButton'
 import { getGroupListFetch } from '../../util/FetchUtil'
 import { getTokens } from '../../util/TokenUtil'
+import { useRecoilValue } from 'recoil'
+import { UserInfoState } from '../../util/RecoilUtil/Atoms'
+
 export const SearchResultScreen = () => {
+  const user = useRecoilValue(UserInfoState)
   const [data, setData] = useState([])
   const [lastGroupId, setLastGroupId] = useState('')
 
@@ -79,8 +83,8 @@ export const SearchResultScreen = () => {
       backgroundColor={Color.WHITE}
     >
       <MainHeader
-        name={'김싸피'}
-        url={'https://picsum.photos/600'}
+        name={user.userNickname}
+        url={user.userImageUrl}
       />
       <View style={styles.commonItem}>
         <SearchOptionCategoryScroll setSearchCategory={setSearchCategory} />
