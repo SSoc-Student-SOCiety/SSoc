@@ -8,8 +8,9 @@ import { ProfileImage } from "../../../../modules/ProfileImage";
 import * as Color from "../../../../components/Colors/colors";
 import { Spacer } from "../../../../components/Basic/Spacer";
 import { ReservationAcceptRejectModal } from "../../../../components/Modal/ReservationAcceptRejectModal";
-export const AllBookingListScreen = (props) => {
-  const [data, setData] = useState([]);
+
+export const ApprovedScreen = (props) => {
+  const [data, setData] = useState(mockResponse.dataBody);
   const [groupId, setGroupId] = useState(props.route.params.groupId);
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
@@ -67,11 +68,11 @@ export const AllBookingListScreen = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <Spacer space={10} />
-
       <FlatList
         showsHorizontalScrollIndicator={false}
         data={data}
         renderItem={({ item, index }) => {
+          console.log("item", item);
           return (
             <View>
               <Divider />
@@ -190,18 +191,6 @@ const mockResponse = {
   },
   dataBody: [
     {
-      productName: "물품 테스트1 (편의성1)",
-      imageUrl: "https://imageUrl",
-      userName: "한주",
-      userEmail: "hanju@yonsei.ac.kr",
-      reservationCreatedAt: "2023-09-15 11:59",
-      reservationCancelFlag: false,
-      reservationReturnStatus: false,
-      reservationApproveStatus: "ACCEPT",
-      reservationRealDate: "2023-09-15",
-      reservationTime: 11,
-    },
-    {
       productName: "물품 테스트2 (편의성2)",
       imageUrl: "https://imageUrl",
       userName: "한주",
@@ -212,42 +201,6 @@ const mockResponse = {
       reservationApproveStatus: "NOTCONFIRM",
       reservationRealDate: "2023-09-15",
       reservationTime: 16,
-    },
-    {
-      productName: "물품 테스트3 (행사용품1)",
-      imageUrl: "https://imageUrl",
-      userName: "한주",
-      userEmail: "hanju@yonsei.ac.kr",
-      reservationCreatedAt: "2023-09-15 11:59",
-      reservationCancelFlag: false,
-      reservationReturnStatus: false,
-      reservationApproveStatus: "REJECT",
-      reservationRealDate: "2023-09-15",
-      reservationTime: 17,
-    },
-    {
-      productName: "물품 테스트4 (전공서적1)",
-      imageUrl: "https://imageUrl",
-      userName: "한주",
-      userEmail: "hanju@yonsei.ac.kr",
-      reservationCreatedAt: "2023-09-15 11:59",
-      reservationCancelFlag: false,
-      reservationReturnStatus: true,
-      reservationApproveStatus: "ACCEPT",
-      reservationRealDate: "2023-09-15",
-      reservationTime: 10,
-    },
-    {
-      productName: "물품 테스트1 (편의성1)",
-      imageUrl: "https://imageUrl",
-      userName: "수린",
-      userEmail: "surin@inha.co.kr",
-      reservationCreatedAt: "2023-09-15 11:59",
-      reservationCancelFlag: false,
-      reservationReturnStatus: false,
-      reservationApproveStatus: "ACCEPT",
-      reservationRealDate: "2023-09-15",
-      reservationTime: 12,
     },
   ],
 };

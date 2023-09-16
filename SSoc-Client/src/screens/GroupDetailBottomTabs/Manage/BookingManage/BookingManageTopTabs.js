@@ -4,8 +4,8 @@ import { View } from "react-native";
 import { StackHeader } from "../../../../modules/StackHeader";
 import { AddProductScreen } from "./AddProductScreen";
 import { AllBookingListScreen } from "./AllBookingListScreen";
-import { NotApprovedScreen } from "./NotApprovedScreen";
-import { NotReturnedistScreen } from "./NotReturnedListScreen";
+import { ApprovedScreen } from "./ApprovedScreen";
+import { NotApprovedScreen } from "./NotApprovedListScreen";
 const Tab = createMaterialTopTabNavigator();
 
 export const BookingManageTopTabs = (props) => {
@@ -27,8 +27,8 @@ export const BookingManageTopTabs = (props) => {
           initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
         ></Tab.Screen>
         <Tab.Screen
-          name="미반납 예약"
-          component={NotReturnedistScreen}
+          name="승인된 예약"
+          component={ApprovedScreen}
           initialParams={{ groupId: groupId, groupMemberRole: groupMemberRole }}
         ></Tab.Screen>
         <Tab.Screen
