@@ -61,12 +61,13 @@ export const DaillySettlementScreen = () => {
       const data = await response.json();
       if (data != null && data.dataHeader != undefined) {
         const withdrawals = data.dataBody.map((item) =>
-          parseInt(item.withdrawal / 10000)
+          parseFloat(item.withdrawal / 10000)
         );
         const months = data.dataBody.map((item) => item.date.slice(-2) + "일");
         setXMonths(months);
         setYWithdrawals(withdrawals);
         setIsLoading(false);
+        console.log(withdrawals);
       }
     } catch (e) {
       console.error(e);
