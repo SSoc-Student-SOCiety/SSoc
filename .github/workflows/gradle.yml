@@ -12,10 +12,6 @@ on:
     paths:
       - 'Backend/**'
     branches: [ "master" ]
-  pull_request:
-    paths:
-      - 'Backend/**'
-    branches: [ "master" ]
 
 permissions:
   contents: read
