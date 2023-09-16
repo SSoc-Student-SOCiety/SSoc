@@ -40,7 +40,7 @@ const SettingUserInfo = () => {
           </SettingProfileImage>
           <Spacer space={18} />
           <Typography>
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{userInfo.userName}</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{userInfo.userNickname}</Text>
             <Text style={{ fontSize: 18, color: Color.DARK_BLUE }}> 님 반갑습니다!</Text>
           </Typography>
           <Spacer space={6} />
