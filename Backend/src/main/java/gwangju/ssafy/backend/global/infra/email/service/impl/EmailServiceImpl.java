@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
 
 	private final EmailRepository emailRepository;
 
-	private static final int EXPIRES_MIN = 1;	// 인증코드 인증 제한시간 1분
+	private static final int EXPIRES_MIN = 30;	// 인증코드 인증 제한시간 30분
 
 	private String createMessage(String to, boolean signupCheck, String key) {
 
@@ -107,4 +107,6 @@ public class EmailServiceImpl implements EmailService {
 		}
 		return key.toString();
 	}
+
+
 }
