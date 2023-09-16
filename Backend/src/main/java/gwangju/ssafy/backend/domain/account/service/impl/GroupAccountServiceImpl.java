@@ -9,14 +9,18 @@ import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_GR
 import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_GROUP_MEMBER;
 import static gwangju.ssafy.backend.domain.account.exception.AccountError.NOT_MATCHED_AUTHCODE;
 
+import gwangju.ssafy.backend.domain.account.dto.BalanceInfo;
 import gwangju.ssafy.backend.domain.account.dto.GetMyGroupAccountRequest;
 import gwangju.ssafy.backend.domain.account.dto.GroupAccountInfo;
+import gwangju.ssafy.backend.domain.account.dto.MonthlyStatisticsInfo;
 import gwangju.ssafy.backend.domain.account.dto.RegisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.account.dto.SendAuthCodeRequest;
 import gwangju.ssafy.backend.domain.account.dto.UnregisterGroupAccountRequest;
 import gwangju.ssafy.backend.domain.account.entity.GroupAccount;
+import gwangju.ssafy.backend.domain.account.entity.MonthlyTransactionStatistics;
 import gwangju.ssafy.backend.domain.account.exception.AccountException;
 import gwangju.ssafy.backend.domain.account.repository.GroupAccountRepository;
+import gwangju.ssafy.backend.domain.account.repository.MonthlyTransactionStatisticsRepository;
 import gwangju.ssafy.backend.domain.account.service.GroupAccountService;
 import gwangju.ssafy.backend.domain.group.entity.Group;
 import gwangju.ssafy.backend.domain.group.entity.GroupMember;
@@ -24,10 +28,12 @@ import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
 import gwangju.ssafy.backend.domain.group.repository.GroupRepository;
 import gwangju.ssafy.backend.global.common.entity.vo.Bank;
+import gwangju.ssafy.backend.global.infra.feign.shinhan.dto.BalanceDetail;
 import gwangju.ssafy.backend.global.infra.feign.shinhan.service.ShinhanBankService;
 import gwangju.ssafy.backend.global.utils.AuthCodeGenerator;
 import jakarta.transaction.Transactional;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +51,7 @@ class GroupAccountServiceImpl implements GroupAccountService {
 	private final GroupMemberRepository groupMemberRepository;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final static String KEY_PREFIX = "registerGroupAccount::";
+	private final MonthlyTransactionStatisticsRepository monthlyTransactionStatisticsRepository;
 
 	@Override
 	public void sendAuthCode(SendAuthCodeRequest request) {
@@ -162,6 +169,29 @@ class GroupAccountServiceImpl implements GroupAccountService {
 
 		return groupAccountRepository.findAllByGroupIdAndIsActiveIsTrue(request.getGroupId())
 			.stream().map(GroupAccountInfo::of).toList();
+	}
+
+	@Override
+	public BalanceInfo getAccountBalance(Long userId, Long accountId) {
+		GroupAccount groupAccount = groupAccountRepository.findById(accountId)
+			.orElseThrow(() -> new AccountException(NOT_EXISTS_ACCOUNT));
+		GroupMember member = groupMemberRepository.findByGroupIdAndUserId(groupAccount.getGroup()
+				.getId(), userId)
+			.orElseThrow(() -> new AccountException(NOT_GROUP_MEMBER));
+
+		LocalDate prevMonth = LocalDate.now().minusMonths(1);
+		MonthlyTransactionStatistics statistic = monthlyTransactionStatisticsRepository.findByGroupAccountIdAndYearAndMonth(
+			groupAccount.getId(), prevMonth.getYear(), prevMonth.getMonthValue());
+
+		BalanceDetail balanceDetail = shinhanBankService.getBalanceDetail(groupAccount.getNumber());
+
+		return BalanceInfo.builder()
+			.balance(balanceDetail.getBalance())
+			.accountNumber(balanceDetail.getAccountNumber())
+			.accountId(groupAccount.getId())
+			.monthlyStatisticsInfo(MonthlyStatisticsInfo.of(statistic))
+			.bank(groupAccount.getBank())
+			.build();
 	}
 
 }

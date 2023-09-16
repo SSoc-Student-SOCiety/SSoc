@@ -119,6 +119,10 @@ export const ScheduleScreen = (props) => {
   }
 
   useEffect(() => {
+    if (isTokenGet) getSceduleListData()
+  }, [reload])
+
+  useEffect(() => {
     if (!isTokenGet) {
       getTokens(setAccessToken, setRefreshToken, setIsTokenGet)
     } else {

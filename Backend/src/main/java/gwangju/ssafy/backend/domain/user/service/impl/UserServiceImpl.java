@@ -71,6 +71,7 @@ class UserServiceImpl implements UserService {
                 .userEmail(user.getUserEmail())
                 .userNickname(user.getUserNickname())
                 .userName(user.getUserName())
+                .userImageUrl(user.getUserImageUrl())
                 .role(user.getRole().toString())
                 .build();
     }

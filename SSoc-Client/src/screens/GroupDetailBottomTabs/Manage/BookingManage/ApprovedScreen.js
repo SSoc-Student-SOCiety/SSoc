@@ -34,10 +34,10 @@ export const ApprovedScreen = (props) => {
       setData(newData["dataBody"]);
       setIsLoading(false);
     } catch (e) {
-      console.error(e);
-      return [];
+      console.error(e)
+      return []
     }
-  };
+  }
 
   useEffect(() => {
     if (!isTokenGet) {
@@ -45,15 +45,15 @@ export const ApprovedScreen = (props) => {
     } else {
       getAllBookingListData();
     }
-  }, [isTokenGet]);
+  }, [isTokenGet])
 
   //예약 상태 변화 모달 띄우는 버튼
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState();
-  const [selectedUserName, setSelectedUserName] = useState();
-  const [selectedDate, setSelectedDate] = useState();
-  const [selectedTime, setSelectedTime] = useState();
-  const [selectedProductName, setSelectedProductName] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [selectedBookingId, setSelectedBookingId] = useState()
+  const [selectedUserName, setSelectedUserName] = useState()
+  const [selectedDate, setSelectedDate] = useState()
+  const [selectedTime, setSelectedTime] = useState()
+  const [selectedProductName, setSelectedProductName] = useState()
 
   return (
     <View style={{ flex: 1 }}>
@@ -128,17 +128,19 @@ export const ApprovedScreen = (props) => {
                     ) : (
                       <View
                         style={{
-                          backgroundColor:
-                            colorStatus[item.reservationApproveStatus],
+                          backgroundColor: colorStatus[item.reservationApproveStatus],
                           width: 100,
                           height: 40,
                           borderRadius: 10,
-                          justifyContent: "center",
-                          alignItems: "center",
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           marginHorizontal: 5,
                         }}
                       >
-                        <Typography fontSize={15} color={Color.WHITE}>
+                        <Typography
+                          fontSize={15}
+                          color={Color.WHITE}
+                        >
                           {koreanStatus[item.reservationApproveStatus]}
                         </Typography>
                       </View>
@@ -162,14 +164,14 @@ export const ApprovedScreen = (props) => {
         setIsModalVisible={setIsModalVisible}
       />
     </View>
-  );
-};
+  )
+}
 
 const colorStatus = {
   ACCEPT: Color.LIGHT_BLUE,
   REJECT: Color.LIGHT_RED,
   NOTCONFIRM: Color.GRAY,
-};
+}
 
 const koreanStatus = {
   ACCEPT: "승인됨",

@@ -116,6 +116,7 @@ const EditGroupInfoModal = (props) => {
                     </Text>
                   </View>
                   <View style={{ justifyContent: 'center', width: '25%', alignItems: 'center' }}>
+                    {/* TO-DO */}
                     {/* 변경버튼 클릭 후 이미지 변경 시 url 가져와서 setInputTumbnail()을 변경 url로 inputTumbnail 바꿔넣기 */}
                     <TouchableOpacity
                       onPress={() => {
