@@ -9,6 +9,7 @@ import gwangju.ssafy.backend.global.common.dto.*;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.repository.RefreshRepository;
 import gwangju.ssafy.backend.domain.user.exception.UserException;
+import gwangju.ssafy.backend.global.infra.email.repository.EmailRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,25 +29,10 @@ class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final JavaMailSender emailSender;
-
     private final PasswordEncoder passwordEncoder;
 
     private final RefreshRepository refreshRepository;
 
-
-
-    // 이메일 보내기
-    @Override
-    public void sendSimpleMessage(MailSendDto mailSendDto) {
-        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setFrom("tlsehdrms124@yonsei.ac.kr"); // 구글 정책 때문에 발신자(보내는사람) 세팅 안됨
-
-        message.setTo(mailSendDto.getAddress());    // 수신자(받는사람) 이메일 주소 세팅
-        message.setSubject(mailSendDto.getTitle()); // 이메일 제목 세팅
-        message.setText(mailSendDto.getContent());  // 이메일 내용 세팅
-        emailSender.send(message);  // 이메일 보내기
-    }
 
     // 이에일 중복 체크를 위해 이메일이 존재하는지 여부 조회
     @Override

@@ -1,6 +1,7 @@
 package gwangju.ssafy.backend.global.component.alarm.impl;
 
 import gwangju.ssafy.backend.global.component.alarm.AlarmService;
+import gwangju.ssafy.backend.global.infra.email.repository.EmailRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class MailAlarmServiceImpl implements AlarmService {
 
 	private final JavaMailSender mailSender;
 	private final TemplateEngine templateEngine;
+
 
 	@Override
 	public void sendMailAlarm(String title, String contents, String receiver,String template) {

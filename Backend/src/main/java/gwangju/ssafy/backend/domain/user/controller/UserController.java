@@ -6,7 +6,7 @@ import gwangju.ssafy.backend.global.common.dto.*;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenDto;
 import gwangju.ssafy.backend.global.component.jwt.dto.TokenUserInfoDto;
 import gwangju.ssafy.backend.global.component.jwt.service.JwtService;
-import gwangju.ssafy.backend.global.infra.email.EmailService;
+import gwangju.ssafy.backend.global.infra.email.service.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -32,10 +32,17 @@ public class UserController {
 
     // 이메일을 통한 인증코드 보내기 -> 토큰 필요 없음
     @PostMapping("/email/send")
-    public ResponseEntity<Message<MailCodeDto>> sendMail(@RequestBody UserDto userDto) throws Exception {
+    public ResponseEntity<Message<MailCodeDto>> sendMail(@RequestBody UserDto userDto) {
         MailCodeDto mailCodeDto = emailService.sendSimpleMessage(userDto.getUserEmail(), true);
         log.info("메일 전송 완료");
         return ResponseEntity.ok().body(Message.success(mailCodeDto));
+    }
+
+    // redis에 저장된 이메일 인증코드 맞는지 확인하기 -> 토큰 필요 없음
+    @PostMapping("/email/redis")
+    public ResponseEntity<Message> signupCodeCheck(@RequestBody MailCodeDto mailCodeDto) {
+        emailService.signupCodeCheck(mailCodeDto.getUserEmail(), mailCodeDto.getEmailCode());
+        return ResponseEntity.ok().body(Message.success());
     }
 
     // 이메일 중복 체크 -> 토큰 필요 없음
