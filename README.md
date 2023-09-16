@@ -52,12 +52,13 @@ Deploy (ci/cd)
 <br>
 
 
+
 ## 🧑‍🤝‍🧑 팀원 소개
 
-|  ![image](https://user-images.githubusercontent.com/49369306/195608027-5633bd06-1c29-4916-bf75-65567de3b2a5.png)   | ![8A47FFE3-01CC-4D5D-BFEF-2442C199 (1)](https://user-images.githubusercontent.com/101342819/195843132-6ac73804-173b-42a2-82fd-46abbe4fadb4.jpg)     |   ![imoge](https://user-images.githubusercontent.com/49369306/195610304-6a7a322e-ffc0-491b-a56b-3bae9ff83c2e.jpg)  |  ![ldh](https://avatars.githubusercontent.com/u/87813831?v=4)    | 
+|  ![image](https://avatars.githubusercontent.com/u/51315222?v=4)   | ![8A47FFE3-01CC-4D5D-BFEF-2442C199](https://avatars.githubusercontent.com/u/119592507?v=4)     |   ![imoge](https://avatars.githubusercontent.com/u/42789808?v=4)  |  ![ldh](https://github.com/SSoc-Student-SOCiety/SSoc/assets/87813831/937c6e7a-cbb5-44c3-8dc0-4af4094842ac)    | 
 | :---------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
 |Front-End|Front-End|Back-End|Back-End|Back-End|Back-End|
-| [김수린](https://github.com/younjaewon) | [김한주](https://github.com/onLuke) | [신동근](https://github.com/malslapq) | [이도훈](https://github.com/Dokuny) |
+| [김수린](https://github.com/uhyeon19) | [김한주](https://github.com/dev1week) | [신동근](https://github.com/shindonggeun) | [이도훈](https://github.com/Dokuny) |
 
 
 
