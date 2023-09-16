@@ -14,4 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // 카테고리에 따른 해당 그룹의 대여 물품들(예약 물품) 조회
     List<Product> findAllByGroupIdAndCategory(Long groupId, ProductCategory category);
+
 }
