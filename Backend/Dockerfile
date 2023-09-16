@@ -1,4 +1,4 @@
-FROM arm64v8/openjdk:17
+FROM openjdk:17.0.2-oracle
 ARG JAR_FILE=Backend/build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 EXPOSE 8080
