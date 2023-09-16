@@ -13,7 +13,7 @@ export default getAPIHost = () => {
 };
 const url = getAPIHost();
 
-// const url = 'https://ssafy.xyz'
+// const url = "https://ssafy.xyz";
 
 export const makeQueryStringForGet = (baseUrl, queryParams) => {
   const queryString = Object.keys(queryParams)
@@ -1011,12 +1011,12 @@ export const getMonthlyStaticsFetch = async (
 };
 
 //가입 그룹 계좌 조회
-export const getTransactionData = async (
+export const getTransactionFetch = async (
   accessToken,
   refreshToken,
   accountId
 ) => {
-  const baseUrl = `${url}/accounts/${account}/transactions`;
+  const baseUrl = `${url}/accounts/${accountId}/transactions?filter.pageSize=10`;
 
   return await fetch(baseUrl, {
     method: "GET",

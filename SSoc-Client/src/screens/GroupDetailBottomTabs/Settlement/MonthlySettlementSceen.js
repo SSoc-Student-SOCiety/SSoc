@@ -10,9 +10,11 @@ import { TransactionItem } from "../../../modules/Settlement/TransactionItem";
 import { getMonthlyStaticsFetch } from "../../../util/FetchUtil";
 import { useEffect, useState } from "react";
 import { getTokens } from "../../../util/TokenUtil";
+import { getTransactionFetch } from "../../../util/FetchUtil";
 export const MonthlySettlementScreen = () => {
   const { year, month, day, today } = useCurrentDate();
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+  const [isListLoading, setIsListLoading] = useState(true);
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [isTokenGet, setIsTokenGet] = useState(false);
@@ -21,6 +23,8 @@ export const MonthlySettlementScreen = () => {
 
   const [xMonths, setXMonths] = useState([]);
   const [yWithdrawals, setYWithdrawals] = useState([]);
+
+  const [transactionList, setTransactionList] = useState([]);
 
   const getMonthlyStaticsData = async () => {
     try {
@@ -40,7 +44,22 @@ export const MonthlySettlementScreen = () => {
         setXMonths(months);
         setYWithdrawals(withdrawals);
         setIsLoading(false);
+
+        console.log(months);
       }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const getTransactionData = async () => {
+    try {
+      var accountId = 1;
+      const response = await getTransactionFetch(accessToken, refreshToken, 1);
+      const data = await response.json();
+
+      console.log("transaction", data.dataBody);
+      setTransactionList(data.dataBody);
     } catch (e) {
       console.error(e);
     }
@@ -51,6 +70,7 @@ export const MonthlySettlementScreen = () => {
       getTokens(setAccessToken, setRefreshToken, setIsTokenGet);
     } else {
       getMonthlyStaticsData();
+      getTransactionData();
     }
   }, [isTokenGet]);
 

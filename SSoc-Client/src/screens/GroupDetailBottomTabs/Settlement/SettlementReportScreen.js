@@ -10,7 +10,7 @@ export const SettlementReportScreen = () => {
   const { weekNumber } = useCurrentWeekNumber();
   return (
     <View style={{ backgroundColor: Color.WHITE, flex: 1 }}>
-      {/* <PieChartSection data={data} title={`${month}월 ${weekNumber}번째 주`} /> */}
+      <PieChartSection data={data} title={`${month}월 ${weekNumber}번째 주`} />
       <WalletSummarySction totalConsumption={0} balance={0} month={month} />
     </View>
   );

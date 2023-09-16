@@ -5,6 +5,7 @@ import { Divider } from "../../components/Basic/Divider";
 import * as Color from "../../components/Colors/colors";
 
 export const TransactionItem = ({ item }) => {
+  console.log(item);
   return (
     <View>
       <View style={{ marginHorizontal: 10 }}>
@@ -17,16 +18,16 @@ export const TransactionItem = ({ item }) => {
           }}
         >
           <View>
-            <Typography fontSize={16}>{item.name}</Typography>
+            <Typography fontSize={16}>{item.branch}</Typography>
             <Spacer space={3} />
             <Typography fontSize={12} color={Color.GRAY}>
-              {item.note}
+              {item.detail}
             </Typography>
             <Spacer space={14} />
           </View>
           <View>
             <Typography fontSize={16} color={Color.RED}>
-              -{item.withdrawl}원
+              -{item.withdrawal}원
             </Typography>
             <Spacer space={3} />
             <Typography fontSize={12} color={Color.GRAY}>
