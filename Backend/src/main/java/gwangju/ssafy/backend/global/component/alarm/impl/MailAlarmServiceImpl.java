@@ -45,9 +45,6 @@ public class MailAlarmServiceImpl implements AlarmService {
 			String html = templateEngine.process(template, context);
 			helper.setText(html, true);
 
-			helper.addInline("image-1", new ClassPathResource("static/images/image-1.png"));
-			helper.addInline("image-2", new ClassPathResource("static/images/image-2.png"));
-
 			//메일 보내기
 			mailSender.send(message);
 		}catch (MessagingException e) {
