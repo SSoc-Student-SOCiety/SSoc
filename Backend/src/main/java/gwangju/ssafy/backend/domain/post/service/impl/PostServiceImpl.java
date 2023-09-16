@@ -59,7 +59,7 @@ public class PostServiceImpl implements PostService {
 			throw new PostException(ALREADY_DELETED_POST);
 		}
 
-		post.edit(request.getTitle(), request.getContent());
+		post.edit(request.getTitle(), request.getContent(),request.getIsAnonymous());
 
 		return post.getId();
 	}
