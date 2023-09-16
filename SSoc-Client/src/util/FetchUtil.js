@@ -238,8 +238,25 @@ export const getAllBookingListFetch = async (
   groupId
 ) => {
   const baseUrl = `${url}/reservation/list/${groupId}`;
-  console.log("fetch", accessToken);
-  console.log(refreshToken);
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
+
+export const getAllBookingListByOptionFetch = async (
+  accessToken,
+  refreshToken,
+  groupId,
+  option
+) => {
+  const baseUrl = `${url}/reservation/list/${groupId}?approveStatus=${option}`;
   console.log(baseUrl);
   return await fetch(baseUrl, {
     method: "GET",
@@ -895,9 +912,9 @@ export const getMonthlyStaticsFetch = async (
   accessToken,
   refreshToken,
   year,
-  transactionId
+  accountId
 ) => {
-  const baseUrl = `${url}/accounts/${transactionId}/monthly-statistics?year=${year}`;
+  const baseUrl = `${url}/accounts/${accountId}/monthly-statistics?year=${year}`;
 
   return await fetch(baseUrl, {
     method: "GET",
@@ -911,3 +928,20 @@ export const getMonthlyStaticsFetch = async (
 };
 
 //가입 그룹 계좌 조회
+export const getTransactionData = async (
+  accessToken,
+  refreshToken,
+  accountId
+) => {
+  const baseUrl = `${url}/accounts/${account}/transactions`;
+
+  return await fetch(baseUrl, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: accessToken,
+      Refresh: refreshToken,
+    },
+  });
+};
