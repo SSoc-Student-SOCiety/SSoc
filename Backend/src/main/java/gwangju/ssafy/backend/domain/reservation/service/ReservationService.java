@@ -1,5 +1,6 @@
 package gwangju.ssafy.backend.domain.reservation.service;
 
+import gwangju.ssafy.backend.domain.reservation.dto.GetReservationProduct;
 import gwangju.ssafy.backend.domain.reservation.dto.GetReservationUser;
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.entity.enums.ReservationApproveStatus;
@@ -27,4 +28,8 @@ public interface ReservationService {
                                              Long loginMemberId,
                                              Long reservationId,
                                              ReservationApproveStatus reservationApproveStatus);
+
+    // 그룹원(로그인한 본인)이 예약한 내역 조회
+    List<GetReservationProduct> searchReservationProduct(Long groupId, Long loginMemberId);
+
 }
