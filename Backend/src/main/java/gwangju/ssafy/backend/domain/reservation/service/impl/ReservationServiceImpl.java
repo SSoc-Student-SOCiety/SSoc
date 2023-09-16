@@ -5,6 +5,7 @@ import gwangju.ssafy.backend.domain.group.entity.enums.GroupMemberRole;
 import gwangju.ssafy.backend.domain.group.exception.GroupError;
 import gwangju.ssafy.backend.domain.group.exception.GroupException;
 import gwangju.ssafy.backend.domain.group.repository.GroupMemberRepository;
+import gwangju.ssafy.backend.domain.reservation.dto.GetReservationProduct;
 import gwangju.ssafy.backend.domain.reservation.dto.GetReservationUser;
 import gwangju.ssafy.backend.domain.reservation.dto.ReservationSimpleInfo;
 import gwangju.ssafy.backend.domain.reservation.entity.Product;
@@ -19,6 +20,7 @@ import gwangju.ssafy.backend.domain.user.exception.UserException;
 import gwangju.ssafy.backend.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -31,6 +33,7 @@ import java.util.Optional;
 
 import static gwangju.ssafy.backend.domain.group.exception.GroupError.NOT_GROUP_MEMBER;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -149,5 +152,24 @@ public class ReservationServiceImpl implements ReservationService {
         GetReservationUser getReservationUser = new GetReservationUser();
         getReservationUser.convert(reservation);
         return getReservationUser;
+    }
+
+    // 그룹원(로그인 한 본인)이 예약한 내역 조회
+    @Override
+    public List<GetReservationProduct> searchReservationProduct(Long groupId, Long loginMemberId) {
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndUserId(groupId, loginMemberId)
+                .orElseThrow(() -> new GroupException(NOT_GROUP_MEMBER));
+
+        List<Reservation> reservationList = reservationRepository.findByUserId(loginMemberId);
+        log.info(reservationList.toString());
+        List<GetReservationProduct> getReservationProductList = new ArrayList<>();
+
+        for(Reservation reservation : reservationList) {
+            GetReservationProduct getReservationProduct = new GetReservationProduct();
+            getReservationProduct.convert(reservation);
+            getReservationProductList.add(getReservationProduct);
+        }
+
+        return getReservationProductList;
     }
 }
