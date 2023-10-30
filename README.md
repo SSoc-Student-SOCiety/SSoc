@@ -36,13 +36,17 @@ Deploy (ci/cd)
 ### 2. 보기 쉬운 일간, 월간 거래 금액 통계 자료 제공
    
    ![9팀_싸광_정산안-모아보기](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/a5da39f1-b96c-4eda-bd24-ae28418a614f)
+    
     - 매일, 매월 배치를 통해 거래 금액을 집계하여 지입,지출을 한 눈에 파악할 수 있도록 통계 자료 제공
     - 배치 시, 대량의 쿼리 발생 가능성으로 JDBC Batch Insert 및 대량의 데이터 접근을 위한 No Offset 페이징 사용
 
 ### 3. 학생회 및 동아리 활동을 돕기 위한 커뮤니티 기능
    - 공지 및 소속원 게시판
      
-     ![9팀_싸광_그룹-게시판-게시글-작성-min](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/48bfefa0-8c19-46cf-9e79-95125a3ebb14)
+     ![ezgif com-resize (3)](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/643e7703-9f63-4990-aa9f-fb378c75c48b)
+
+     
+
    - 물품 대여
      
      ![ezgif com-resize (1)](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/925d10d8-fee7-4249-954f-f2ad1b0863c1)
