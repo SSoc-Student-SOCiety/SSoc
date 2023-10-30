@@ -27,8 +27,7 @@ Deploy (ci/cd)
 
 ## 🔍 기능 명세
 ### 1. 계좌 내역 연동을 통한 거래 내역 자동 공시 기능
-   
-   ![ezgif com-resize](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/e589e965-76d8-447e-8bfb-f5c517c56716)
+   ![ezgif com-resize (4)](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/ff998917-3ed3-43c5-b468-e32945701bc4)
     - 신한 은행 계좌 1원 인증 api를 이용해 금융 계좌와 서비스 내 학생회/동아리 관리 계정 연동
     - 신한 은행 거래내역 조회 api를 활용해 매일 전날의 거래 내역을 배치를 통해 DB에 저장
     - 거래내역 자체가 저장되어 수정되지 않으므로 신뢰성 높은 자료 제공 및 거래 내역에 대한 추가 설명 작성 가능
@@ -49,7 +48,8 @@ Deploy (ci/cd)
 
    - 물품 대여
      
-     ![ezgif com-resize (1)](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/925d10d8-fee7-4249-954f-f2ad1b0863c1)
+     ![ezgif com-resize (5)](https://github.com/SSoc-Student-SOCiety/SSoc/assets/119592507/e8ad176e-b45d-4471-8e0b-c7609b18dfd3)
+
 
 
 ### 4. JWT 기반 로그인, 로그아웃 기능 구현
